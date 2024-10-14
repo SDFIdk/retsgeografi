@@ -173,19 +173,65 @@ class MapViewer extends LitElement {
   uploadFiles(event) {
     const files = event.target.files;
     const gmlFile = [...files].find(file => file.name.endsWith('.gml'));
-    const xsdFile = [...files].find(file => file.name.endsWith('.xsd'));
+    const sldFile = [...files].find(file => file.name.endsWith('.sld'));  // SLD file
 
     if (gmlFile) {
       const gmlReader = new FileReader();
-      gmlReader.onload = () => this.loadGML(gmlReader.result);
-      gmlReader.readAsText(gmlFile);
+      gmlReader.onload = () => {
+        if (sldFile) {
+          const sldReader = new FileReader();
+          sldReader.onload = () => this.loadGML(gmlReader.result, sldReader.result);  // Pass the SLD for styling
+          sldReader.readAsText(sldFile);
+          const sldString = sldReader.result;
+          const styles = this.parseSLD(sldString);
 
-    } else if (xsdFile) {
-      const xsdReader = new FileReader();
-      xsdReader.onload = () => this.loadXSD(xsdReader.result);
-      xsdReader.readAsText(xsdFile);
+          features.forEach(feature => {
+            const featureType = feature.getGeometry().getType();  // Use feature type for styling
+            feature.setStyle(styles[featureType]);
+          });
+        } else {
+          this.loadGML(gmlReader.result, null);  // No SLD
+          console.log('Error: No SLD file found.');
+        }
+      };
+      gmlReader.readAsText(gmlFile);
     }
   }
+
+  parseSLD(sldString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(sldString, 'application/xml');
+
+    const styles = {};
+
+    // Example parsing for polygon styles
+    const polygonSymbols = xmlDoc.getElementsByTagName('PolygonSymbolizer');
+    for (let i = 0; i < polygonSymbols.length; i++) {
+      const fillColor = polygonSymbols[i].getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
+      const strokeColor = polygonSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
+      const strokeWidth = parseFloat(polygonSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[1]?.textContent);
+
+      styles['Polygon'] = new Style({
+        fill: new Fill({ color: fillColor || 'rgba(255, 0, 0, 0.5)' }),
+        stroke: new Stroke({ color: strokeColor || '#ff0000', width: strokeWidth || 2 })
+      });
+    }
+
+    // Example parsing for line styles
+    const lineSymbols = xmlDoc.getElementsByTagName('LineSymbolizer');
+    for (let i = 0; i < lineSymbols.length; i++) {
+      const strokeColor = lineSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
+      const strokeWidth = parseFloat(lineSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[1]?.textContent);
+
+      styles['LineString'] = new Style({
+        stroke: new Stroke({ color: strokeColor || '#0000ff', width: strokeWidth || 2 })
+      });
+    }
+
+    return styles;
+  }
+
+
 
   loadGML(gmlString) {
     const format = new GML32();  // Assuming GML 3.2 format
@@ -194,8 +240,8 @@ class MapViewer extends LitElement {
     try {
       // Read features from the GML file
       features = format.readFeatures(gmlString, {
-        featureProjection: 'EPSG:25832',  // Ensure the correct projection is used
-        dataProjection: 'EPSG:25832',  // Use dataProjection if your GML file specifies the data projection
+        featureProjection: epsg25832,  // Ensure the correct projection is used
+        dataProjection: epsg25832,  // Use dataProjection if your GML file specifies the data projection
       });
     } catch (error) {
       console.error('Error parsing GML:', error);
@@ -345,7 +391,7 @@ class MapViewer extends LitElement {
               <use href="${svg}#minus"></use>
             </svg>
           </button>
-          <input type="file" id="file-input" multiple @change="${this.uploadFiles}" />
+          <input type="file" id="file-input" multiple accept=".gml,.sld" @change="${this.uploadFiles}" />
           <label class="control-label" for="file-input" title="Upload GML & XSD">
             <svg>
               <use href="${svg}#arrow-up"></use>
