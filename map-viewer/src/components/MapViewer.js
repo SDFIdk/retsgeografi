@@ -10,7 +10,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
 import svg from '@dataforsyningen/designsystem/assets/icons.svg'
-import { Style, Stroke, Fill } from 'ol/style.js';
+import { Style, Stroke, Fill, Circle} from 'ol/style.js';
 import GML32 from 'ol/format/GML32.js';
 import { register } from 'ol/proj/proj4';
 import { get } from 'ol/proj';
@@ -115,6 +115,11 @@ class MapViewer extends LitElement {
     super();
     this.showSecondMap = false;
     this.vectorLayers = [];  // Store added vector layers
+    this.styles = {
+      fillColor: '#ffffff', // Default fill color
+      strokeColor: '000', // Default stroke color
+      strokeWidth: 1, // Default stroke width
+    };
   }
 
   firstUpdated() {
@@ -155,6 +160,44 @@ class MapViewer extends LitElement {
     });
   }
 
+
+
+  getStyle(geometryType) {
+    if (geometryType === 'Polygon') {
+      return new Style({
+        fill: new Fill({
+          color: this.styles.fillColor,
+        }),
+        stroke: new Stroke({
+          color: this.styles.strokeColor,
+          width: this.styles.strokeWidth,
+        }),
+      });
+    } else if (geometryType === 'LineString') {
+      return new Style({
+        stroke: new Stroke({
+          color: this.styles.strokeColor,
+          width: this.styles.strokeWidth,
+        }),
+      });
+    } else if (geometryType === 'Point') {
+      return new Style({
+        image: new Circle({
+          radius: 5,
+          fill: new Fill({ color: this.styles.fillColor }),
+          stroke: new Stroke({ color: this.styles.strokeColor, width: 1 }),
+        }),
+      });
+    } else {
+      return new Style({
+        stroke: new Stroke({
+          color: this.styles.strokeColor,
+          width: this.styles.strokeWidth,
+        }),
+      });
+    }
+  }
+
   toggleSecondMap() {
     this.showSecondMap = !this.showSecondMap;
     this.shadowRoot.getElementById('map2').style.display = this.showSecondMap ? 'block' : 'none';
@@ -173,29 +216,46 @@ class MapViewer extends LitElement {
   uploadFiles(event) {
     const files = event.target.files;
     const gmlFile = [...files].find(file => file.name.endsWith('.gml'));
-    const sldFile = [...files].find(file => file.name.endsWith('.sld'));  // SLD file
+    const sldFile = [...files].find(file => file.name.endsWith('.sld'));
 
     if (gmlFile) {
       const gmlReader = new FileReader();
       gmlReader.onload = () => {
         if (sldFile) {
           const sldReader = new FileReader();
-          sldReader.onload = () => this.loadGML(gmlReader.result, sldReader.result);  // Pass the SLD for styling
+          sldReader.onload = () => {
+            const sldString = sldReader.result;
+            const styles = this.parseSLD(sldString);
+            this.loadGML(gmlReader.result, styles);  // Pass styles to loadGML
+          };
           sldReader.readAsText(sldFile);
-          const sldString = sldReader.result;
-          const styles = this.parseSLD(sldString);
-
-          features.forEach(feature => {
-            const featureType = feature.getGeometry().getType();  // Use feature type for styling
-            feature.setStyle(styles[featureType]);
-          });
         } else {
-          this.loadGML(gmlReader.result, null);  // No SLD
-          console.log('Error: No SLD file found.');
+          this.loadGML(gmlReader.result, null);  // No SLD file
         }
       };
       gmlReader.readAsText(gmlFile);
     }
+  }
+
+  updateStyle() {
+    // Update styles based on user input
+    const fillColor = this.shadowRoot.getElementById('fill-color').value;
+    const strokeColor = this.shadowRoot.getElementById('stroke-color').value;
+    const strokeWidth = parseFloat(this.shadowRoot.getElementById('stroke-width').value);
+
+    this.styles = {
+      fillColor: fillColor || '',
+      strokeColor: strokeColor || '',
+      strokeWidth: strokeWidth || 0,
+    };
+
+    // Update existing vector layers with the new styles
+    this.vectorLayers.forEach(layer => {
+      layer.getSource().getFeatures().forEach(feature => {
+        const geometryType = feature.getGeometry().getType();
+        feature.setStyle(this.getStyle(geometryType));
+      });
+    });
   }
 
   parseSLD(sldString) {
@@ -204,7 +264,7 @@ class MapViewer extends LitElement {
 
     const styles = {};
 
-    // Example parsing for polygon styles
+    // PolygonSymbolizer Parsing
     const polygonSymbols = xmlDoc.getElementsByTagName('PolygonSymbolizer');
     for (let i = 0; i < polygonSymbols.length; i++) {
       const fillColor = polygonSymbols[i].getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
@@ -217,7 +277,7 @@ class MapViewer extends LitElement {
       });
     }
 
-    // Example parsing for line styles
+    // LineSymbolizer Parsing
     const lineSymbols = xmlDoc.getElementsByTagName('LineSymbolizer');
     for (let i = 0; i < lineSymbols.length; i++) {
       const strokeColor = lineSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
@@ -228,50 +288,55 @@ class MapViewer extends LitElement {
       });
     }
 
+    // PointSymbolizer Parsing (if needed)
+    const pointSymbols = xmlDoc.getElementsByTagName('PointSymbolizer');
+    for (let i = 0; i < pointSymbols.length; i++) {
+      const pointColor = pointSymbols[i].getElementsByTagName('Graphic')[0]?.getElementsByTagName('Mark')[0]?.getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
+
+      styles['Point'] = new Style({
+        image: new Circle({
+          radius: 5,
+          fill: new Fill({ color: pointColor || '#00ff00' }),
+          stroke: new Stroke({ color: '#000000', width: 1 })
+        })
+      });
+    }
+
     return styles;
   }
 
 
 
-  loadGML(gmlString) {
-    const format = new GML32();  // Assuming GML 3.2 format
+  loadGML(gmlString, sldStyles = null) {
+    const format = new GML32();
     let features;
 
     try {
-      // Read features from the GML file
       features = format.readFeatures(gmlString, {
-        featureProjection: epsg25832,  // Ensure the correct projection is used
-        dataProjection: epsg25832,  // Use dataProjection if your GML file specifies the data projection
+        featureProjection: epsg25832,
+        dataProjection: epsg25832,
       });
     } catch (error) {
       console.error('Error parsing GML:', error);
       return;
     }
-    console.log('Loaded features:', features)
 
-    // Parse the GML string to extract types from <gml:featureMember> elements
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(gmlString, "application/xml");
-
-    // Group features by extracted 'type' (from the first child after <gml:featureMember>)
     const featureGroups = {};
+
     features.forEach((feature, index) => {
       const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index];
-
       let featureType = 'Unnamed Type'; // Fallback if no type is found
       if (featureMember && featureMember.children.length > 0) {
         featureType = featureMember.children[0].localName;  // Use localName to exclude the namespace prefix
       }
-
-      // Group the features by the extracted type
       if (!featureGroups[featureType]) {
         featureGroups[featureType] = [];
       }
       featureGroups[featureType].push(feature);
     });
 
-
-    // For each group, create a vector layer and add a checkbox for toggling its visibility
     Object.keys(featureGroups).forEach(featureType => {
       const vectorSource = new VectorSource({
         features: featureGroups[featureType],
@@ -279,29 +344,29 @@ class MapViewer extends LitElement {
 
       const vectorLayer = new VectorLayer({
         source: vectorSource,
-        title: featureType,  // Set the feature type as the title for the toggle control
-        visible: true,  // Set the layer to be visible by default
+        title: featureType,
+        visible: true,
+        // Apply dynamic styles or SLD styles if available
+        style: sldStyles ? sldStyles[featureType] || this.getStyle(featureType) : this.getStyle(featureType),
       });
 
-      // Add the layer to the map
       this.map1.addLayer(vectorLayer);
-      this.vectorLayers.push(vectorLayer);  // Store the layer for later toggling
+      this.vectorLayers.push(vectorLayer);
 
-      // Dynamically create a checkbox for toggling this layer
       const layerToggles = this.shadowRoot.getElementById('layer-toggles');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.checked = true;  // Set to checked by default (layer is visible)
+      checkbox.checked = true;
       checkbox.addEventListener('change', () => this.toggleLayer(vectorLayer));
 
-      // Create a label for the checkbox
       const label = document.createElement('label');
-      label.textContent = featureType;  // Display the feature type as the label text
-      label.prepend(checkbox);  // Add the checkbox to the label
-
-      // Append the label (with checkbox) to the toggle controls section
+      label.textContent = featureType;
+      label.prepend(checkbox);
       layerToggles.appendChild(label);
     });
+
+    // Ensure styles are applied right after the GML is loaded
+    this.updateStyle();
   }
 
 
@@ -379,7 +444,6 @@ class MapViewer extends LitElement {
         <div id="map1" class="map"></div>
         <div id="layer-toggles"></div>
 
-
         <div id="controls">
           <button class="control-label" @click="${this.zoomIn}" title="Zoom In">
             <svg>
@@ -391,12 +455,27 @@ class MapViewer extends LitElement {
               <use href="${svg}#minus"></use>
             </svg>
           </button>
+
           <input type="file" id="file-input" multiple accept=".gml,.sld" @change="${this.uploadFiles}" />
-          <label class="control-label" for="file-input" title="Upload GML & XSD">
+          <label class="control-label" for="file-input" title="Upload GML & SLD">
             <svg>
               <use href="${svg}#arrow-up"></use>
             </svg>
           </label>
+
+          <!-- Color pickers and stroke width input -->
+          <div>
+            <label for="fill-color">Fill Color:</label>
+            <input type="color" id="fill-color" value="${this.styles.fillColor}" @input="${this.updateStyle}">
+          </div>
+          <div>
+            <label for="stroke-color">Stroke Color:</label>
+            <input type="color" id="stroke-color" value="${this.styles.strokeColor}" @input="${this.updateStyle}">
+          </div>
+          <div>
+            <label for="stroke-width">Stroke Width:</label>
+            <input type="number" id="stroke-width" value="${this.styles.strokeWidth}" min="1" max="10" @input="${this.updateStyle}">
+          </div>
         </div>
       </div>
     `;
