@@ -163,36 +163,38 @@ class MapViewer extends LitElement {
 
 
   getStyle(geometryType) {
+    const { fillColor, strokeColor, strokeWidth } = this.styles;
+
     if (geometryType === 'Polygon') {
       return new Style({
         fill: new Fill({
-          color: this.styles.fillColor,
+          color: fillColor || 'rgba(255, 255, 255, 0.5)',  // Default white if empty
         }),
         stroke: new Stroke({
-          color: this.styles.strokeColor,
-          width: this.styles.strokeWidth,
+          color: strokeColor || '#000000',  // Default black if empty
+          width: strokeWidth || 1,
         }),
       });
     } else if (geometryType === 'LineString') {
       return new Style({
         stroke: new Stroke({
-          color: this.styles.strokeColor,
-          width: this.styles.strokeWidth,
+          color: strokeColor || '#000000',
+          width: strokeWidth || 1,
         }),
       });
     } else if (geometryType === 'Point') {
       return new Style({
         image: new Circle({
           radius: 5,
-          fill: new Fill({ color: this.styles.fillColor }),
-          stroke: new Stroke({ color: this.styles.strokeColor, width: 1 }),
+          fill: new Fill({ color: fillColor || '#ffffff' }),
+          stroke: new Stroke({ color: strokeColor || '#000000', width: 1 }),
         }),
       });
     } else {
       return new Style({
         stroke: new Stroke({
-          color: this.styles.strokeColor,
-          width: this.styles.strokeWidth,
+          color: strokeColor || '#000000',
+          width: strokeWidth || 1,
         }),
       });
     }
@@ -239,14 +241,14 @@ class MapViewer extends LitElement {
 
   updateStyle() {
     // Update styles based on user input
-    const fillColor = this.shadowRoot.getElementById('fill-color').value;
-    const strokeColor = this.shadowRoot.getElementById('stroke-color').value;
-    const strokeWidth = parseFloat(this.shadowRoot.getElementById('stroke-width').value);
+    const fillColor = this.shadowRoot.getElementById('fill-color').value || '#ffffff';
+    const strokeColor = this.shadowRoot.getElementById('stroke-color').value || '#000000';
+    const strokeWidth = parseFloat(this.shadowRoot.getElementById('stroke-width').value) || 1;
 
     this.styles = {
-      fillColor: fillColor || '',
-      strokeColor: strokeColor || '',
-      strokeWidth: strokeWidth || 0,
+      fillColor,
+      strokeColor,
+      strokeWidth,
     };
 
     // Update existing vector layers with the new styles
@@ -258,11 +260,14 @@ class MapViewer extends LitElement {
     });
   }
 
+
   parseSLD(sldString) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(sldString, 'application/xml');
 
     const styles = {};
+
+    console.log('Parsed SLD Styles:', styles)
 
     // PolygonSymbolizer Parsing
     const polygonSymbols = xmlDoc.getElementsByTagName('PolygonSymbolizer');
@@ -325,6 +330,9 @@ class MapViewer extends LitElement {
     const xmlDoc = parser.parseFromString(gmlString, "application/xml");
     const featureGroups = {};
 
+    // Log the sldStyles to check if styles were parsed correctly
+    console.log('Parsed SLD Styles:', sldStyles);
+
     features.forEach((feature, index) => {
       const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index];
       let featureType = 'Unnamed Type'; // Fallback if no type is found
@@ -350,6 +358,9 @@ class MapViewer extends LitElement {
         style: sldStyles ? sldStyles[featureType] || this.getStyle(featureType) : this.getStyle(featureType),
       });
 
+      console.log('Feature Type:', featureType)
+      console.log('Applying styles to', featureType, sldStyles[featureType], this.getStyle(featureType));
+
       this.map1.addLayer(vectorLayer);
       this.vectorLayers.push(vectorLayer);
 
@@ -368,71 +379,6 @@ class MapViewer extends LitElement {
     // Ensure styles are applied right after the GML is loaded
     this.updateStyle();
   }
-
-
-
-  loadXSD(xsdString) {
-    const descriptions = this.parseXSD(xsdString);
-    console.log('Parsed XSD descriptions:', descriptions);
-  }
-
-  parseXSD(xsdString) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xsdString, "application/xml");
-
-    const descriptions = {};
-
-    // Extract top-level elements
-    const elements = xmlDoc.getElementsByTagName('element');
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      const name = element.getAttribute('name');
-      const type = element.getAttribute('type');
-      const doc = this.extractDocumentation(element);
-
-      if (name && type) {
-        descriptions[name] = { type, doc };
-      }
-    }
-
-    // Extract complex types and their sequences
-    const complexTypes = xmlDoc.getElementsByTagName('complexType');
-    for (let i = 0; i < complexTypes.length; i++) {
-      const complexType = complexTypes[i];
-      const typeName = complexType.getAttribute('name');
-      const sequence = complexType.getElementsByTagName('sequence')[0];
-
-      if (sequence) {
-        const childElements = sequence.getElementsByTagName('element');
-        descriptions[typeName] = [];
-
-        for (let j = 0; j < childElements.length; j++) {
-          const child = childElements[j];
-          const childName = child.getAttribute('name');
-          const childType = child.getAttribute('type');
-          const childDoc = this.extractDocumentation(child);
-
-          if (childName && childType) {
-            descriptions[typeName].push({ name: childName, type: childType, doc: childDoc });
-          }
-        }
-      }
-    }
-
-    return descriptions;
-  }
-
-  extractDocumentation(element) {
-    const annotation = element.getElementsByTagName('annotation')[0];
-    if (annotation) {
-      const documentation = annotation.getElementsByTagName('documentation')[0];
-      if (documentation) {
-        return documentation.textContent.trim();
-      }
-    }
-    return null;
-  }
-
 
   toggleLayer(layer) {
     layer.setVisible(!layer.getVisible());
