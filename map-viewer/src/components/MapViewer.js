@@ -116,8 +116,8 @@ class MapViewer extends LitElement {
     this.showSecondMap = false;
     this.vectorLayers = [];  // Store added vector layers
     this.styles = {
-      fillColor: '#ffffff', // Default fill color
-      strokeColor: '000', // Default stroke color
+      fillColor: null, // Default fill color
+      strokeColor: null, // Default stroke color
       strokeWidth: 1, // Default stroke width
     };
   }
@@ -162,23 +162,29 @@ class MapViewer extends LitElement {
 
 
 
-  getStyle(geometryType) {
+  getStyle(geometryType, sldStyle = null) {
+    // If SLD style is available, use it and skip the default style
+    if (sldStyle) {
+      return sldStyle;
+    }
+
+    // If no SLD style, use default styles
     const { fillColor, strokeColor, strokeWidth } = this.styles;
 
     if (geometryType === 'Polygon') {
       return new Style({
         fill: new Fill({
-          color: fillColor || 'rgba(255, 255, 255, 0.5)',  // Default white if empty
+          color: fillColor || null,  // Only use default if no fillColor is set
         }),
         stroke: new Stroke({
-          color: strokeColor || '#000000',  // Default black if empty
+          color: strokeColor || null,  // Only use default if no strokeColor is set
           width: strokeWidth || 1,
         }),
       });
     } else if (geometryType === 'LineString') {
       return new Style({
         stroke: new Stroke({
-          color: strokeColor || '#000000',
+          color: strokeColor || null,
           width: strokeWidth || 1,
         }),
       });
@@ -186,19 +192,21 @@ class MapViewer extends LitElement {
       return new Style({
         image: new Circle({
           radius: 5,
-          fill: new Fill({ color: fillColor || '#ffffff' }),
-          stroke: new Stroke({ color: strokeColor || '#000000', width: 1 }),
+          fill: new Fill({ color: fillColor || null }),
+          stroke: new Stroke({ color: strokeColor || null, width: 1 }),
         }),
       });
     } else {
       return new Style({
         stroke: new Stroke({
-          color: strokeColor || '#000000',
+          color: strokeColor || null,
           width: strokeWidth || 1,
         }),
       });
     }
   }
+
+
 
   toggleSecondMap() {
     this.showSecondMap = !this.showSecondMap;
@@ -227,7 +235,11 @@ class MapViewer extends LitElement {
           const sldReader = new FileReader();
           sldReader.onload = () => {
             const sldString = sldReader.result;
+            console.log('This goes through the styles:', sldReader.result);
             const styles = this.parseSLD(sldString);
+
+
+
             this.loadGML(gmlReader.result, styles);  // Pass styles to loadGML
           };
           sldReader.readAsText(sldFile);
@@ -241,9 +253,9 @@ class MapViewer extends LitElement {
 
   updateStyle() {
     // Update styles based on user input
-    const fillColor = this.shadowRoot.getElementById('fill-color').value || '#ffffff';
-    const strokeColor = this.shadowRoot.getElementById('stroke-color').value || '#000000';
-    const strokeWidth = parseFloat(this.shadowRoot.getElementById('stroke-width').value) || 1;
+    const fillColor = this.shadowRoot.getElementById('fill-color').value;
+    const strokeColor = this.shadowRoot.getElementById('stroke-color').value;
+    const strokeWidth = parseFloat(this.shadowRoot.getElementById('stroke-width').value);
 
     this.styles = {
       fillColor,
@@ -251,14 +263,15 @@ class MapViewer extends LitElement {
       strokeWidth,
     };
 
-    // Update existing vector layers with the new styles
+    // Update each vector layer's style
     this.vectorLayers.forEach(layer => {
-      layer.getSource().getFeatures().forEach(feature => {
+      layer.setStyle((feature) => {
         const geometryType = feature.getGeometry().getType();
-        feature.setStyle(this.getStyle(geometryType));
+        return this.getStyle(geometryType);
       });
     });
   }
+
 
 
   parseSLD(sldString) {
@@ -267,42 +280,77 @@ class MapViewer extends LitElement {
 
     const styles = {};
 
-    console.log('Parsed SLD Styles:', styles)
+    console.log('Parsed SLD Styles:', styles);
 
     // PolygonSymbolizer Parsing
     const polygonSymbols = xmlDoc.getElementsByTagName('PolygonSymbolizer');
     for (let i = 0; i < polygonSymbols.length; i++) {
-      const fillColor = polygonSymbols[i].getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
-      const strokeColor = polygonSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
-      const strokeWidth = parseFloat(polygonSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[1]?.textContent);
+      const fillElement = polygonSymbols[i].getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0];
+      const strokeElement = polygonSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter');
+
+      const fillColor = fillElement ? fillElement.textContent : 'rgba(255, 0, 0, 0.5)';
+      let strokeColor = '#73ff00';  // Default stroke color
+      let strokeWidth = 2;          // Default stroke width
+
+      if (strokeElement) {
+        // Iterate over the stroke elements to find relevant parameters
+        for (let j = 0; j < strokeElement.length; j++) {
+          const paramName = strokeElement[j].getAttribute('name');
+          const paramValue = strokeElement[j].textContent;
+
+          if (paramName === 'stroke') {
+            strokeColor = paramValue;
+          }
+          if (paramName === 'stroke-width') {
+            strokeWidth = parseFloat(paramValue);
+          }
+        }
+      }
 
       styles['Polygon'] = new Style({
-        fill: new Fill({ color: fillColor || 'rgba(255, 0, 0, 0.5)' }),
-        stroke: new Stroke({ color: strokeColor || '#ff0000', width: strokeWidth || 2 })
+        fill: new Fill({ color: fillColor }),
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth })
       });
     }
 
     // LineSymbolizer Parsing
     const lineSymbols = xmlDoc.getElementsByTagName('LineSymbolizer');
     for (let i = 0; i < lineSymbols.length; i++) {
-      const strokeColor = lineSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
-      const strokeWidth = parseFloat(lineSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter')[1]?.textContent);
+      const strokeElement = lineSymbols[i].getElementsByTagName('Stroke')[0]?.getElementsByTagName('CssParameter');
+
+      let strokeColor = '#73ff00';  // Default stroke color
+      let strokeWidth = 2;          // Default stroke width
+
+      if (strokeElement) {
+        // Iterate over the stroke elements to find relevant parameters
+        for (let j = 0; j < strokeElement.length; j++) {
+          const paramName = strokeElement[j].getAttribute('name');
+          const paramValue = strokeElement[j].textContent;
+
+          if (paramName === 'stroke') {
+            strokeColor = paramValue;
+          }
+          if (paramName === 'stroke-width') {
+            strokeWidth = parseFloat(paramValue);
+          }
+        }
+      }
 
       styles['LineString'] = new Style({
-        stroke: new Stroke({ color: strokeColor || '#0000ff', width: strokeWidth || 2 })
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth })
       });
     }
 
-    // PointSymbolizer Parsing (if needed)
+    // PointSymbolizer Parsing
     const pointSymbols = xmlDoc.getElementsByTagName('PointSymbolizer');
     for (let i = 0; i < pointSymbols.length; i++) {
-      const pointColor = pointSymbols[i].getElementsByTagName('Graphic')[0]?.getElementsByTagName('Mark')[0]?.getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
+      const fillColor = pointSymbols[i].getElementsByTagName('Graphic')[0]?.getElementsByTagName('Mark')[0]?.getElementsByTagName('Fill')[0]?.getElementsByTagName('CssParameter')[0]?.textContent;
 
       styles['Point'] = new Style({
         image: new Circle({
           radius: 5,
-          fill: new Fill({ color: pointColor || '#00ff00' }),
-          stroke: new Stroke({ color: '#000000', width: 1 })
+          fill: new Fill({ color: fillColor || '#73ff00' }),
+          stroke: new Stroke({ color: '#73ff00', width: 1 })
         })
       });
     }
@@ -312,7 +360,8 @@ class MapViewer extends LitElement {
 
 
 
-  loadGML(gmlString, sldStyles = null) {
+
+  loadGML(gmlString, sldStyles) {
     const format = new GML32();
     let features;
 
@@ -330,14 +379,11 @@ class MapViewer extends LitElement {
     const xmlDoc = parser.parseFromString(gmlString, "application/xml");
     const featureGroups = {};
 
-    // Log the sldStyles to check if styles were parsed correctly
-    console.log('Parsed SLD Styles:', sldStyles);
-
     features.forEach((feature, index) => {
       const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index];
-      let featureType = 'Unnamed Type'; // Fallback if no type is found
+      let featureType = 'Unnamed Type';  // Fallback if no type is found
       if (featureMember && featureMember.children.length > 0) {
-        featureType = featureMember.children[0].localName;  // Use localName to exclude the namespace prefix
+        featureType = featureMember.children[0].localName;
       }
       if (!featureGroups[featureType]) {
         featureGroups[featureType] = [];
@@ -354,16 +400,14 @@ class MapViewer extends LitElement {
         source: vectorSource,
         title: featureType,
         visible: true,
-        // Apply dynamic styles or SLD styles if available
-        style: sldStyles ? sldStyles[featureType] || this.getStyle(featureType) : this.getStyle(featureType),
+        // Pass SLD styles if available
+        style: (feature) => this.getStyle(feature.getGeometry().getType(), sldStyles ? sldStyles[featureType] : null),
       });
-
-      console.log('Feature Type:', featureType)
-      console.log('Applying styles to', featureType, sldStyles[featureType], this.getStyle(featureType));
 
       this.map1.addLayer(vectorLayer);
       this.vectorLayers.push(vectorLayer);
 
+      // Add the layer toggles in UI
       const layerToggles = this.shadowRoot.getElementById('layer-toggles');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
@@ -375,9 +419,6 @@ class MapViewer extends LitElement {
       label.prepend(checkbox);
       layerToggles.appendChild(label);
     });
-
-    // Ensure styles are applied right after the GML is loaded
-    this.updateStyle();
   }
 
   toggleLayer(layer) {
