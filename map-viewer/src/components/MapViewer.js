@@ -114,7 +114,11 @@ class MapViewer extends LitElement {
   constructor() {
     super();
     this.vectorLayers = [];
-    this.styles = {};
+    this.styles = {
+      fillColor: '#73ff00',
+      strokeColor: '#000000',
+      strokeWidth: 1,
+    };
   }
 
   firstUpdated() {
@@ -134,8 +138,8 @@ class MapViewer extends LitElement {
             tileGrid: new WMTSTileGrid({
               extent: [120000, 5900000, 1000000, 6500000],
               resolutions: [1638.4, 819.2, 409.6, 204.8],
-              matrixIds: ['0', '1', '2', '3', '4']
-            })
+              matrixIds: ['0', '1', '2', '3', '4'],
+            }),
           }),
           visible: true,
         }),
@@ -143,53 +147,72 @@ class MapViewer extends LitElement {
       view: new View({
         center: [600000, 6225000],
         zoom: 8,
-        projection: epsg25832
+        projection: epsg25832,
       }),
       controls: [],
     });
   }
 
-  getStyle(geometryType, sldStyle = null) {
-    // Debug: Log the incoming SLD style
-    console.log('SLD Style:', sldStyle);
+  applySLDStyles(sldStyle) {
+    // Assuming sldStyle is correctly parsed from the SLD file
+    this.map1.getLayers().forEach(layer => {
+      if (layer instanceof VectorLayer) {
+        layer.setStyle(sldStyle); // Apply the base SLD style
+      }
+    });
+  }
 
+  applyCustomStyles() {
+    const fillColor = this.shadowRoot.getElementById('fill-color').value;
+    const strokeColor = this.shadowRoot.getElementById('stroke-color').value;
+    const strokeWidth = parseInt(this.shadowRoot.getElementById('stroke-width').value, 10);
+
+    this.vectorLayers.forEach(layer => {
+      const customStyle = new Style({
+        fill: new Fill({ color: fillColor }),
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      });
+      layer.setStyle(customStyle); // Override existing styles with custom settings
+    });
+  }
+
+  updateStyle() {
+    this.applyCustomStyles(); // Trigger custom styles when inputs change
+  }
+
+  getStyle(geometryType, sldStyle = null) {
     // If SLD style is provided, use it
     if (sldStyle) {
-      console.log('Using SLD Style');
       return sldStyle;
     }
 
-    // Debug: No SLD style, fall back to default
-    console.log('No SLD style provided, using default styling.');
-
-    // Default styles
-    const { fillColor = '#73ff00', strokeColor = '#000000', strokeWidth = 1 } = this.styles;
+    // Default styles if no SLD style is provided
+    const { fillColor, strokeColor, strokeWidth } = this.styles;
 
     switch (geometryType) {
       case 'Polygon':
         return new Style({
           fill: new Fill({ color: fillColor }),
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth })
+          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
         });
       case 'LineString':
         return new Style({
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth })
+          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
         });
       case 'Point':
         return new Style({
           image: new Circle({
             radius: 5,
             fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: 1 })
-          })
+            stroke: new Stroke({ color: strokeColor, width: 1 }),
+          }),
         });
       default:
         return new Style({
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth })
+          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
         });
     }
   }
-
 
   uploadFiles(event) {
     const files = [...event.target.files];
@@ -272,7 +295,7 @@ class MapViewer extends LitElement {
       const vectorSource = new VectorSource({ features: featureGroups[type] });
       const vectorLayer = new VectorLayer({
         source: vectorSource,
-        style: feature => this.getStyle(feature.getGeometry().getType(), sldStyles ? sldStyles[type] : null),
+        style: (feature) => this.getStyle(feature.getGeometry().getType(), sldStyles ? sldStyles[type] : null),
       });
       this.map1.addLayer(vectorLayer);
       this.vectorLayers.push(vectorLayer);
