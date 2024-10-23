@@ -153,6 +153,16 @@ class MapViewer extends LitElement {
     });
   }
 
+  zoomIn() {
+    const view = this.map1.getView();
+    view.setZoom(view.getZoom() + 1);
+  }
+
+  zoomOut() {
+    const view = this.map1.getView();
+    view.setZoom(view.getZoom() - 1);
+  }
+
   applySLDStyles(sldStyle) {
     // Assuming sldStyle is correctly parsed from the SLD file
     this.map1.getLayers().forEach(layer => {
