@@ -178,13 +178,42 @@ class MapViewer extends LitElement {
     const strokeWidth = parseInt(this.shadowRoot.getElementById('stroke-width').value, 10);
 
     this.vectorLayers.forEach(layer => {
-      const customStyle = new Style({
-        fill: new Fill({ color: fillColor }),
-        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      layer.setStyle((feature) => {
+        const geometryType = feature.getGeometry().getType();
+
+        switch (geometryType) {
+          case 'Polygon':
+            return new Style({
+              fill: new Fill({ color: fillColor }),
+              stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+            });
+
+          case 'LineString':
+            return new Style({
+              stroke: new Stroke({
+                color: strokeColor,  // Apply stroke color for LineString
+                width: strokeWidth,  // Apply stroke width for LineString
+              }),
+            });
+
+          case 'Point':
+            return new Style({
+              image: new Circle({
+                radius: 5, // Set radius for points
+                fill: new Fill({ color: fillColor }),
+                stroke: new Stroke({ color: strokeColor, width: 1 }),
+              }),
+            });
+
+          default:
+            return new Style(); // Default style if geometry type doesn't match
+        }
       });
-      layer.setStyle(customStyle); // Override existing styles with custom settings
     });
   }
+
+
+
 
   updateStyle() {
     this.applyCustomStyles(); // Trigger custom styles when inputs change
@@ -211,11 +240,8 @@ class MapViewer extends LitElement {
         });
       case 'Point':
         return new Style({
-          image: new Circle({
-            radius: 5,
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({ color: strokeColor, width: 1 }),
-          }),
         });
       default:
         return new Style({
@@ -289,28 +315,69 @@ class MapViewer extends LitElement {
 
   loadGML(gmlString, sldStyles) {
     const format = new GML32();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
+
     const features = format.readFeatures(gmlString, {
       featureProjection: epsg25832,
       dataProjection: epsg25832,
     });
 
-    const featureGroups = features.reduce((groups, feature) => {
-      const geometryType = feature.getGeometry().getType();
-      if (!groups[geometryType]) groups[geometryType] = [];
-      groups[geometryType].push(feature);
+    const featureGroups = features.reduce((groups, feature, index) => {
+      const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index];
+      const firstChildElement = featureMember.firstElementChild;
+
+      const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
+
+      if (!groups[featureType]) groups[featureType] = [];
+      groups[featureType].push(feature);
       return groups;
     }, {});
 
+    this.vectorLayers.forEach(layer => this.map1.removeLayer(layer));
+    this.vectorLayers = [];
+    this.shadowRoot.getElementById('layer-toggles').innerHTML = '';
+
     Object.keys(featureGroups).forEach(type => {
       const vectorSource = new VectorSource({ features: featureGroups[type] });
+
       const vectorLayer = new VectorLayer({
         source: vectorSource,
-        style: (feature) => this.getStyle(feature.getGeometry().getType(), sldStyles ? sldStyles[type] : null),
+        style: (feature) => {
+          const geometryType = feature.getGeometry().getType();
+          return sldStyles && sldStyles[geometryType] ? sldStyles[geometryType] : this.getStyle(geometryType);
+        }
       });
+      vectorLayer.set('name', type);
+
       this.map1.addLayer(vectorLayer);
       this.vectorLayers.push(vectorLayer);
+
+      const container = document.createElement('div');
+      container.className = 'layer-item';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = `checkbox-${type}`;
+      checkbox.checked = true;
+      checkbox.addEventListener('change', () => {
+        vectorLayer.setVisible(checkbox.checked);
+      });
+
+      const label = document.createElement('label');
+      label.htmlFor = `checkbox-${type}`;
+      label.textContent = type;
+
+      const toggleContainer = this.shadowRoot.getElementById('layer-toggles');
+      container.appendChild(checkbox);
+      container.appendChild(label);
+      toggleContainer.appendChild(container);
     });
+
+    this.requestUpdate();
   }
+
+
 
   render() {
     return html`
