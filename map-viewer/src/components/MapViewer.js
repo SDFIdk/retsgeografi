@@ -455,7 +455,7 @@ class MapViewer extends LitElement {
             image: new Circle({
               radius: 5,
               fill: new Fill({ color: fillColor }),
-              stroke: new Stroke({ color: strokeColor, width: 1 }),
+              stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
             }),
           });
         default:
@@ -493,6 +493,7 @@ class MapViewer extends LitElement {
           </label>
 
           <!-- Color pickers and stroke width input -->
+          <!-- 
           <div>
             <label for="fill-color">Fill Color:</label>
             <input type="color" id="fill-color" value="${this.styles.fillColor}" @input="${this.updateStyle}">
@@ -506,6 +507,7 @@ class MapViewer extends LitElement {
             <input type="number" id="stroke-width" value="${this.styles.strokeWidth}" min="1" max="10" @input="${this.updateStyle}">
           </div>
         </div>
+        -->
       </div>
     `;
   }
