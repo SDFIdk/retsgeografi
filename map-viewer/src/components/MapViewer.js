@@ -188,48 +188,48 @@ class MapViewer extends LitElement {
               stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
             });
 
+          case 'MultiPolygon':
+            return new Style({
+              fill: new Fill({ color: fillColor }),
+              stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+            });
+
           case 'LineString':
             return new Style({
               stroke: new Stroke({
-                color: strokeColor,  // Apply stroke color for LineString
-                width: strokeWidth,  // Apply stroke width for LineString
+                color: strokeColor,
+                width: strokeWidth,
               }),
             });
 
           case 'Point':
             return new Style({
               image: new Circle({
-                radius: 5, // Set radius for points
+                radius: 5,
                 fill: new Fill({ color: fillColor }),
                 stroke: new Stroke({ color: strokeColor, width: 1 }),
               }),
             });
 
+
+
           default:
-            return new Style(); // Default style if geometry type doesn't match
+            return null; // Return null to skip rendering for unknown geometry types
         }
       });
     });
   }
 
-
-
-
-  updateStyle() {
-    this.applyCustomStyles(); // Trigger custom styles when inputs change
-  }
-
   getStyle(geometryType, sldStyle = null) {
-    // If SLD style is provided, use it
     if (sldStyle) {
       return sldStyle;
     }
 
-    // Default styles if no SLD style is provided
     const { fillColor, strokeColor, strokeWidth } = this.styles;
 
     switch (geometryType) {
       case 'Polygon':
+      case 'MultiPolygon':  // Add MultiPolygon here
         return new Style({
           fill: new Fill({ color: fillColor }),
           stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
@@ -240,15 +240,23 @@ class MapViewer extends LitElement {
         });
       case 'Point':
         return new Style({
+          image: new Circle({
+            radius: 5,
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({ color: strokeColor, width: 1 }),
+          }),
         });
       default:
-        return new Style({
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
-        });
+        console.warn(`No style found for geometry type: ${geometryType}`);
+        return null;
     }
   }
+
+
+  updateStyle() {
+    this.applyCustomStyles(); // Trigger custom styles when inputs change
+  }
+
 
   uploadFiles(event) {
     const files = [...event.target.files];
@@ -326,7 +334,6 @@ class MapViewer extends LitElement {
     const featureGroups = features.reduce((groups, feature, index) => {
       const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index];
       const firstChildElement = featureMember.firstElementChild;
-
       const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
 
       if (!groups[featureType]) groups[featureType] = [];
@@ -345,14 +352,31 @@ class MapViewer extends LitElement {
         source: vectorSource,
         style: (feature) => {
           const geometryType = feature.getGeometry().getType();
-          return sldStyles && sldStyles[geometryType] ? sldStyles[geometryType] : this.getStyle(geometryType);
+          let style;
+
+          if (sldStyles && sldStyles[geometryType]) {
+            style = sldStyles[geometryType];
+          } else {
+            style = this.getStyle(geometryType);
+          }
+
+          if (style) {
+            return style;
+          } else {
+            console.warn(`No style found for geometry type: ${geometryType}`);
+            return new Style({ stroke: new Stroke({ color: '#ff0000', width: 2 }) });
+          }
         }
+      });
+      features.forEach((feature) => {
+        console.log('Geometry Type:', feature.getGeometry().getType());
       });
       vectorLayer.set('name', type);
 
       this.map1.addLayer(vectorLayer);
       this.vectorLayers.push(vectorLayer);
 
+      // Create container for each layer control with color pickers
       const container = document.createElement('div');
       container.className = 'layer-item';
 
@@ -368,14 +392,78 @@ class MapViewer extends LitElement {
       label.htmlFor = `checkbox-${type}`;
       label.textContent = type;
 
-      const toggleContainer = this.shadowRoot.getElementById('layer-toggles');
+      // Color pickers for individual layer styling
+      const fillColorInput = document.createElement('input');
+      fillColorInput.type = 'color';
+      fillColorInput.value = this.styles.fillColor;
+      fillColorInput.addEventListener('input', () => {
+        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
+      });
+
+      const strokeColorInput = document.createElement('input');
+      strokeColorInput.type = 'color';
+      strokeColorInput.value = this.styles.strokeColor;
+      strokeColorInput.addEventListener('input', () => {
+        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
+      });
+
+      const strokeWidthInput = document.createElement('input');
+      strokeWidthInput.type = 'number';
+      strokeWidthInput.value = this.styles.strokeWidth;
+      strokeWidthInput.min = 1;
+      strokeWidthInput.max = 10;
+      strokeWidthInput.addEventListener('input', () => {
+        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
+      });
+
       container.appendChild(checkbox);
       container.appendChild(label);
-      toggleContainer.appendChild(container);
+      container.appendChild(fillColorInput);
+      container.appendChild(strokeColorInput);
+      container.appendChild(strokeWidthInput);
+
+      this.shadowRoot.getElementById('layer-toggles').appendChild(container);
     });
 
     this.requestUpdate();
   }
+
+  updateLayerStyle(layer, type, fillColor, strokeColor, strokeWidth) {
+    layer.setStyle((feature) => {
+      const geometryType = feature.getGeometry().getType();
+
+      switch (geometryType) {
+        case 'Polygon':
+          return new Style({
+            fill: new Fill({ color: fillColor }),
+            stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
+          });
+        case 'MultiPolygon':
+          return new Style({
+            fill: new Fill({ color: fillColor }),
+            stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
+          });
+        case 'LineString':
+          return new Style({
+            stroke: new Stroke({
+              color: strokeColor,
+              width: parseInt(strokeWidth, 10),
+            }),
+          });
+        case 'Point':
+          return new Style({
+            image: new Circle({
+              radius: 5,
+              fill: new Fill({ color: fillColor }),
+              stroke: new Stroke({ color: strokeColor, width: 1 }),
+            }),
+          });
+        default:
+          return new Style({}); // Fallback style for unsupported geometry types
+      }
+    });
+  }
+
 
 
 
