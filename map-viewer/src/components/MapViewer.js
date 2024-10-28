@@ -272,6 +272,19 @@ class MapViewer extends LitElement {
     const xmlDoc = parser.parseFromString(sldString, 'application/xml');
     const styles = {};
 
+    xmlDoc.querySelectorAll('Rule').forEach(rule => {
+      const ruleName = rule.querySelector('Name')?.textContent;
+      const symbolizer = rule.querySelector('PolygonSymbolizer, LineSymbolizer, PointSymbolizer');
+
+      if (symbolizer) {
+        const geometryType = symbolizer.nodeName.replace('Symbolizer', '');
+        const style = this.getStyle(symbolizer, geometryType); // Helper method to extract SLD style
+        if (ruleName && style) {
+          styles[ruleName] = style;
+        }
+      }
+    });
+
     xmlDoc.querySelectorAll('PolygonSymbolizer').forEach(symbol => {
       const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
       const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
@@ -337,20 +350,28 @@ class MapViewer extends LitElement {
       const vectorLayer = new VectorLayer({
         source: vectorSource,
         style: (feature) => {
+          const rgeoNavn = feature.get('rgeo:navn'); // Get the rgeo:navn attribute
           const geometryType = feature.getGeometry().getType();
           let style;
 
-          if (sldStyles && sldStyles[geometryType]) {
+          // Check if SLD style exists for this specific feature name
+          if (sldStyles && rgeoNavn && sldStyles[rgeoNavn]) {
+            console.log('rgeoNavn:', rgeoNavn);
+            style = sldStyles[rgeoNavn]; // Use SLD style if it exists for the rgeo:navn
+          } else if (sldStyles && sldStyles[geometryType]) {
+            // If no SLD style for rgeo:navn, check based on geometry type
             style = sldStyles[geometryType];
           } else {
+            // Fallback to the existing getStyle method for default styling
             style = this.getStyle(geometryType);
           }
 
           if (style) {
-            return style;
+            return style; // Return the found style
           } else {
+            // If no style is found, log a warning and return a default style
             console.warn(`No style found for geometry type: ${geometryType}`);
-            return new Style({ stroke: new Stroke({ color: '#ff0000', width: 2 }) });
+            return new ol.style.Style({ stroke: new ol.style.Stroke({ color: '#ff0000', width: 2 }) });
           }
         }
       });
