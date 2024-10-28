@@ -163,15 +163,6 @@ class MapViewer extends LitElement {
     view.setZoom(view.getZoom() - 1);
   }
 
-  applySLDStyles(sldStyle) {
-    // Assuming sldStyle is correctly parsed from the SLD file
-    this.map1.getLayers().forEach(layer => {
-      if (layer instanceof VectorLayer) {
-        layer.setStyle(sldStyle); // Apply the base SLD style
-      }
-    });
-  }
-
   applyCustomStyles() {
     const fillColor = this.shadowRoot.getElementById('fill-color').value;
     const strokeColor = this.shadowRoot.getElementById('stroke-color').value;
@@ -250,11 +241,6 @@ class MapViewer extends LitElement {
         console.warn(`No style found for geometry type: ${geometryType}`);
         return null;
     }
-  }
-
-
-  updateStyle() {
-    this.applyCustomStyles(); // Trigger custom styles when inputs change
   }
 
 
@@ -492,22 +478,7 @@ class MapViewer extends LitElement {
             </svg>
           </label>
 
-          <!-- Color pickers and stroke width input -->
-          <!-- 
-          <div>
-            <label for="fill-color">Fill Color:</label>
-            <input type="color" id="fill-color" value="${this.styles.fillColor}" @input="${this.updateStyle}">
-          </div>
-          <div>
-            <label for="stroke-color">Stroke Color:</label>
-            <input type="color" id="stroke-color" value="${this.styles.strokeColor}" @input="${this.updateStyle}">
-          </div>
-          <div>
-            <label for="stroke-width">Stroke Width:</label>
-            <input type="number" id="stroke-width" value="${this.styles.strokeWidth}" min="1" max="10" @input="${this.updateStyle}">
-          </div>
-        </div>
-        -->
+
       </div>
     `;
   }
