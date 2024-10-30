@@ -15,6 +15,7 @@ import GML32 from 'ol/format/GML32.js';
 import { register } from 'ol/proj/proj4';
 import { get } from 'ol/proj';
 import proj4 from 'proj4';
+import Overlay from 'ol/Overlay.js';
 
 // Define and register the projection for EPSG:25832
 proj4.defs('EPSG:25832', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs +axis=enu');
@@ -123,6 +124,7 @@ class MapViewer extends LitElement {
 
   firstUpdated() {
     this.initMaps();
+    this.initHoverPopup();
   }
 
   initMaps() {
@@ -150,6 +152,53 @@ class MapViewer extends LitElement {
         projection: epsg25832,
       }),
       controls: [],
+    });
+  }
+
+  initHoverPopup() {
+    const container = document.createElement('div');
+    container.id = 'popup';
+    container.style.cssText = `
+      background: white;
+      border: 1px solid black;
+      padding: 5px;
+      border-radius: 5px;
+      font-size: 12px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      position: absolute;
+      display: none;
+    `;
+
+    // Append the container to the shadow root
+    this.shadowRoot.appendChild(container);
+
+    // Create an overlay using the container
+    this.overlay = new Overlay({
+      element: container,
+      offset: [10, 10],
+      positioning: 'center-left',
+    });
+
+    // Add overlay to the map
+    this.map1.addOverlay(this.overlay);
+
+    // Set up hover event to display feature information
+    this.map1.on('pointermove', (event) => {
+      const feature = this.map1.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+      if (feature) {
+        const rgeoNavn = feature.get('rgeo:navn');
+        const rgeoType = feature.get('rgeo:type');
+
+        // Set the content of the popup and display it
+        container.innerHTML = `<strong>${rgeoNavn}</strong><br/>Type: ${rgeoType}`;
+        container.style.display = 'block';
+
+        // Set the position of the overlay to the feature location
+        this.overlay.setPosition(event.coordinate);
+      } else {
+        container.style.display = 'none'; // Hide if no feature is found
+      }
     });
   }
 
