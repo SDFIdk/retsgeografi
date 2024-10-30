@@ -187,10 +187,10 @@ class MapViewer extends LitElement {
     this.map1.on('pointermove', (event) => {
       const feature = this.map1.forEachFeatureAtPixel(event.pixel, (feat) => feat);
       if (feature) {
-        console.log('Feature properties:', feature.getProperties()); // Log all properties for inspection
+        // console.log('Feature properties:', feature.getProperties());
 
-        const rgeoNavn = feature.get('rgeo:navn') || feature.get('navn');
-        const rgeoType = feature.get('rgeo:type') || feature.get('type');
+        const rgeoNavn = feature.get('navn');
+        const rgeoType = feature.get('type');
 
         // Display properties in the popup
         container.innerHTML = `<strong>${rgeoNavn || 'Unknown'}</strong><br/>Type: ${rgeoType || 'Unknown'}`;
