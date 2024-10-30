@@ -187,17 +187,17 @@ class MapViewer extends LitElement {
     this.map1.on('pointermove', (event) => {
       const feature = this.map1.forEachFeatureAtPixel(event.pixel, (feat) => feat);
       if (feature) {
-        const rgeoNavn = feature.get('rgeo:navn');
-        const rgeoType = feature.get('rgeo:type');
+        console.log('Feature properties:', feature.getProperties()); // Log all properties for inspection
 
-        // Set the content of the popup and display it
-        container.innerHTML = `<strong>${rgeoNavn}</strong><br/>Type: ${rgeoType}`;
+        const rgeoNavn = feature.get('rgeo:navn') || feature.get('navn');
+        const rgeoType = feature.get('rgeo:type') || feature.get('type');
+
+        // Display properties in the popup
+        container.innerHTML = `<strong>${rgeoNavn || 'Unknown'}</strong><br/>Type: ${rgeoType || 'Unknown'}`;
         container.style.display = 'block';
-
-        // Set the position of the overlay to the feature location
         this.overlay.setPosition(event.coordinate);
       } else {
-        container.style.display = 'none'; // Hide if no feature is found
+        container.style.display = 'none';
       }
     });
   }
