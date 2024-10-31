@@ -297,6 +297,7 @@ class MapViewer extends LitElement {
     const files = [...event.target.files];
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
     const sldFile = files.find(file => file.name.endsWith('.sld'));
+    const geojsonFile = files.find(file => file.name.endsWith('.geojson'));
 
     if (gmlFile) {
       const gmlReader = new FileReader();
@@ -314,6 +315,53 @@ class MapViewer extends LitElement {
       };
       gmlReader.readAsText(gmlFile);
     }
+
+    if (geojsonFile) {
+      const geojsonReader = new FileReader();
+      geojsonReader.onload = () => {
+        this.loadMetadata(JSON.parse(geojsonReader.result));
+      };
+      geojsonReader.readAsText(geojsonFile);
+    }
+  }
+
+  loadMetadata(metadata) {
+    // Create a foldable textbox for metadata display
+    let metadataBox = this.shadowRoot.getElementById('metadata-box');
+    if (!metadataBox) {
+      metadataBox = document.createElement('div');
+      metadataBox.id = 'metadata-box';
+      metadataBox.style.cssText = `
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-height: 200px;
+            overflow-y: auto;
+        `;
+      this.shadowRoot.appendChild(metadataBox);
+    }
+
+    // Toggle foldable content
+    metadataBox.innerHTML = `
+        <button id="toggle-metadata" style="background:none; border:none; font-size:1rem; cursor:pointer;">
+            Metadata ▼
+        </button>
+        <div id="metadata-content" style="display:none; margin-top:5px;">
+            <pre>${JSON.stringify(metadata, null, 2)}</pre>
+        </div>
+    `;
+
+    const toggleButton = metadataBox.querySelector('#toggle-metadata');
+    const contentBox = metadataBox.querySelector('#metadata-content');
+    toggleButton.addEventListener('click', () => {
+      const isVisible = contentBox.style.display === 'block';
+      contentBox.style.display = isVisible ? 'none' : 'block';
+      toggleButton.textContent = isVisible ? 'Metadata ▼' : 'Metadata ▲';
+    });
   }
 
   parseSLD(sldString) {
@@ -541,7 +589,7 @@ class MapViewer extends LitElement {
             </svg>
           </button>
 
-          <input type="file" id="file-input" multiple accept=".gml,.sld" @change="${this.uploadFiles}" />
+          <input type="file" id="file-input" multiple accept=".gml,.sld, .geojson" @change="${this.uploadFiles}" />
           <label class="control-label" for="file-input" title="Upload GML & SLD">
             <svg>
               <use href="${svg}#arrow-up"></use>
