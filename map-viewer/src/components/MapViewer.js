@@ -326,7 +326,10 @@ class MapViewer extends LitElement {
   }
 
   loadMetadata(metadata) {
-    // Create a foldable textbox for metadata display
+    const properties = metadata.properties;
+    if (!properties) return;
+
+    // Create or select metadata box
     let metadataBox = this.shadowRoot.getElementById('metadata-box');
     if (!metadataBox) {
       metadataBox = document.createElement('div');
@@ -335,23 +338,31 @@ class MapViewer extends LitElement {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            max-height: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            max-height: 300px;
             overflow-y: auto;
+            max-width: 25rem;
         `;
       this.shadowRoot.appendChild(metadataBox);
     }
 
-    // Toggle foldable content
+    // Generate styled HTML for properties
+    let contentHtml = ``;
+    for (const [key, value] of Object.entries(properties)) {
+      const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
+      contentHtml += `<div style="margin-bottom: 8px;"><strong>${displayKey}:</strong> ${value}</div>`;
+    }
+
+    // Toggle content visibility
     metadataBox.innerHTML = `
         <button id="toggle-metadata" style="background:none; border:none; font-size:1rem; cursor:pointer;">
             Metadata ▼
         </button>
-        <div id="metadata-content" style="display:none; margin-top:5px;">
-            <pre>${JSON.stringify(metadata, null, 2)}</pre>
+        <div id="metadata-content" style="display:none; margin-top:10px;">
+            ${contentHtml}
         </div>
     `;
 
