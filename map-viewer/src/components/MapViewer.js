@@ -382,47 +382,25 @@ class MapViewer extends LitElement {
 
     xmlDoc.querySelectorAll('Rule').forEach(rule => {
       const ruleName = rule.querySelector('Name')?.textContent;
-      const symbolizer = rule.querySelector('PolygonSymbolizer, LineSymbolizer, PointSymbolizer');
+      const symbolizer = rule.querySelector('PolygonSymbolizer');
 
       if (symbolizer) {
-        const geometryType = symbolizer.nodeName.replace('Symbolizer', '');
-        const style = this.getStyle(symbolizer, geometryType); // Helper method to extract SLD style
-        if (ruleName && style) {
+        // Extract fill and stroke colors
+        const fillColor = symbolizer.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#ffffff';
+        const strokeColor = symbolizer.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
+        const strokeWidth = parseFloat(symbolizer.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
+
+        // Define the style based on extracted values
+        const style = new Style({
+          fill: new Fill({ color: fillColor }),
+          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+        });
+
+        // Store the style associated with this rule name
+        if (ruleName) {
           styles[ruleName] = style;
         }
       }
-    });
-
-    xmlDoc.querySelectorAll('PolygonSymbolizer').forEach(symbol => {
-      const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
-      const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
-      const strokeWidth = parseFloat(symbol.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
-
-      styles['Polygon'] = new Style({
-        fill: new Fill({ color: fillColor }),
-        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
-      });
-    });
-
-    xmlDoc.querySelectorAll('LineSymbolizer').forEach(symbol => {
-      const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
-      const strokeWidth = parseFloat(symbol.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
-
-      styles['LineString'] = new Style({
-        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
-      });
-    });
-
-    xmlDoc.querySelectorAll('PointSymbolizer').forEach(symbol => {
-      const fillColor = symbol.querySelector('Graphic > Mark > Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
-
-      styles['Point'] = new Style({
-        image: new Circle({
-          radius: 5,
-          fill: new Fill({ color: fillColor }),
-          stroke: new Stroke({ color: '#000000', width: 1 }),
-        }),
-      });
     });
 
     return styles;
