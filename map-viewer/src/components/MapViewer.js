@@ -212,54 +212,6 @@ class MapViewer extends LitElement {
     view.setZoom(view.getZoom() - 1);
   }
 
-  applyCustomStyles() {
-    const fillColor = this.shadowRoot.getElementById('fill-color').value;
-    const strokeColor = this.shadowRoot.getElementById('stroke-color').value;
-    const strokeWidth = parseInt(this.shadowRoot.getElementById('stroke-width').value, 10);
-
-    this.vectorLayers.forEach(layer => {
-      layer.setStyle((feature) => {
-        const geometryType = feature.getGeometry().getType();
-
-        switch (geometryType) {
-          case 'Polygon':
-            return new Style({
-              fill: new Fill({ color: fillColor }),
-              stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
-            });
-
-          case 'MultiPolygon':
-            return new Style({
-              fill: new Fill({ color: fillColor }),
-              stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
-            });
-
-          case 'LineString':
-            return new Style({
-              stroke: new Stroke({
-                color: strokeColor,
-                width: strokeWidth,
-              }),
-            });
-
-          case 'Point':
-            return new Style({
-              image: new Circle({
-                radius: 5,
-                fill: new Fill({ color: fillColor }),
-                stroke: new Stroke({ color: strokeColor, width: 1 }),
-              }),
-            });
-
-
-
-          default:
-            return null; // Return null to skip rendering for unknown geometry types
-        }
-      });
-    });
-  }
-
   getStyle(geometryType, sldStyle = null) {
     if (sldStyle) {
       return sldStyle;
