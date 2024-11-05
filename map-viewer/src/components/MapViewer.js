@@ -271,19 +271,15 @@ class MapViewer extends LitElement {
       case 'Polygon':
       case 'MultiPolygon':  // Add MultiPolygon here
         return new Style({
-          fill: new Fill({ color: fillColor }),
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
-        });
-      case 'LineString':
-        return new Style({
+          fill: new Fill({ color: '#1100ff' }),
           stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
         });
       case 'Point':
         return new Style({
           image: new Circle({
             radius: 5,
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: 1 }),
+            fill: new Fill({ color: '#00ffd1' }),
+            stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
           }),
         });
       default:
@@ -394,7 +390,7 @@ class MapViewer extends LitElement {
     });
 
     xmlDoc.querySelectorAll('PolygonSymbolizer').forEach(symbol => {
-      const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
+      const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#1100ff';
       const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
       const strokeWidth = parseFloat(symbol.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
 
@@ -414,7 +410,7 @@ class MapViewer extends LitElement {
     });
 
     xmlDoc.querySelectorAll('PointSymbolizer').forEach(symbol => {
-      const fillColor = symbol.querySelector('Graphic > Mark > Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
+      const fillColor = symbol.querySelector('Graphic > Mark > Fill > CssParameter[name="fill"]')?.textContent || '#ff0015';
 
       styles['Point'] = new Style({
         image: new Circle({
@@ -479,7 +475,6 @@ class MapViewer extends LitElement {
           } else {
             // If no style is found, log a warning and return a default style
             console.warn(`No style found for geometry type: ${geometryType}`);
-            return new ol.style.Style({ stroke: new ol.style.Stroke({ color: '#ff0000', width: 2 }) });
           }
         }
       });
@@ -512,14 +507,12 @@ class MapViewer extends LitElement {
       fillColorInput.type = 'color';
       fillColorInput.value = this.styles.fillColor;
       fillColorInput.addEventListener('input', () => {
-        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
       });
 
       const strokeColorInput = document.createElement('input');
       strokeColorInput.type = 'color';
       strokeColorInput.value = this.styles.strokeColor;
       strokeColorInput.addEventListener('input', () => {
-        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
       });
 
       const strokeWidthInput = document.createElement('input');
@@ -528,7 +521,6 @@ class MapViewer extends LitElement {
       strokeWidthInput.min = 1;
       strokeWidthInput.max = 10;
       strokeWidthInput.addEventListener('input', () => {
-        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
       });
 
       container.appendChild(checkbox);
@@ -543,41 +535,6 @@ class MapViewer extends LitElement {
     this.requestUpdate();
   }
 
-  updateLayerStyle(layer, type, fillColor, strokeColor, strokeWidth) {
-    layer.setStyle((feature) => {
-      const geometryType = feature.getGeometry().getType();
-
-      switch (geometryType) {
-        case 'Polygon':
-          return new Style({
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
-          });
-        case 'MultiPolygon':
-          return new Style({
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
-          });
-        case 'LineString':
-          return new Style({
-            stroke: new Stroke({
-              color: strokeColor,
-              width: parseInt(strokeWidth, 10),
-            }),
-          });
-        case 'Point':
-          return new Style({
-            image: new Circle({
-              radius: 5,
-              fill: new Fill({ color: fillColor }),
-              stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
-            }),
-          });
-        default:
-          return new Style({}); // Fallback style for unsupported geometry types
-      }
-    });
-  }
 
 
 
