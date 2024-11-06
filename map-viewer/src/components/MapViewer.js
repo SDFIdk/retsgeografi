@@ -14,8 +14,11 @@ import { Style, Stroke, Fill, Circle} from 'ol/style.js';
 import GML32 from 'ol/format/GML32.js';
 import { register } from 'ol/proj/proj4';
 import { get } from 'ol/proj';
+import { getPointResolution } from 'ol/proj';
 import proj4 from 'proj4';
 import Overlay from 'ol/Overlay.js';
+// SLD Reader, see https://github.com/NieuwlandGeo/SLDReader
+import * as SLDReader from '@nieuwlandgeo/sldreader';
 
 // Define and register the projection for EPSG:25832
 proj4.defs('EPSG:25832', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs +axis=enu');
@@ -255,12 +258,11 @@ class MapViewer extends LitElement {
       const gmlReader = new FileReader();
       gmlReader.onload = () => {
         if (sldFile) {
-          const sldReader = new FileReader();
-          sldReader.onload = () => {
-            const styles = this.parseSLD(sldReader.result);
-            this.loadGML(gmlReader.result, styles);
+          const sldFileReader = new FileReader();
+          sldFileReader.onload = () => {
+            this.loadGML(gmlReader.result, sldFileReader.result);
           };
-          sldReader.readAsText(sldFile);
+          sldFileReader.readAsText(sldFile);
         } else {
           this.loadGML(gmlReader.result, null);
         }
@@ -346,7 +348,7 @@ class MapViewer extends LitElement {
     });
 
     xmlDoc.querySelectorAll('PolygonSymbolizer').forEach(symbol => {
-      const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
+      const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#1100ff';
       const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
       const strokeWidth = parseFloat(symbol.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
 
@@ -366,7 +368,7 @@ class MapViewer extends LitElement {
     });
 
     xmlDoc.querySelectorAll('PointSymbolizer').forEach(symbol => {
-      const fillColor = symbol.querySelector('Graphic > Mark > Fill > CssParameter[name="fill"]')?.textContent || '#73ff00';
+      const fillColor = symbol.querySelector('Graphic > Mark > Fill > CssParameter[name="fill"]')?.textContent || '#ff0015';
 
       styles['Point'] = new Style({
         image: new Circle({
@@ -380,7 +382,7 @@ class MapViewer extends LitElement {
     return styles;
   }
 
-  loadGML(gmlString, sldStyles) {
+  loadGML(gmlString, sldString = null) {
     const format = new GML32();
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
@@ -404,36 +406,54 @@ class MapViewer extends LitElement {
     this.vectorLayers = [];
     this.shadowRoot.getElementById('layer-toggles').innerHTML = '';
 
+    let sldObject = null;
+    if (sldString) {
+      sldObject = SLDReader.Reader(sldString);
+    }
+
+    const viewProjection = this.map1.getView().getProjection();
+
     Object.keys(featureGroups).forEach(type => {
       const vectorSource = new VectorSource({ features: featureGroups[type] });
 
       const vectorLayer = new VectorLayer({
-        source: vectorSource,
-        style: (feature) => {
-          const rgeoNavn = feature.get('rgeo:navn'); // Get the rgeo:navn attribute
-          const geometryType = feature.getGeometry().getType();
-          let style;
-
-          // Check if SLD style exists for this specific feature name
-          if (sldStyles && rgeoNavn && sldStyles[rgeoNavn]) {
-            console.log('rgeoNavn:', rgeoNavn);
-            style = sldStyles[rgeoNavn]; // Use SLD style if it exists for the rgeo:navn
-          } else if (sldStyles && sldStyles[geometryType]) {
-            // If no SLD style for rgeo:navn, check based on geometry type
-            style = sldStyles[geometryType];
-          } else {
-            // Fallback to the existing getStyle method for default styling
-            style = this.getStyle(geometryType);
-          }
-
-          if (style) {
-            return style; // Return the found style
-          } else {
-            // If no style is found, log a warning and return a default style
-            console.warn(`No style found for geometry type: ${geometryType}`);
-          }
-        }
+        source: vectorSource
       });
+
+
+      if (sldObject) {
+        /* SLD contains a named layer for every feature type in the data set,
+        so find the correct named layer by name.
+        Convention: unqualified name of the feature type = name of the named layer (to be verified)
+        */
+        const sldLayer = SLDReader.getLayer(sldObject, type);
+        // do not use parameter name, so the first (and only) style will be returned
+        if (sldLayer) {
+          const sldStyle = SLDReader.getStyle(sldLayer);
+          if (sldStyle) {
+            const featureTypeStyle = sldStyle.featuretypestyles[0];
+            vectorLayer.setStyle(SLDReader.createOlStyleFunction(featureTypeStyle, {
+              // Use the convertResolution option to calculate a more accurate resolution.
+              convertResolution: viewResolution => {
+                const viewCenter = this.map1.getView().getCenter();
+                return getPointResolution(viewProjection, viewResolution, viewCenter);
+              },
+
+              // If you use point icons with an ExternalGraphic, you have to use imageLoadCallback
+              // to update the vector layer when an image finishes loading.
+              // If you do not do this, the image will only be visible after next layer pan/zoom.
+              imageLoadedCallback: () => {
+                vectorLayer.changed();
+              },
+            }));
+          } else {
+            console.warn("No style found for layer " + sldLayer);
+          }
+        } else {
+          console.warn("No named layer found for " + type);
+        }
+      }
+
       features.forEach((feature) => {
         console.log('Geometry Type:', feature.getGeometry().getType());
       });
@@ -463,14 +483,12 @@ class MapViewer extends LitElement {
       fillColorInput.type = 'color';
       fillColorInput.value = this.styles.fillColor;
       fillColorInput.addEventListener('input', () => {
-        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
       });
 
       const strokeColorInput = document.createElement('input');
       strokeColorInput.type = 'color';
       strokeColorInput.value = this.styles.strokeColor;
       strokeColorInput.addEventListener('input', () => {
-        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
       });
 
       const strokeWidthInput = document.createElement('input');
@@ -479,7 +497,6 @@ class MapViewer extends LitElement {
       strokeWidthInput.min = 1;
       strokeWidthInput.max = 10;
       strokeWidthInput.addEventListener('input', () => {
-        this.updateLayerStyle(vectorLayer, type, fillColorInput.value, strokeColorInput.value, strokeWidthInput.value);
       });
 
       container.appendChild(checkbox);
@@ -494,41 +511,6 @@ class MapViewer extends LitElement {
     this.requestUpdate();
   }
 
-  updateLayerStyle(layer, type, fillColor, strokeColor, strokeWidth) {
-    layer.setStyle((feature) => {
-      const geometryType = feature.getGeometry().getType();
-
-      switch (geometryType) {
-        case 'Polygon':
-          return new Style({
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
-          });
-        case 'MultiPolygon':
-          return new Style({
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
-          });
-        case 'LineString':
-          return new Style({
-            stroke: new Stroke({
-              color: strokeColor,
-              width: parseInt(strokeWidth, 10),
-            }),
-          });
-        case 'Point':
-          return new Style({
-            image: new Circle({
-              radius: 5,
-              fill: new Fill({ color: fillColor }),
-              stroke: new Stroke({ color: strokeColor, width: parseInt(strokeWidth, 10) }),
-            }),
-          });
-        default:
-          return new Style({}); // Fallback style for unsupported geometry types
-      }
-    });
-  }
 
 
 
