@@ -151,7 +151,7 @@ class MapViewer extends LitElement {
       ],
       view: new View({
         center: [600000, 6225000],
-        zoom: 8,
+        zoom: 9,
         projection: epsg25832,
       }),
       controls: [],
