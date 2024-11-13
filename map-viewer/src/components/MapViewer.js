@@ -332,112 +332,58 @@ class MapViewer extends LitElement {
   loadGML(gmlString, sldString = null) {
     const { features, xmlDoc } = this.parseGML(gmlString); // parseGML()
     const featureGroups = this.groupFeaturesByType(features, xmlDoc); // groupFeaturesByType()
-    this.resetLayers()
-
-    let sldObject = null;
-    if (sldString) {
-      sldObject = SLDReader.Reader(sldString);
-    }
+    this.resetLayers();
 
     const viewProjection = this.map1.getView().getProjection();
+    const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
     Object.keys(featureGroups).forEach(type => {
       const vectorSource = new VectorSource({ features: featureGroups[type] });
-
-      const vectorLayer = new VectorLayer({
-        source: vectorSource
-      });
-
+      const vectorLayer = new VectorLayer({ source: vectorSource });
 
       if (sldObject) {
-        /* SLD contains a named layer for every feature type in the data set,
-        so find the correct named layer by name.
-        Convention: unqualified name of the feature type = name of the named layer (to be verified)
-        */
         const sldLayer = SLDReader.getLayer(sldObject, type);
-        // do not use parameter name, so the first (and only) style will be returned
         if (sldLayer) {
           const sldStyle = SLDReader.getStyle(sldLayer);
           if (sldStyle) {
             const featureTypeStyle = sldStyle.featuretypestyles[0];
             vectorLayer.setStyle(SLDReader.createOlStyleFunction(featureTypeStyle, {
-              // Use the convertResolution option to calculate a more accurate resolution.
               convertResolution: viewResolution => {
                 const viewCenter = this.map1.getView().getCenter();
                 return getPointResolution(viewProjection, viewResolution, viewCenter);
               },
-
-              // If you use point icons with an ExternalGraphic, you have to use imageLoadCallback
-              // to update the vector layer when an image finishes loading.
-              // If you do not do this, the image will only be visible after next layer pan/zoom.
               imageLoadedCallback: () => {
                 vectorLayer.changed();
               },
             }));
+            console.log(`Applied SLD style for feature type: ${type}`);
           } else {
-            console.warn("No style found for layer " + sldLayer);
+            console.warn(`No SLD style found for layer ${sldLayer}`);
           }
         } else {
-          console.warn("No named layer found for " + type);
+          console.warn(`No named layer found in SLD for type: ${type}`);
         }
       }
 
-      features.forEach((feature) => {
-        console.log('Geometry Type:', feature.getGeometry().getType());
-      });
-      vectorLayer.set('name', type);
-
+      // Add vector layer to the map and create controls
       this.map1.addLayer(vectorLayer);
       this.vectorLayers.push(vectorLayer);
 
-      // Create container for each layer control with color pickers
       const container = document.createElement('div');
       container.className = 'layer-item';
 
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = `checkbox-${type}`;
-      checkbox.checked = true;
-      checkbox.addEventListener('change', () => {
-        vectorLayer.setVisible(checkbox.checked);
-      });
-
-      const label = document.createElement('label');
-      label.htmlFor = `checkbox-${type}`;
-      label.textContent = type;
-
-      // Color pickers for individual layer styling
-      const fillColorInput = document.createElement('input');
-      fillColorInput.type = 'color';
-      fillColorInput.value = this.styles.fillColor;
-      fillColorInput.addEventListener('input', () => {
-      });
-
-      const strokeColorInput = document.createElement('input');
-      strokeColorInput.type = 'color';
-      strokeColorInput.value = this.styles.strokeColor;
-      strokeColorInput.addEventListener('input', () => {
-      });
-
-      const strokeWidthInput = document.createElement('input');
-      strokeWidthInput.type = 'number';
-      strokeWidthInput.value = this.styles.strokeWidth;
-      strokeWidthInput.min = 1;
-      strokeWidthInput.max = 10;
-      strokeWidthInput.addEventListener('input', () => {
-      });
-
+      const checkbox = this.createLayerToggleCheckbox(type, vectorLayer);
       container.appendChild(checkbox);
-      container.appendChild(label);
-      container.appendChild(fillColorInput);
-      container.appendChild(strokeColorInput);
-      container.appendChild(strokeWidthInput);
+
+      // Add color pickers
+      this.addColorPickers(container, type, vectorLayer);
 
       this.shadowRoot.getElementById('layer-toggles').appendChild(container);
     });
 
     this.requestUpdate();
   }
+
 
   parseGML(gmlString) {
     const format = new GML32();
@@ -470,6 +416,129 @@ class MapViewer extends LitElement {
     })
     this.vectorLayers = []
     this.shadowRoot.getElementById('layer-toggles').innerHTML = ''
+  }
+
+  applySLDStyles(sldObject, type, viewProjection) {
+    if (!sldObject) return null;
+
+    const sldLayer = SLDReader.getLayer(sldObject, type);
+    if (sldLayer) {
+      console.log(`SLD layer found for type: ${type}`);
+      const sldStyle = SLDReader.getStyle(sldLayer);
+      if (sldStyle) {
+        const featureTypeStyle = sldStyle.featuretypestyles[0];
+        console.log(`SLD style retrieved for type: ${type}`);
+        return SLDReader.createOlStyleFunction(featureTypeStyle, {
+          convertResolution: viewResolution => {
+            const viewCenter = this.map1.getView().getCenter();
+            return getPointResolution(viewProjection, viewResolution, viewCenter);
+          },
+          imageLoadedCallback: () => {
+            this.map1.changed();
+          },
+        });
+      } else {
+        console.warn(`No style found in SLD for layer of type: ${type}`);
+      }
+    } else {
+      console.warn(`No SLD layer found for type: ${type}`);
+    }
+    return null;
+  }
+
+  updateLayerStyle(vectorLayer, { fillColor, strokeColor, strokeWidth }) {
+    vectorLayer.setStyle(new Style({
+      fill: new Fill({ color: fillColor }),
+      stroke: new Stroke({
+        color: strokeColor,
+        width: strokeWidth
+      })
+    }));
+  }
+
+  createLayerToggleCheckbox(type, vectorLayer) {
+    const checkboxContainer = document.createElement('div');
+    checkboxContainer.className = 'checkbox-container';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `checkbox-${type}`;
+    checkbox.checked = true;
+    checkbox.addEventListener('change', () => {
+      vectorLayer.setVisible(checkbox.checked);
+    });
+
+    const label = document.createElement('label');
+    label.htmlFor = `checkbox-${type}`;
+    label.textContent = type;
+
+    checkboxContainer.appendChild(checkbox);
+    checkboxContainer.appendChild(label);
+
+    return checkboxContainer;
+  }
+
+  addColorPickers(container, type, vectorLayer) {
+    const fillColorInput = document.createElement('input');
+    fillColorInput.type = 'color';
+    fillColorInput.value = this.styles.fillColor;
+    fillColorInput.addEventListener('input', () => {
+      this.updateLayerStyle(vectorLayer, {
+        fillColor: fillColorInput.value,
+        strokeColor: strokeColorInput.value,
+        strokeWidth: strokeWidthInput.value
+      });
+    });
+
+    const strokeColorInput = document.createElement('input');
+    strokeColorInput.type = 'color';
+    strokeColorInput.value = this.styles.strokeColor;
+    strokeColorInput.addEventListener('input', () => {
+      this.updateLayerStyle(vectorLayer, {
+        fillColor: fillColorInput.value,
+        strokeColor: strokeColorInput.value,
+        strokeWidth: strokeWidthInput.value
+      });
+    });
+
+    const strokeWidthInput = document.createElement('input');
+    strokeWidthInput.type = 'number';
+    strokeWidthInput.value = this.styles.strokeWidth;
+    strokeWidthInput.min = 1;
+    strokeWidthInput.max = 10;
+    strokeWidthInput.addEventListener('input', () => {
+      this.updateLayerStyle(vectorLayer, {
+        fillColor: fillColorInput.value,
+        strokeColor: strokeColorInput.value,
+        strokeWidth: strokeWidthInput.value
+      });
+    });
+
+    container.appendChild(fillColorInput);
+    container.appendChild(strokeColorInput);
+    container.appendChild(strokeWidthInput);
+  }
+
+
+  addLayerWithControls(type, vectorSource) {
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+      name: type
+    });
+
+    this.map1.addLayer(vectorLayer);
+    this.vectorLayers.push(vectorLayer);
+
+    const container = document.createElement('div');
+    container.className = 'layer-item';
+
+    const checkbox = this.createLayerToggleCheckbox(type, vectorLayer);
+
+    // Add color pickers and controls
+    this.addColorPickers(container, type, vectorLayer);
+
+    container.appendChild(checkbox);
+    this.shadowRoot.getElementById('layer-toggles').appendChild(container);
   }
 
 
