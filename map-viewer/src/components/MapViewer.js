@@ -339,46 +339,12 @@ class MapViewer extends LitElement {
 
     Object.keys(featureGroups).forEach(type => {
       const vectorSource = new VectorSource({ features: featureGroups[type] });
-      const vectorLayer = new VectorLayer({ source: vectorSource });
 
-      if (sldObject) {
-        const sldLayer = SLDReader.getLayer(sldObject, type);
-        if (sldLayer) {
-          const sldStyle = SLDReader.getStyle(sldLayer);
-          if (sldStyle) {
-            const featureTypeStyle = sldStyle.featuretypestyles[0];
-            vectorLayer.setStyle(SLDReader.createOlStyleFunction(featureTypeStyle, {
-              convertResolution: viewResolution => {
-                const viewCenter = this.map1.getView().getCenter();
-                return getPointResolution(viewProjection, viewResolution, viewCenter);
-              },
-              imageLoadedCallback: () => {
-                vectorLayer.changed();
-              },
-            }));
-            console.log(`Applied SLD style for feature type: ${type}`);
-          } else {
-            console.warn(`No SLD style found for layer ${sldLayer}`);
-          }
-        } else {
-          console.warn(`No named layer found in SLD for type: ${type}`);
-        }
-      }
+      // Get the SLD style function if available
+      const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
 
-      // Add vector layer to the map and create controls
-      this.map1.addLayer(vectorLayer);
-      this.vectorLayers.push(vectorLayer);
-
-      const container = document.createElement('div');
-      container.className = 'layer-item';
-
-      const checkbox = this.createLayerToggleCheckbox(type, vectorLayer);
-      container.appendChild(checkbox);
-
-      // Add color pickers
-      this.addColorPickers(container, type, vectorLayer);
-
-      this.shadowRoot.getElementById('layer-toggles').appendChild(container);
+      // Add the layer with controls, using the SLD style function if it exists
+      this.addLayerWithControls(type, vectorSource, sldStyleFunction);
     });
 
     this.requestUpdate();
@@ -418,43 +384,79 @@ class MapViewer extends LitElement {
     this.shadowRoot.getElementById('layer-toggles').innerHTML = ''
   }
 
+  // This method retrieves the SLD style and returns the style function for the layer
   applySLDStyles(sldObject, type, viewProjection) {
+    // Return early if no SLD object or the required type is not available
     if (!sldObject) return null;
 
     const sldLayer = SLDReader.getLayer(sldObject, type);
-    if (sldLayer) {
-      console.log(`SLD layer found for type: ${type}`);
-      const sldStyle = SLDReader.getStyle(sldLayer);
-      if (sldStyle) {
-        const featureTypeStyle = sldStyle.featuretypestyles[0];
-        console.log(`SLD style retrieved for type: ${type}`);
-        return SLDReader.createOlStyleFunction(featureTypeStyle, {
-          convertResolution: viewResolution => {
-            const viewCenter = this.map1.getView().getCenter();
-            return getPointResolution(viewProjection, viewResolution, viewCenter);
-          },
-          imageLoadedCallback: () => {
-            this.map1.changed();
-          },
-        });
-      } else {
-        console.warn(`No style found in SLD for layer of type: ${type}`);
-      }
-    } else {
-      console.warn(`No SLD layer found for type: ${type}`);
+    if (!sldLayer) {
+      console.warn("No named layer found for " + type);
+      return null;
     }
-    return null;
+
+    const sldStyle = SLDReader.getStyle(sldLayer);
+    if (!sldStyle) {
+      console.warn("No style found for layer " + sldLayer);
+      return null;
+    }
+
+    const featureTypeStyle = sldStyle.featuretypestyles[0];
+
+    // Return the style function that can be applied to the vector layer
+    return SLDReader.createOlStyleFunction(featureTypeStyle, {
+      convertResolution: viewResolution => {
+        const viewCenter = this.map1.getView().getCenter();
+        return getPointResolution(viewProjection, viewResolution, viewCenter);
+      },
+      imageLoadedCallback: () => {
+        this.map1.changed();
+      },
+    });
   }
 
+
   updateLayerStyle(vectorLayer, { fillColor, strokeColor, strokeWidth }) {
-    vectorLayer.setStyle(new Style({
-      fill: new Fill({ color: fillColor }),
-      stroke: new Stroke({
-        color: strokeColor,
-        width: strokeWidth
-      })
-    }));
+    vectorLayer.setStyle((feature) => {
+      const geometryType = feature.getGeometry().getType();
+
+      // Style for Point geometries
+      if (geometryType === 'Point') {
+        return new Style({
+          image: new CircleStyle({
+            radius: 5,
+            fill: new Fill({ color: fillColor }),
+            stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+          }),
+        });
+      }
+
+      // Style for Polygon and MultiPolygon geometries
+      if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
+        return new Style({
+          fill: new Fill({ color: fillColor }),
+          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+        });
+      }
+
+      // Style for LineString geometries
+      if (geometryType === 'LineString') {
+        return new Style({
+          stroke: new Stroke({
+            color: strokeColor,
+            width: strokeWidth,
+          }),
+        });
+      }
+
+      // Default style (if no specific geometry type matches)
+      return new Style({
+        fill: new Fill({ color: fillColor }),
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      });
+    });
   }
+
 
   createLayerToggleCheckbox(type, vectorLayer) {
     const checkboxContainer = document.createElement('div');
@@ -520,9 +522,10 @@ class MapViewer extends LitElement {
   }
 
 
-  addLayerWithControls(type, vectorSource) {
+  addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
       source: vectorSource,
+      style: sldStyleFunction, // Apply the style function here
       name: type
     });
 
