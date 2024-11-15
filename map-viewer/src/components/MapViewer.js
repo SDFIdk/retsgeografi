@@ -5,7 +5,7 @@ import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import { Tile as TileLayer } from 'ol/layer';
-import { WMTS } from 'ol/source';
+import { OSM, WMTS } from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
@@ -31,8 +31,8 @@ const epsg25832 = get('EPSG:25832');
 class MapViewer extends LitElement {
   static styles = css`
       
-      html, div {
-          font-family: Helvetica,serif;
+      htm, div {
+          font-family: Helvetica;
       }
       #map-container {
           display: flex;
@@ -248,7 +248,6 @@ class MapViewer extends LitElement {
   }
 
 
-
   uploadFiles(event) {
     const files = [...event.target.files];
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
@@ -345,7 +344,7 @@ class MapViewer extends LitElement {
       const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
 
       // Add the layer with controls, using the SLD style function if it exists
-      this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
+      this.addLayerWithControls(type, vectorSource, sldStyleFunction);
     });
 
     this.requestUpdate();
@@ -385,23 +384,26 @@ class MapViewer extends LitElement {
     this.shadowRoot.getElementById('layer-toggles').innerHTML = ''
   }
 
+  // This method retrieves the SLD style and returns the style function for the layer
   applySLDStyles(sldObject, type, viewProjection) {
+    // Return early if no SLD object or the required type is not available
     if (!sldObject) return null;
 
     const sldLayer = SLDReader.getLayer(sldObject, type);
     if (!sldLayer) {
-      console.warn(`No matching SLD layer found for type: ${type}`);
+      console.warn("No named layer found for " + type);
       return null;
     }
 
     const sldStyle = SLDReader.getStyle(sldLayer);
     if (!sldStyle) {
-      console.warn(`No styles found in SLD for type: ${type}`);
+      console.warn("No style found for layer " + sldLayer);
       return null;
     }
 
     const featureTypeStyle = sldStyle.featuretypestyles[0];
-    console.log(`Applying SLD style for type: ${type}`);
+
+    // Return the style function that can be applied to the vector layer
     return SLDReader.createOlStyleFunction(featureTypeStyle, {
       convertResolution: viewResolution => {
         const viewCenter = this.map1.getView().getCenter();
@@ -415,14 +417,46 @@ class MapViewer extends LitElement {
 
 
   updateLayerStyle(vectorLayer, { fillColor, strokeColor, strokeWidth }) {
-    vectorLayer.setStyle(new Style({
-      fill: new Fill({ color: fillColor }),
-      stroke: new Stroke({
-        color: strokeColor,
-        width: strokeWidth
-      })
-    }));
+    vectorLayer.setStyle((feature) => {
+      const geometryType = feature.getGeometry().getType();
+
+      // Style for Point geometries
+      if (geometryType === 'Point') {
+        return new Style({
+          image: new CircleStyle({
+            radius: 5,
+            fill: new Fill({ color: fillColor }),
+            stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+          }),
+        });
+      }
+
+      // Style for Polygon and MultiPolygon geometries
+      if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
+        return new Style({
+          fill: new Fill({ color: fillColor }),
+          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+        });
+      }
+
+      // Style for LineString geometries
+      if (geometryType === 'LineString') {
+        return new Style({
+          stroke: new Stroke({
+            color: strokeColor,
+            width: strokeWidth,
+          }),
+        });
+      }
+
+      // Default style (if no specific geometry type matches)
+      return new Style({
+        fill: new Fill({ color: fillColor }),
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      });
+    });
   }
+
 
   createLayerToggleCheckbox(type, vectorLayer) {
     const checkboxContainer = document.createElement('div');
@@ -488,9 +522,10 @@ class MapViewer extends LitElement {
   }
 
 
-  addLayerWithControls(type, vectorSource) {
+  addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
       source: vectorSource,
+      style: sldStyleFunction, // Apply the style function here
       name: type
     });
 
