@@ -329,10 +329,82 @@ class MapViewer extends LitElement {
     });
   }
 
+  parseSLD(sldString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(sldString, 'application/xml');
+    const styles = {};
+
+    xmlDoc.querySelectorAll('Rule').forEach(rule => {
+      const ruleName = rule.querySelector('Name')?.textContent;
+      const symbolizer = rule.querySelector('PolygonSymbolizer, LineSymbolizer, PointSymbolizer');
+
+      if (symbolizer) {
+        const geometryType = symbolizer.nodeName.replace('Symbolizer', '');
+        const style = this.getStyle(symbolizer, geometryType); // Helper method to extract SLD style
+        if (ruleName && style) {
+          styles[ruleName] = style;
+        }
+      }
+    });
+
+    xmlDoc.querySelectorAll('PolygonSymbolizer').forEach(symbol => {
+      const fillColor = symbol.querySelector('Fill > CssParameter[name="fill"]')?.textContent || '#1100ff';
+      const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
+      const strokeWidth = parseFloat(symbol.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
+
+      styles['Polygon'] = new Style({
+        fill: new Fill({ color: fillColor }),
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      });
+    });
+
+    xmlDoc.querySelectorAll('LineSymbolizer').forEach(symbol => {
+      const strokeColor = symbol.querySelector('Stroke > CssParameter[name="stroke"]')?.textContent || '#000000';
+      const strokeWidth = parseFloat(symbol.querySelector('Stroke > CssParameter[name="stroke-width"]')?.textContent) || 1;
+
+      styles['LineString'] = new Style({
+        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+      });
+    });
+
+    xmlDoc.querySelectorAll('PointSymbolizer').forEach(symbol => {
+      const fillColor = symbol.querySelector('Graphic > Mark > Fill > CssParameter[name="fill"]')?.textContent || '#ff0015';
+
+      styles['Point'] = new Style({
+        image: new Circle({
+          radius: 5,
+          fill: new Fill({ color: fillColor }),
+          stroke: new Stroke({ color: '#000000', width: 1 }),
+        }),
+      });
+    });
+
+    return styles;
+  }
+
   loadGML(gmlString, sldString = null) {
-    const { features, xmlDoc } = this.parseGML(gmlString); // parseGML()
-    const featureGroups = this.groupFeaturesByType(features, xmlDoc); // groupFeaturesByType()
-    this.resetLayers()
+    const format = new GML32();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
+
+    const features = format.readFeatures(gmlString, {
+      featureProjection: epsg25832,
+      dataProjection: epsg25832,
+    });
+
+    const featureGroups = features.reduce((groups, feature, index) => {
+      const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index];
+      const firstChildElement = featureMember.firstElementChild;
+      const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
+
+      if (!groups[featureType]) groups[featureType] = [];
+      groups[featureType].push(feature);
+      return groups;
+    }, {});
+
+    this.vectorLayers.forEach(layer => this.map1.removeLayer(layer));
+    this.vectorLayers = [];
+    this.shadowRoot.getElementById('layer-toggles').innerHTML = '';
 
     let sldObject = null;
     if (sldString) {
@@ -438,41 +510,6 @@ class MapViewer extends LitElement {
 
     this.requestUpdate();
   }
-
-  parseGML(gmlString) {
-    const format = new GML32();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
-
-    const features = format.readFeatures(gmlString, {
-      featureProjection: epsg25832,
-      dataProjection: epsg25832,
-    });
-
-    return { features, xmlDoc };
-  }
-
-  groupFeaturesByType(features, xmlDoc) {
-    return features.reduce((groups, feature, index) => {
-      const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index]
-      const firstChildElement = featureMember.firstElementChild
-      const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
-
-      if (!groups[featureType]) groups[featureType] = []
-      groups[featureType].push(feature)
-      return groups
-    }, {})
-  }
-
-  resetLayers() {
-    this.vectorLayers.forEach((layer) => {
-      this.map1.removeLayer(layer)
-    })
-    this.vectorLayers = []
-    this.shadowRoot.getElementById('layer-toggles').innerHTML = ''
-  }
-
-
 
 
 
