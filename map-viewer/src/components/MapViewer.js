@@ -190,15 +190,22 @@ class MapViewer extends LitElement {
     this.map1.on('pointermove', (event) => {
       const feature = this.map1.forEachFeatureAtPixel(event.pixel, (feat) => feat);
       if (feature) {
-        // console.log('Feature properties:', feature.getProperties());
-
         const rgeoNavn = feature.get('navn');
         const rgeoType = feature.get('type');
 
-        // Display properties in the popup
-        container.innerHTML = `<strong>${rgeoNavn || 'Unknown'}</strong><br/>Type: ${rgeoType || 'Unknown'}`;
-        container.style.display = 'block';
-        this.overlay.setPosition(event.coordinate);
+        // Build the popup content dynamically
+        let popupContent = '';
+        if (rgeoNavn) popupContent += `<strong>${rgeoNavn}</strong><br/>`;
+        if (rgeoType) popupContent += `Type: ${rgeoType}`;
+
+        // Display the popup if there's any content to show
+        if (popupContent) {
+          container.innerHTML = popupContent;
+          container.style.display = 'block';
+          this.overlay.setPosition(event.coordinate);
+        } else {
+          container.style.display = 'none';
+        }
       } else {
         container.style.display = 'none';
       }
@@ -423,7 +430,7 @@ class MapViewer extends LitElement {
       // Style for Point geometries
       if (geometryType === 'Point') {
         return new Style({
-          image: new CircleStyle({
+          image: new Circle({
             radius: 5,
             fill: new Fill({ color: fillColor }),
             stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
