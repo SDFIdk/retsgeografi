@@ -337,9 +337,9 @@ class MapViewer extends LitElement {
   }
 
   loadGML(gmlString, sldString = null) {
-    const { features, xmlDoc } = this.parseGML(gmlString); // parseGML()
-    const featureGroups = this.groupFeaturesByType(features, xmlDoc); // groupFeaturesByType()
-    this.resetLayers();
+    const { features, xmlDoc } = this.parseGML(gmlString); // Parse GML data
+    const featureGroups = this.groupFeaturesByType(features, xmlDoc); // Group features by type
+    this.resetLayers(); // Reset existing layers
 
     const viewProjection = this.map1.getView().getProjection();
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
@@ -350,10 +350,12 @@ class MapViewer extends LitElement {
       // Get the SLD style function if available
       const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
 
-      // Add the layer with controls, using the SLD style function if it exists
-      this.addLayerWithControls(type, vectorSource, sldStyleFunction);
+      // Add the layer with controls, ensuring default styles are applied
+      this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
     });
 
+    // Force a refresh to ensure features are visible
+    this.map1.render();
     this.requestUpdate();
   }
 
@@ -532,24 +534,91 @@ class MapViewer extends LitElement {
   addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
       source: vectorSource,
-      style: sldStyleFunction, // Apply the style function here
-      name: type
+      style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType())),
     });
 
     this.map1.addLayer(vectorLayer);
     this.vectorLayers.push(vectorLayer);
 
-    const container = document.createElement('div');
-    container.className = 'layer-item';
+    // Create a checkbox and color pickers for the layer
+    const layerToggleDiv = document.createElement('div');
+    layerToggleDiv.classList.add('layer-toggle');
 
-    const checkbox = this.createLayerToggleCheckbox(type, vectorLayer);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = true;
+    checkbox.addEventListener('change', () => {
+      vectorLayer.setVisible(checkbox.checked);
+    });
 
-    // Add color pickers and controls
-    this.addColorPickers(container, type, vectorLayer);
+    const label = document.createElement('label');
+    label.textContent = type;
 
-    container.appendChild(checkbox);
-    this.shadowRoot.getElementById('layer-toggles').appendChild(container);
+    const colorPickerDiv = document.createElement('div');
+    colorPickerDiv.classList.add('color-pickers');
+
+    const fillColorInput = this.createColorInput('Fill', this.styles.fillColor, (value) => {
+      this.styles.fillColor = value;
+      vectorLayer.setStyle(this.getStyle('Polygon'));
+    });
+
+    const strokeColorInput = this.createColorInput('Stroke', this.styles.strokeColor, (value) => {
+      this.styles.strokeColor = value;
+      vectorLayer.setStyle(this.getStyle('Polygon'));
+    });
+
+    const strokeWidthInput = this.createNumberInput('Width', this.styles.strokeWidth, (value) => {
+      this.styles.strokeWidth = value;
+      vectorLayer.setStyle(this.getStyle('Polygon'));
+    });
+
+    colorPickerDiv.appendChild(fillColorInput);
+    // colorPickerDiv.appendChild(strokeColorInput);
+    // colorPickerDiv.appendChild(strokeWidthInput);
+
+    layerToggleDiv.appendChild(checkbox);
+    layerToggleDiv.appendChild(label);
+    layerToggleDiv.appendChild(colorPickerDiv);
+
+    this.shadowRoot.getElementById('layer-toggles').appendChild(layerToggleDiv);
   }
+
+  createColorInput(label, initialValue, onChange) {
+    const container = document.createElement('div');
+    container.style.marginBottom = '5px';
+
+    const inputLabel = document.createElement('span');
+    inputLabel.textContent = `${label} Color: `;
+    // container.appendChild(inputLabel);
+
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.value = initialValue;
+    input.addEventListener('input', (event) => onChange(event.target.value));
+
+    container.appendChild(input);
+    return container;
+  }
+
+  createNumberInput(label, initialValue, onChange) {
+    const container = document.createElement('div');
+    container.style.marginBottom = '5px';
+
+    const inputLabel = document.createElement('span');
+    inputLabel.textContent = `${label}: `;
+    // container.appendChild(inputLabel);
+
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.value = initialValue;
+    input.min = 1;
+    input.addEventListener('input', (event) => onChange(Number(event.target.value)));
+
+    container.appendChild(input);
+    return container;
+  }
+
+
 
 
 
