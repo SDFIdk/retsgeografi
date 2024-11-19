@@ -50,7 +50,7 @@ class MapViewer extends LitElement {
 
       #controls {
           position: absolute;
-          bottom: 20px;
+          bottom: 1rem;
           right: 20px;
           display: flex;
           flex-direction: column;
@@ -65,7 +65,7 @@ class MapViewer extends LitElement {
           position: absolute;
           width: auto !important;
           height: auto !important;
-          bottom: 20px;
+          bottom: 1rem;
           left: 20px;
           display: flex;
           flex-direction: column;
@@ -337,40 +337,42 @@ class MapViewer extends LitElement {
   }
 
   loadGML(gmlString, sldString = null) {
-    const { features, xmlDoc } = this.parseGML(gmlString); // Parse GML data
-    const featureGroups = this.groupFeaturesByType(features, xmlDoc); // Group features by type
-    this.resetLayers(); // Reset existing layers
+    const { features, xmlDoc } = this.parseGML(gmlString);
+    const featureGroups = this.groupFeaturesByType(features, xmlDoc);
+    this.resetLayers();
+    this.applyFeatureGroupsToMap(featureGroups, sldString);
+  }
 
+  applyFeatureGroupsToMap(featureGroups, sldString) {
     const viewProjection = this.map1.getView().getProjection();
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
     Object.keys(featureGroups).forEach(type => {
       const vectorSource = new VectorSource({ features: featureGroups[type] });
-
-      // Get the SLD style function if available
       const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
-
-      // Add the layer with controls, ensuring default styles are applied
       this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
     });
 
-    // Force a refresh to ensure features are visible
     this.map1.render();
     this.requestUpdate();
   }
 
 
   parseGML(gmlString) {
-    const format = new GML32();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
+    try {
+      const format = new GML32();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
+      const features = format.readFeatures(gmlString, {
+        featureProjection: epsg25832,
+        dataProjection: epsg25832,
+      });
 
-    const features = format.readFeatures(gmlString, {
-      featureProjection: epsg25832,
-      dataProjection: epsg25832,
-    });
-
-    return { features, xmlDoc };
+      return { features, xmlDoc };
+    } catch (error) {
+      console.error("Failed to parse GML file:", error);
+      return { features: [], xmlDoc: null };
+    }
   }
 
   groupFeaturesByType(features, xmlDoc) {
@@ -573,12 +575,12 @@ class MapViewer extends LitElement {
     });
 
     colorPickerDiv.appendChild(fillColorInput);
-    // colorPickerDiv.appendChild(strokeColorInput);
-    // colorPickerDiv.appendChild(strokeWidthInput);
+    colorPickerDiv.appendChild(strokeColorInput);
+    colorPickerDiv.appendChild(strokeWidthInput);
 
     layerToggleDiv.appendChild(checkbox);
     layerToggleDiv.appendChild(label);
-    layerToggleDiv.appendChild(colorPickerDiv);
+    // layerToggleDiv.appendChild(colorPickerDiv); Disabled color picker
 
     this.shadowRoot.getElementById('layer-toggles').appendChild(layerToggleDiv);
   }
@@ -618,6 +620,36 @@ class MapViewer extends LitElement {
     return container;
   }
 
+  onDragOver(event) {
+    event.preventDefault();
+    const dropZone = this.shadowRoot.getElementById('drop-zone');
+    dropZone.classList.add('dragover');
+  }
+
+  onDragLeave() {
+    const dropZone = this.shadowRoot.getElementById('drop-zone');
+    dropZone.classList.remove('dragover');
+  }
+
+  onDrop(event) {
+    event.preventDefault();
+    const dropZone = this.shadowRoot.getElementById('drop-zone');
+    dropZone.classList.remove('dragover');
+
+    const files = [...event.dataTransfer.files];
+    const gmlFile = files.find(file => file.name.endsWith('.gml'));
+    const sldFile = files.find(file => file.name.endsWith('.sld'));
+
+    if (gmlFile || sldFile) {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.files = new DataTransfer().files; // Simulate input with dropped files
+      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+      this.uploadFiles({ target: { files } });
+    }
+  }
+
+
 
 
 
@@ -628,32 +660,25 @@ class MapViewer extends LitElement {
 
   render() {
     return html`
-      <div id="map-container">
-        <div id="map1" class="map"></div>
-        <div id="layer-toggles"></div>
-
-        <div id="controls">
-          <button class="control-label" @click="${this.zoomIn}" title="Zoom In">
-            <svg>
-              <use href="${svg}#plus"></use>
-            </svg>
-          </button>
-          <button class="control-label" @click="${this.zoomOut}" title="Zoom Out">
-            <svg>
-              <use href="${svg}#minus"></use>
-            </svg>
-          </button>
-
-          <input type="file" id="file-input" multiple accept=".gml,.sld, .geojson" @change="${this.uploadFiles}" />
-          <label class="control-label" for="file-input" title="Upload GML & SLD">
-            <svg>
-              <use href="${svg}#arrow-up"></use>
-            </svg>
-          </label>
-
-
+    <div id="map-container">
+      <div id="map1" class="map"></div>
+      
+      <div id="layer-toggles"></div>
+      
+      <div id="controls">
+        <label class="control-label" title="Zoom In" @click="${this.zoomIn}">
+          <svg><use href="${svg}#plus"></use></svg>
+        </label>
+        <label class="control-label" title="Zoom Out" @click="${this.zoomOut}">
+          <svg><use href="${svg}#minus"></use></svg>
+        </label>
+        <label class="control-label" id="drop-zone" title="Upload Files" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+          <input type="file" multiple @change="${this.uploadFiles}"/>
+          <svg><use href="${svg}#upload"></use></svg>
+        </label>
       </div>
-    `;
+    </div>
+  `;
   }
 }
 
