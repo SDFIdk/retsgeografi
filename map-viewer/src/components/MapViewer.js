@@ -285,6 +285,7 @@ class MapViewer extends LitElement {
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
     const sldFile = files.find(file => file.name.endsWith('.sld'));
     const geojsonFile = files.find(file => file.name.endsWith('.geojson'));
+    const xmlFile = files.find(file => file.name.endsWith('.xml'));
 
     if (gmlFile) {
       const gmlReader = new FileReader();
@@ -308,6 +309,13 @@ class MapViewer extends LitElement {
         this.loadMetadata(JSON.parse(geojsonReader.result));
       };
       geojsonReader.readAsText(geojsonFile);
+    }
+    if (xmlFile) {
+      const xmlReader = new FileReader();
+      xmlReader.onload = () => {
+        this.loadMetadata(xmlReader.result);
+      };
+      xmlReader.readAsText(xmlFile);
     }
   }
 
@@ -703,7 +711,7 @@ class MapViewer extends LitElement {
 
   render() {
     return html`
-    <div id="map-container">
+    <div id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
       <div id="map1" class="map"></div>
       
       <div id="layer-toggles"></div>
@@ -715,7 +723,7 @@ class MapViewer extends LitElement {
         <label class="control-label" title="Zoom Out" @click="${this.zoomOut}">
           <svg><use href="${svg}#minus"></use></svg>
         </label>
-        <label class="control-label" id="drop-zone" title="Upload Files" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+        <label class="control-label" id="drop-zone" title="Upload Files">
           <input type="file" multiple @change="${this.uploadFiles}"/>
           <svg><use href="${svg}#upload"></use></svg>
         </label>
