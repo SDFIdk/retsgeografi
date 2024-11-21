@@ -48,6 +48,30 @@ class MapViewer extends LitElement {
           width: 100%;
           height: 100%;
       }
+      
+      #compass-container {
+          position: absolute;
+          top: 1rem;
+          right: 20px;
+          display: flex;
+          flex-direction: column;
+          padding: 10px;
+          width: 3rem;
+          height: 3rem;
+      }
+      
+      .compass {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: white;
+          border: 1px solid #ccc;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+      }
 
       #controls {
           position: absolute;
@@ -99,7 +123,7 @@ class MapViewer extends LitElement {
           transform: scale(1.1);
       }
 
-      button svg, label svg {
+      label svg {
           width: 20px;
           height: 20px;
           fill: #333;
@@ -695,6 +719,9 @@ class MapViewer extends LitElement {
           <input type="file" multiple @change="${this.uploadFiles}"/>
           <svg><use href="${svg}#upload"></use></svg>
         </label>
+      </div>
+      <div id="compass-container">
+          <svg><use href="${svg}#compass"></use></svg>
       </div>
     </div>
   `;
