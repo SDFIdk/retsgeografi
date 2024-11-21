@@ -19,6 +19,7 @@ import proj4 from 'proj4';
 import Overlay from 'ol/Overlay.js';
 // SLD Reader, see https://github.com/NieuwlandGeo/SLDReader
 import * as SLDReader from '@nieuwlandgeo/sldreader';
+import {extend} from 'ol/extent';
 
 // Define and register the projection for EPSG:25832
 proj4.defs('EPSG:25832', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs +axis=enu');
@@ -341,6 +342,24 @@ class MapViewer extends LitElement {
     const featureGroups = this.groupFeaturesByType(features, xmlDoc);
     this.resetLayers();
     this.applyFeatureGroupsToMap(featureGroups, sldString);
+
+    // Calculate the combined extent of all features
+    const allFeaturesExtent = features.length > 0 ? features[0].getGeometry().getExtent().slice() : null;
+    features.forEach((feature) => {
+      const geometryExtent = feature.getGeometry().getExtent();
+      if (allFeaturesExtent) {
+        extend(allFeaturesExtent, geometryExtent);
+      }
+    });
+
+    // Adjust the view to fit all features
+    if (allFeaturesExtent) {
+      this.map1.getView().fit(allFeaturesExtent, {
+        size: this.map1.getSize(),
+        padding: [50, 50, 50, 50], // Add some padding for better visibility
+        maxZoom: 18, // Optional: restrict max zoom level
+      });
+    }
   }
 
   applyFeatureGroupsToMap(featureGroups, sldString) {
