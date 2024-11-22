@@ -362,10 +362,14 @@ class MapViewer extends LitElement {
 
     const toggleButton = metadataBox.querySelector('#toggle-metadata');
     const contentBox = metadataBox.querySelector('#metadata-content');
-    toggleButton.addEventListener('click', () => {
+    toggleButton.addEventListener('mouseenter', () => {
       const isVisible = contentBox.style.display === 'block';
       contentBox.style.display = isVisible ? 'none' : 'block';
       toggleButton.textContent = isVisible ? 'Metadata ▼' : 'Metadata ▲';
+    });
+    contentBox.addEventListener('mouseleave', () => {
+      contentBox.style.display = 'none';
+      toggleButton.textContent = 'Metadata ▼';
     });
   }
 
