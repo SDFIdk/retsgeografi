@@ -161,10 +161,11 @@ class MapViewer extends LitElement {
       layers: [
         new TileLayer({
           source: new WMTS({
-            url: 'https://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?token=9ca510be3c4eca89b1333cadbaa60c36',
+            url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
             layer: 'topo_skaermkort_daempet',
             matrixSet: 'View1',
             format: 'image/jpeg',
+            style: 'default',
             tileGrid: new WMTSTileGrid({
               extent: [120000, 5900000, 1000000, 6500000],
               resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
