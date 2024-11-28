@@ -32,7 +32,7 @@ const epsg25832 = get('EPSG:25832');
 class MapViewer extends LitElement {
   static styles = css`
       
-      htm, div {
+      html, div {
           font-family: Helvetica;
       }
       #map-container {
@@ -321,8 +321,23 @@ class MapViewer extends LitElement {
   }
 
   loadMetadata(metadata) {
-    const properties = metadata.properties;
-    if (!properties) return;
+    let properties;
+
+    if (typeof metadata === 'string') {
+      // Parse XML metadata
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(metadata, 'application/xml');
+      properties = Array.from(xmlDoc.documentElement.children).reduce((acc, child) => {
+        acc[child.tagName] = child.textContent;
+        return acc;
+      }, {});
+    } else if (metadata.properties) {
+      // Use GeoJSON metadata directly
+      properties = metadata.properties;
+    } else {
+      console.warn('Unsupported metadata format.');
+      return;
+    }
 
     // Create or select metadata box
     let metadataBox = this.shadowRoot.getElementById('metadata-box');
@@ -330,17 +345,17 @@ class MapViewer extends LitElement {
       metadataBox = document.createElement('div');
       metadataBox.id = 'metadata-box';
       metadataBox.style.cssText = `
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            max-height: 300px;
-            overflow-y: auto;
-            max-width: 25rem;
-        `;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      max-height: 300px;
+      overflow-y: auto;
+      max-width: 25rem;
+    `;
       this.shadowRoot.appendChild(metadataBox);
     }
 
@@ -351,26 +366,22 @@ class MapViewer extends LitElement {
       contentHtml += `<div style="margin-bottom: 8px;"><strong>${displayKey}:</strong> ${value}</div>`;
     }
 
-    // Toggle content visibility
+    // Display metadata with toggle
     metadataBox.innerHTML = `
-        <button id="toggle-metadata" style="background:none; border:none; font-size:1rem; cursor:pointer;">
-            Metadata ▼
-        </button>
-        <div id="metadata-content" style="display:none; margin-top:10px;">
-            ${contentHtml}
-        </div>
-    `;
+    <button id="toggle-metadata" style="background:none; border:none; font-size:1rem; cursor:pointer;">
+        Metadata ▼
+    </button>
+    <div id="metadata-content" style="display:none; margin-top:10px;">
+        ${contentHtml}
+    </div>
+  `;
 
     const toggleButton = metadataBox.querySelector('#toggle-metadata');
     const contentBox = metadataBox.querySelector('#metadata-content');
-    toggleButton.addEventListener('mouseenter', () => {
+    toggleButton.addEventListener('click', () => {
       const isVisible = contentBox.style.display === 'block';
       contentBox.style.display = isVisible ? 'none' : 'block';
       toggleButton.textContent = isVisible ? 'Metadata ▼' : 'Metadata ▲';
-    });
-    contentBox.addEventListener('mouseleave', () => {
-      contentBox.style.display = 'none';
-      toggleButton.textContent = 'Metadata ▼';
     });
   }
 
@@ -704,15 +715,6 @@ class MapViewer extends LitElement {
       this.uploadFiles({ target: { files } });
     }
   }
-
-
-
-
-
-
-
-
-
 
   render() {
     return html`
