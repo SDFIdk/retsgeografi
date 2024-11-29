@@ -359,18 +359,12 @@ class MapViewer extends LitElement {
       this.shadowRoot.appendChild(metadataBox);
     }
 
-// Generate styled HTML for properties
+    // Generate styled HTML for properties
     let contentHtml = ``;
     for (const [key, value] of Object.entries(properties)) {
-      // Remove "mdb:" prefix (case-insensitive) and format the display key
-      const displayKey = key
-        .replace(/^mdb:/i, '') // Remove "mdb:" prefix
-        .replace(/([A-Z])/g, ' $1') // Add spaces before uppercase letters
-        .trim(); // Trim any leading/trailing spaces
-      const formattedKey = displayKey.charAt(0).toUpperCase() + displayKey.slice(1); // Capitalize first letter
-      contentHtml += `<div style="margin-bottom: 8px;"><strong>${formattedKey}:</strong> ${value}</div>`;
+      const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
+      contentHtml += `<div style="margin-bottom: 8px;"><strong>${displayKey}:</strong> ${value}</div>`;
     }
-
 
     // Display metadata with toggle
     metadataBox.innerHTML = `
