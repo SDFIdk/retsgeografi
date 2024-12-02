@@ -29,7 +29,7 @@ register(proj4);
 // Get the EPSG:25832 projection
 const epsg25832 = get('EPSG:25832');
 
-class MapViewer extends LitElement {
+export class MapViewer extends LitElement {
   static styles = css`
       
       html, div {
