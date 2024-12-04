@@ -44,7 +44,7 @@ export class MapViewer extends LitElement {
           position: relative;
       }
 
-      .map {
+      map {
           width: 100%;
           height: 100%;
       }
@@ -148,6 +148,10 @@ export class MapViewer extends LitElement {
       strokeColor: '#000000',
       strokeWidth: 1,
     };
+  }
+
+  createRenderRoot() {
+    return super.createRenderRoot(); // Should use Shadow DOM unless intentional
   }
 
   firstUpdated() {

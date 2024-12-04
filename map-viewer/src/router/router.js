@@ -1,14 +1,18 @@
-// router.js
-import {html} from 'lit';
+// src/router/router.js
+import { html } from 'lit';
+import '../../data/2019/713/Bekendtgorelse.js'
+import '@/components/MapViewer.js'
+import '@/MainPage.js'
 
-export function routing(route) {
-
-  if (route === '#bekendtgorelse') {
-    return html`
-      <bekendtgorelse-page></bekendtgorelse-page>`;
+export const routing = (route) => {
+  switch (route) {
+    case '/':
+      return html`<main-page></main-page>`;
+    case '/map':
+      return html`<map-viewer></map-viewer>`;
+    case '/bekendtgorelse':
+      return html`<bekendtgorelse-page></bekendtgorelse-page>`;
+    default:
+      return html`<h1>404: Page Not Found</h1>`;
   }
-
-  // Default route
-  return html`
-    <main-page></main-page>`;
-}
+};

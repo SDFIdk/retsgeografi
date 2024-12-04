@@ -1,7 +1,6 @@
 import {html, LitElement} from 'lit';
 import '/src/style/style.css';
-import {routing} from './src/router/router.js';
-import{ MapViewer } from 'src/components/MapViewer.js'
+import {routing} from '@/router/router.js';
 
 export class Main extends LitElement {
   static get properties() {
@@ -10,18 +9,28 @@ export class Main extends LitElement {
     }
   }
 
-  render() {
-    return html`
-      <main-page>
-        ${routing(this.route)}
-      </main-page>
-    `;
+  constructor() {
+    super();
+    this.route = window.location.pathname;
+    window.addEventListener('popstate', this._onRouteChange.bind(this));
   }
 
-  createRenderRoot() {
-    return this;
+  _onRouteChange = () => {
+    this.route = window.location.pathname;
+  };
+
+  navigate = (path) => {
+    history.pushState(null, '', path);
+    this._onRouteChange();
+  };
+
+  render() {
+    return html`
+    <main>
+      ${routing(this.route)}
+    </main>
+  `;
   }
 }
 
-customElements.define('main-page', Main);
-customElements.define('map-viewer', MapViewer)
+customElements.define('main-app', Main); // Register the element
