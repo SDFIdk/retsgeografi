@@ -1,23 +1,21 @@
 // MapViewer.js
 
-import { LitElement, html, css } from 'lit';
+import {css, html, LitElement} from 'lit';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import { Tile as TileLayer } from 'ol/layer';
-import { OSM, WMTS } from 'ol/source';
+import {Tile as TileLayer} from 'ol/layer';
+import {WMTS} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
 import svg from '@dataforsyningen/designsystem/assets/icons.svg'
-import { Style, Stroke, Fill, Circle} from 'ol/style.js';
+import {Circle, Fill, Stroke, Style} from 'ol/style.js';
 import GML32 from 'ol/format/GML32.js';
-import { register } from 'ol/proj/proj4';
-import { get } from 'ol/proj';
-import { getPointResolution } from 'ol/proj';
+import {register} from 'ol/proj/proj4';
+import {get, getPointResolution} from 'ol/proj';
 import proj4 from 'proj4';
 import Overlay from 'ol/Overlay.js';
-// SLD Reader, see https://github.com/NieuwlandGeo/SLDReader
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 import {extend} from 'ol/extent';
 
@@ -29,12 +27,12 @@ register(proj4);
 // Get the EPSG:25832 projection
 const epsg25832 = get('EPSG:25832');
 
-class MapViewer extends LitElement {
+export class MapViewer extends LitElement {
   static styles = css`
-      
       html, div {
           font-family: Helvetica;
       }
+
       #map-container {
           display: flex;
           justify-content: center;
@@ -48,7 +46,7 @@ class MapViewer extends LitElement {
           width: 100%;
           height: 100%;
       }
-      
+
       #compass-container {
           position: absolute;
           top: 1rem;
@@ -58,19 +56,6 @@ class MapViewer extends LitElement {
           padding: 10px;
           width: 3rem;
           height: 3rem;
-      }
-      
-      .compass {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: white;
-          border: 1px solid #ccc;
-          border-radius: 50%;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.2s;
       }
 
       #controls {
@@ -100,7 +85,7 @@ class MapViewer extends LitElement {
           padding: 10px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
-      
+
       .control-label {
           width: 40px;
           height: 40px;
@@ -144,10 +129,12 @@ class MapViewer extends LitElement {
     super();
     this.vectorLayers = [];
     this.styles = {
-      fillColor: '#73ff00',
-      strokeColor: '#000000',
-      strokeWidth: 1,
+      fillColor: '#73ff00', strokeColor: '#000000', strokeWidth: 1,
     };
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
   }
 
   firstUpdated() {
@@ -157,30 +144,22 @@ class MapViewer extends LitElement {
 
   initMaps() {
     this.map1 = new Map({
-      target: this.shadowRoot.getElementById('map1'),
-      layers: [
-        new TileLayer({
-          source: new WMTS({
-            url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
-            layer: 'topo_skaermkort_daempet',
-            matrixSet: 'View1',
-            format: 'image/jpeg',
-            style: 'default',
-            tileGrid: new WMTSTileGrid({
-              extent: [120000, 5900000, 1000000, 6500000],
-              resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
-              matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
-            }),
+      target: this.shadowRoot.getElementById('map1'), layers: [new TileLayer({
+        source: new WMTS({
+          url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
+          layer: 'topo_skaermkort_daempet',
+          matrixSet: 'View1',
+          format: 'image/jpeg',
+          style: 'default',
+          tileGrid: new WMTSTileGrid({
+            extent: [120000, 5900000, 1000000, 6500000],
+            resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
+            matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
           }),
-          visible: true,
-        }),
-      ],
-      view: new View({
-        center: [600000, 6225000],
-        zoom: 9,
-        projection: epsg25832,
-      }),
-      controls: [],
+        }), visible: true,
+      }),], view: new View({
+        center: [600000, 6225000], zoom: 9, projection: epsg25832,
+      }), controls: [],
     });
   }
 
@@ -204,9 +183,7 @@ class MapViewer extends LitElement {
 
     // Create an overlay using the container
     this.overlay = new Overlay({
-      element: container,
-      offset: [10, 10],
-      positioning: 'center-left',
+      element: container, offset: [10, 10], positioning: 'center-left',
     });
 
     // Add overlay to the map
@@ -253,25 +230,22 @@ class MapViewer extends LitElement {
       return sldStyle;
     }
 
-    const { fillColor, strokeColor, strokeWidth } = this.styles;
+    const {fillColor, strokeColor, strokeWidth} = this.styles;
 
     switch (geometryType) {
       case 'Polygon':
       case 'MultiPolygon':  // Add MultiPolygon here
         return new Style({
-          fill: new Fill({ color: fillColor }),
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+          fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
         });
       case 'LineString':
         return new Style({
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+          stroke: new Stroke({color: strokeColor, width: strokeWidth}),
         });
       case 'Point':
         return new Style({
           image: new Circle({
-            radius: 5,
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: 1 }),
+            radius: 5, fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: 1}),
           }),
         });
       default:
@@ -386,7 +360,7 @@ class MapViewer extends LitElement {
   }
 
   loadGML(gmlString, sldString = null) {
-    const { features, xmlDoc } = this.parseGML(gmlString);
+    const {features, xmlDoc} = this.parseGML(gmlString);
     const featureGroups = this.groupFeaturesByType(features, xmlDoc);
     this.resetLayers();
     this.applyFeatureGroupsToMap(featureGroups, sldString);
@@ -403,8 +377,7 @@ class MapViewer extends LitElement {
     // Adjust the view to fit all features
     if (allFeaturesExtent) {
       this.map1.getView().fit(allFeaturesExtent, {
-        size: this.map1.getSize(),
-        padding: [50, 50, 50, 50], // Add some padding for better visibility
+        size: this.map1.getSize(), padding: [50, 50, 50, 50], // Add some padding for better visibility
         maxZoom: 18, // Optional: restrict max zoom level
       });
     }
@@ -415,7 +388,7 @@ class MapViewer extends LitElement {
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
     Object.keys(featureGroups).forEach(type => {
-      const vectorSource = new VectorSource({ features: featureGroups[type] });
+      const vectorSource = new VectorSource({features: featureGroups[type]});
       const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
       this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
     });
@@ -431,14 +404,13 @@ class MapViewer extends LitElement {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
       const features = format.readFeatures(gmlString, {
-        featureProjection: epsg25832,
-        dataProjection: epsg25832,
+        featureProjection: epsg25832, dataProjection: epsg25832,
       });
 
-      return { features, xmlDoc };
+      return {features, xmlDoc};
     } catch (error) {
       console.error("Failed to parse GML file:", error);
-      return { features: [], xmlDoc: null };
+      return {features: [], xmlDoc: null};
     }
   }
 
@@ -486,15 +458,14 @@ class MapViewer extends LitElement {
       convertResolution: viewResolution => {
         const viewCenter = this.map1.getView().getCenter();
         return getPointResolution(viewProjection, viewResolution, viewCenter);
-      },
-      imageLoadedCallback: () => {
+      }, imageLoadedCallback: () => {
         this.map1.changed();
       },
     });
   }
 
 
-  updateLayerStyle(vectorLayer, { fillColor, strokeColor, strokeWidth }) {
+  updateLayerStyle(vectorLayer, {fillColor, strokeColor, strokeWidth}) {
     vectorLayer.setStyle((feature) => {
       const geometryType = feature.getGeometry().getType();
 
@@ -502,9 +473,7 @@ class MapViewer extends LitElement {
       if (geometryType === 'Point') {
         return new Style({
           image: new Circle({
-            radius: 5,
-            fill: new Fill({ color: fillColor }),
-            stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+            radius: 5, fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
           }),
         });
       }
@@ -512,8 +481,7 @@ class MapViewer extends LitElement {
       // Style for Polygon and MultiPolygon geometries
       if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
         return new Style({
-          fill: new Fill({ color: fillColor }),
-          stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+          fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
         });
       }
 
@@ -521,16 +489,14 @@ class MapViewer extends LitElement {
       if (geometryType === 'LineString') {
         return new Style({
           stroke: new Stroke({
-            color: strokeColor,
-            width: strokeWidth,
+            color: strokeColor, width: strokeWidth,
           }),
         });
       }
 
       // Default style (if no specific geometry type matches)
       return new Style({
-        fill: new Fill({ color: fillColor }),
-        stroke: new Stroke({ color: strokeColor, width: strokeWidth }),
+        fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
       });
     });
   }
@@ -564,9 +530,7 @@ class MapViewer extends LitElement {
     fillColorInput.value = this.styles.fillColor;
     fillColorInput.addEventListener('input', () => {
       this.updateLayerStyle(vectorLayer, {
-        fillColor: fillColorInput.value,
-        strokeColor: strokeColorInput.value,
-        strokeWidth: strokeWidthInput.value
+        fillColor: fillColorInput.value, strokeColor: strokeColorInput.value, strokeWidth: strokeWidthInput.value
       });
     });
 
@@ -575,9 +539,7 @@ class MapViewer extends LitElement {
     strokeColorInput.value = this.styles.strokeColor;
     strokeColorInput.addEventListener('input', () => {
       this.updateLayerStyle(vectorLayer, {
-        fillColor: fillColorInput.value,
-        strokeColor: strokeColorInput.value,
-        strokeWidth: strokeWidthInput.value
+        fillColor: fillColorInput.value, strokeColor: strokeColorInput.value, strokeWidth: strokeWidthInput.value
       });
     });
 
@@ -588,9 +550,7 @@ class MapViewer extends LitElement {
     strokeWidthInput.max = 10;
     strokeWidthInput.addEventListener('input', () => {
       this.updateLayerStyle(vectorLayer, {
-        fillColor: fillColorInput.value,
-        strokeColor: strokeColorInput.value,
-        strokeWidth: strokeWidthInput.value
+        fillColor: fillColorInput.value, strokeColor: strokeColorInput.value, strokeWidth: strokeWidthInput.value
       });
     });
 
@@ -602,8 +562,7 @@ class MapViewer extends LitElement {
 
   addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
-      source: vectorSource,
-      style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType())),
+      source: vectorSource, style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType())),
     });
 
     this.map1.addLayer(vectorLayer);
@@ -711,36 +670,45 @@ class MapViewer extends LitElement {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.files = new DataTransfer().files; // Simulate input with dropped files
-      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-      this.uploadFiles({ target: { files } });
+      fileInput.dispatchEvent(new Event('change', {bubbles: true}));
+      this.uploadFiles({target: {files}});
     }
   }
 
   render() {
     return html`
-    <div id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
-      <div id="map1" class="map"></div>
-      
-      <div id="layer-toggles"></div>
-      
-      <div id="controls">
-        <label class="control-label" title="Zoom In" @click="${this.zoomIn}">
-          <svg><use href="${svg}#plus"></use></svg>
-        </label>
-        <label class="control-label" title="Zoom Out" @click="${this.zoomOut}">
-          <svg><use href="${svg}#minus"></use></svg>
-        </label>
-        <label class="control-label" id="drop-zone" title="Upload Files">
-          <input type="file" multiple @change="${this.uploadFiles}"/>
-          <svg><use href="${svg}#upload"></use></svg>
-        </label>
+      <div id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+        <div id="map1" class="map"></div>
+
+        <div id="layer-toggles"></div>
+
+        <div id="controls">
+          <label class="control-label" title="Zoom In" @click="${this.zoomIn}">
+            <svg>
+              <use href="${svg}#plus"></use>
+            </svg>
+          </label>
+          <label class="control-label" title="Zoom Out" @click="${this.zoomOut}">
+            <svg>
+              <use href="${svg}#minus"></use>
+            </svg>
+          </label>
+          <label class="control-label" id="drop-zone" title="Upload Files">
+            <input type="file" multiple @change="${this.uploadFiles}"/>
+            <svg>
+              <use href="${svg}#upload"></use>
+            </svg>
+          </label>
+        </div>
+        <div id="compass-container">
+          <svg>
+            <use href="${svg}#compass"></use>
+          </svg>
+        </div>
       </div>
-      <div id="compass-container">
-          <svg><use href="${svg}#compass"></use></svg>
-      </div>
-    </div>
-  `;
+      <a href="#bekendtgorelse" role="button">Bekendtgørelse</a>
+      <a href="#map" role="button">Kort</a>
+    `;
   }
 }
 
-customElements.define('map-viewer', MapViewer);
