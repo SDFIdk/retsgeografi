@@ -254,7 +254,6 @@ export class MapViewer extends LitElement {
     }
   }
 
-
   uploadFiles(event) {
     const files = [...event.target.files];
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
@@ -397,7 +396,6 @@ export class MapViewer extends LitElement {
     this.requestUpdate();
   }
 
-
   parseGML(gmlString) {
     try {
       const format = new GML32();
@@ -434,7 +432,6 @@ export class MapViewer extends LitElement {
     this.shadowRoot.getElementById('layer-toggles').innerHTML = ''
   }
 
-  // This method retrieves the SLD style and returns the style function for the layer
   applySLDStyles(sldObject, type, viewProjection) {
     // Return early if no SLD object or the required type is not available
     if (!sldObject) return null;
@@ -463,7 +460,6 @@ export class MapViewer extends LitElement {
       },
     });
   }
-
 
   updateLayerStyle(vectorLayer, {fillColor, strokeColor, strokeWidth}) {
     vectorLayer.setStyle((feature) => {
@@ -500,7 +496,6 @@ export class MapViewer extends LitElement {
       });
     });
   }
-
 
   createLayerToggleCheckbox(type, vectorLayer) {
     const checkboxContainer = document.createElement('div');
@@ -558,7 +553,6 @@ export class MapViewer extends LitElement {
     container.appendChild(strokeColorInput);
     container.appendChild(strokeWidthInput);
   }
-
 
   addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
