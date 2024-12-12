@@ -18,7 +18,6 @@ import proj4 from 'proj4';
 import Overlay from 'ol/Overlay.js';
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 import {extend} from 'ol/extent';
-import initializeMap from "../modules/MapInitializer.js";
 
 // Define and register the projection for EPSG:25832
 proj4.defs('EPSG:25832', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs +axis=enu');
@@ -130,10 +129,9 @@ export class MapViewer extends LitElement {
     super();
     this.vectorLayers = [];
     this.styles = {
-      fillColor: '#112a3c', strokeColor: '#000000', strokeWidth: 1,
+      fillColor: '#73ff00', strokeColor: '#000000', strokeWidth: 1,
     };
   }
-
 
   connectedCallback() {
     super.connectedCallback();
@@ -145,13 +143,24 @@ export class MapViewer extends LitElement {
   }
 
   initMaps() {
-    this.map = initializeMap(this.target, this.options)
-
-    this.addLayerWithControls()
-  }
-
-  getMap() {
-    return this.map
+    this.map1 = new Map({
+      target: this.shadowRoot.getElementById('map1'), layers: [new TileLayer({
+        source: new WMTS({
+          url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
+          layer: 'topo_skaermkort_daempet',
+          matrixSet: 'View1',
+          format: 'image/jpeg',
+          style: 'default',
+          tileGrid: new WMTSTileGrid({
+            extent: [120000, 5900000, 1000000, 6500000],
+            resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
+            matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+          }),
+        }), visible: true,
+      }),], view: new View({
+        center: [600000, 6225000], zoom: 9, projection: epsg25832,
+      }), controls: [],
+    });
   }
 
   initHoverPopup() {
@@ -250,60 +259,40 @@ export class MapViewer extends LitElement {
     const files = [...event.target.files];
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
     const sldFile = files.find(file => file.name.endsWith('.sld'));
-    const metadataFile = files.find(file => file.name.endsWith('.xml') || file.name.endsWith('.geojson'));
-
-    const promises = [];
+    const geojsonFile = files.find(file => file.name.endsWith('.geojson'));
+    const xmlFile = files.find(file => file.name.endsWith('.xml'));
 
     if (gmlFile) {
-      promises.push(
-        new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = () => resolve({ gmlString: reader.result });
-          reader.readAsText(gmlFile);
-        })
-      );
-    }
-
-    if (sldFile) {
-      promises.push(
-        new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = () => resolve({ sldString: reader.result });
-          reader.readAsText(sldFile);
-        })
-      );
-    }
-
-    if (metadataFile) {
-      promises.push(
-        new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const content = metadataFile.name.endsWith('.geojson')
-              ? JSON.parse(reader.result)
-              : reader.result;
-            resolve({ metadata: content });
+      const gmlReader = new FileReader();
+      gmlReader.onload = () => {
+        if (sldFile) {
+          const sldFileReader = new FileReader();
+          sldFileReader.onload = () => {
+            this.loadGML(gmlReader.result, sldFileReader.result);
           };
-          reader.readAsText(metadataFile);
-        })
-      );
+          sldFileReader.readAsText(sldFile);
+        } else {
+          this.loadGML(gmlReader.result, null);
+        }
+      };
+      gmlReader.readAsText(gmlFile);
     }
 
-    Promise.all(promises).then(results => {
-      const data = results.reduce((acc, cur) => ({ ...acc, ...cur }), {});
-      this.loadData(data);
-    });
+    if (geojsonFile) {
+      const geojsonReader = new FileReader();
+      geojsonReader.onload = () => {
+        this.loadMetadata(JSON.parse(geojsonReader.result));
+      };
+      geojsonReader.readAsText(geojsonFile);
+    }
+    if (xmlFile) {
+      const xmlReader = new FileReader();
+      xmlReader.onload = () => {
+        this.loadMetadata(xmlReader.result);
+      };
+      xmlReader.readAsText(xmlFile);
+    }
   }
-
-  loadData({ gmlString = null, sldString = null, metadata = null } = {}) {
-    if (gmlString) {
-      this.loadGML(gmlString, sldString);
-    }
-    if (metadata) {
-      this.loadMetadata(metadata);
-    }
-  }
-
 
   loadMetadata(metadata) {
     let properties;
