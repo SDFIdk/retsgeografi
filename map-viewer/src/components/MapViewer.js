@@ -166,7 +166,10 @@ export class MapViewer extends LitElement {
     if (this.xmlFile) {
       fetch(this.xmlFile)
         .then(response => response.text())
-        .then(xmlData => this.loadMetadata(xmlData))
+        .then(xmlData => {
+          console.log('XML Data:', xmlData);  // Log the fetched XML data
+          this.loadMetadata(xmlData);
+        })
         .catch(error => console.error('Error loading XML:', error));
     }
   }
