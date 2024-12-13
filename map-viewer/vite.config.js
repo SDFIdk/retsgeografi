@@ -8,5 +8,6 @@ export default defineConfig({
   server: {
     open: true, // Automatically opens the app in the default browser
     port: 5000, // You can change the port if needed
+    middlewareMode: false,
   },
 });

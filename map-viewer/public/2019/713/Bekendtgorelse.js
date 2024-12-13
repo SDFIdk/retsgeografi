@@ -125,16 +125,20 @@ export class Bekendtgorelse extends LitElement {
   `;
 
 	render() {
-      const gmlFile = 'map-viewer/data/2019/713/data_demo.gml';
-      const metadataFile = 'map-viewer/data/2019/713/metadata.xml';
-      const sldFile = 'map-viewer/data/2019/713/styles.sld';
+      const gmlFile = 'map-viewer/public/2019/713/data_demo.gml';
+      const xmlFile = 'map-viewer/public/2019/713/metadata.xml';
+      const sldFile = 'map-viewer/public/2019/713/styles.sld';
+      console.log("Bekendtgørelse XML", xmlFile);
+      console.log('Bekendtgørelse GML', gmlFile);
+      console.log('Bekendtgørelse SLD', sldFile);
+
 
       return html`
         <div class="map-container">
           <map-viewer
-              gml-file="${gmlFile}"
-              metadata-file="${metadataFile}"
-              sld-file="${sldFile}">
+              .gmlFile="${gmlFile}"
+              .xmlFile="${xmlFile}"
+              .sldFile="${sldFile}">
           </map-viewer>
         </div>
       `;

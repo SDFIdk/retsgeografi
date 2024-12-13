@@ -125,16 +125,50 @@ export class MapViewer extends LitElement {
       }
   `;
 
+  static properties = {
+    gmlFile: { type: String },
+    xmlFile: { type: String },
+    sldFile: { type: String },
+  };
+
   constructor() {
     super();
     this.vectorLayers = [];
     this.styles = {
-      fillColor: '#73ff00', strokeColor: '#000000', strokeWidth: 1,
+      fillColor: '#73ff00',
+      strokeColor: '#000000',
+      strokeWidth: 1,
     };
+    // Initialize to null, but don't rely on constructor for attribute retrieval
+    this.gmlFile = null;
+    this.sldFile = null;
+    this.xmlFile = null;
   }
 
   connectedCallback() {
     super.connectedCallback();
+    console.log('Connected Properties:', this.gmlFile, this.xmlFile, this.sldFile);
+
+    if (this.gmlFile) {
+      fetch(this.gmlFile)
+        .then(response => response.text())
+        .then(gmlString => {
+          if (this.sldFile) {
+            return fetch(this.sldFile)
+              .then(response => response.text())
+              .then(sldString => this.loadGML(gmlString, sldString));
+          }
+          this.loadGML(gmlString, null);
+        })
+        .catch(error => console.error('Error loading GML or SLD:', error));
+    }
+
+    if (this.xmlFile) {
+      fetch(this.xmlFile)
+        .then(response => response.text())
+        .then(xmlData => this.loadMetadata(xmlData))
+        .catch(error => console.error('Error loading XML:', error));
+    }
   }
 
   firstUpdated() {
@@ -297,7 +331,6 @@ export class MapViewer extends LitElement {
     let properties;
 
     if (typeof metadata === 'string') {
-      // Parse XML metadata
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(metadata, 'application/xml');
       properties = Array.from(xmlDoc.documentElement.children).reduce((acc, child) => {
@@ -305,14 +338,13 @@ export class MapViewer extends LitElement {
         return acc;
       }, {});
     } else if (metadata.properties) {
-      // Use GeoJSON metadata directly
-      properties = metadata.properties;
+      properties = metadata.properties
     } else {
       console.warn('Unsupported metadata format.');
       return;
     }
 
-    // Create or select metadata box
+    // Display metadata on the map or in a designated UI element
     let metadataBox = this.shadowRoot.getElementById('metadata-box');
     if (!metadataBox) {
       metadataBox = document.createElement('div');
@@ -331,8 +363,6 @@ export class MapViewer extends LitElement {
     `;
       this.shadowRoot.appendChild(metadataBox);
     }
-
-    // Generate styled HTML for properties
     let contentHtml = ``;
     for (const [key, value] of Object.entries(properties)) {
       const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
@@ -359,12 +389,17 @@ export class MapViewer extends LitElement {
   }
 
   loadGML(gmlString, sldString = null) {
-    const {features, xmlDoc} = this.parseGML(gmlString);
+    // Parse the GML data and get the features
+    const { features, xmlDoc } = this.parseGML(gmlString);
     const featureGroups = this.groupFeaturesByType(features, xmlDoc);
+
+    // Reset existing layers
     this.resetLayers();
+
+    // Apply the feature groups to the map (same as original logic)
     this.applyFeatureGroupsToMap(featureGroups, sldString);
 
-    // Calculate the combined extent of all features
+    // Calculate the combined extent of all features (same as original logic)
     const allFeaturesExtent = features.length > 0 ? features[0].getGeometry().getExtent().slice() : null;
     features.forEach((feature) => {
       const geometryExtent = feature.getGeometry().getExtent();
@@ -372,18 +407,19 @@ export class MapViewer extends LitElement {
         extend(allFeaturesExtent, geometryExtent);
       }
     });
-
-    // Adjust the view to fit all features
+    // Adjust the map view to fit all features
     if (allFeaturesExtent) {
       this.map1.getView().fit(allFeaturesExtent, {
-        size: this.map1.getSize(), padding: [50, 50, 50, 50], // Add some padding for better visibility
-        maxZoom: 18, // Optional: restrict max zoom level
+        size: this.map1.getSize(),
+        padding: [50, 50, 50, 50],
+        maxZoom: 18,
       });
     }
   }
 
   applyFeatureGroupsToMap(featureGroups, sldString) {
     const viewProjection = this.map1.getView().getProjection();
+    console.log("SLD String:", sldString);  // Log the SLD string to verify the format
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
     Object.keys(featureGroups).forEach(type => {
@@ -433,7 +469,6 @@ export class MapViewer extends LitElement {
   }
 
   applySLDStyles(sldObject, type, viewProjection) {
-    // Return early if no SLD object or the required type is not available
     if (!sldObject) return null;
 
     const sldLayer = SLDReader.getLayer(sldObject, type);
@@ -449,8 +484,6 @@ export class MapViewer extends LitElement {
     }
 
     const featureTypeStyle = sldStyle.featuretypestyles[0];
-
-    // Return the style function that can be applied to the vector layer
     return SLDReader.createOlStyleFunction(featureTypeStyle, {
       convertResolution: viewResolution => {
         const viewCenter = this.map1.getView().getCenter();
@@ -658,9 +691,10 @@ export class MapViewer extends LitElement {
 
     const files = [...event.dataTransfer.files];
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
+    const xmlFile = files.find(file => file.name.endsWith('.xml'));
     const sldFile = files.find(file => file.name.endsWith('.sld'));
 
-    if (gmlFile || sldFile) {
+    if (gmlFile || sldFile || xmlFile) {
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.files = new DataTransfer().files; // Simulate input with dropped files
