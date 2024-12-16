@@ -29,10 +29,6 @@ const epsg25832 = get('EPSG:25832');
 
 export class MapViewer extends LitElement {
   static styles = css`
-      html, div {
-          font-family: Helvetica;
-      }
-
       #map-container {
           display: flex;
           justify-content: center;
@@ -58,7 +54,7 @@ export class MapViewer extends LitElement {
           height: 3rem;
       }
 
-      #controls {
+      #controls-container {
           position: absolute;
           bottom: 1rem;
           right: 20px;
@@ -71,22 +67,7 @@ export class MapViewer extends LitElement {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
-      #layer-toggles {
-          position: absolute;
-          width: auto !important;
-          height: auto !important;
-          bottom: 1rem;
-          left: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          background: rgba(255, 255, 255, 0.8);
-          border-radius: 8px;
-          padding: 10px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .control-label {
+      .control-icon {
           width: 40px;
           height: 40px;
           display: flex;
@@ -99,8 +80,14 @@ export class MapViewer extends LitElement {
           transition: background-color 0.3s, transform 0.2s;
       }
 
-      button, label {
-
+      #data-toggle {
+          position: absolute;
+          bottom: 1rem;
+          left: 1rem;
+          background: rgba(255, 255, 255, 0.8);
+          border-radius: 8px;
+          padding: 10px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       button:hover, label:hover {
@@ -117,25 +104,19 @@ export class MapViewer extends LitElement {
       input[type="file"] {
           display: none;
       }
-
-      #layer-toggles {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-      }
   `;
 
   static properties = {
-    gmlFile: { type: String },
-    xmlFile: { type: String },
-    sldFile: { type: String },
+    gmlFile: {type: String},
+    xmlFile: {type: String},
+    sldFile: {type: String},
   };
 
   constructor() {
     super();
     this.vectorLayers = [];
     this.styles = {
-      fillColor: '#73ff00',
+      fillColor: '#ffffff',
       strokeColor: '#000000',
       strokeWidth: 1,
     };
@@ -393,7 +374,7 @@ export class MapViewer extends LitElement {
 
   loadGML(gmlString, sldString = null) {
     // Parse the GML data and get the features
-    const { features, xmlDoc } = this.parseGML(gmlString);
+    const {features, xmlDoc} = this.parseGML(gmlString);
     const featureGroups = this.groupFeaturesByType(features, xmlDoc);
 
     // Reset existing layers
@@ -468,7 +449,7 @@ export class MapViewer extends LitElement {
       this.map1.removeLayer(layer)
     })
     this.vectorLayers = []
-    this.shadowRoot.getElementById('layer-toggles').innerHTML = ''
+    this.shadowRoot.getElementById('data-toggle').innerHTML = ''
   }
 
   applySLDStyles(sldObject, type, viewProjection) {
@@ -638,7 +619,7 @@ export class MapViewer extends LitElement {
     layerToggleDiv.appendChild(label);
     // layerToggleDiv.appendChild(colorPickerDiv); Disabled color picker
 
-    this.shadowRoot.getElementById('layer-toggles').appendChild(layerToggleDiv);
+    this.shadowRoot.getElementById('data-toggle').appendChild(layerToggleDiv);
   }
 
   createColorInput(label, initialValue, onChange) {
@@ -711,20 +692,20 @@ export class MapViewer extends LitElement {
       <div id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
         <div id="map1" class="map"></div>
 
-        <div id="layer-toggles"></div>
+        <div id="data-toggle"></div>
 
-        <div id="controls">
-          <label class="control-label" title="Zoom In" @click="${this.zoomIn}">
+        <div id="controls-container">
+          <label class="control-icon" title="Zoom In" @click="${this.zoomIn}">
             <svg>
               <use href="${svg}#plus"></use>
             </svg>
           </label>
-          <label class="control-label" title="Zoom Out" @click="${this.zoomOut}">
+          <label class="control-icon" title="Zoom Out" @click="${this.zoomOut}">
             <svg>
               <use href="${svg}#minus"></use>
             </svg>
           </label>
-          <label class="control-label" id="drop-zone" title="Upload Files">
+          <label class="control-icon" id="drop-zone" title="Upload Files">
             <input type="file" multiple @change="${this.uploadFiles}"/>
             <svg>
               <use href="${svg}#upload"></use>
@@ -739,6 +720,7 @@ export class MapViewer extends LitElement {
       </div>
       <a href="#bekendtgorelse" role="button">Bekendtgørelse</a>
       <a href="#map" role="button">Kort</a>
+      <a href="#knapper" role="button">Link-knap</a>
     `;
   }
 }

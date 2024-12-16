@@ -1,5 +1,4 @@
-
-
+@import "@dataforsyningen/designsystem/assets/designsystem.css";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -29,15 +28,6 @@ bekendtgorelse map-viewer {
     border: 1px solid #ccc;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-  }
-}
-
-ma
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
   }
 }
 
