@@ -46,10 +46,10 @@ export class MapViewer extends LitElement {
       #compass-container {
           position: absolute;
           top: 1rem;
-          right: 20px;
+          right: 1rem;
           display: flex;
           flex-direction: column;
-          padding: 10px;
+          padding: 8px;
           width: 3rem;
           height: 3rem;
       }
@@ -57,7 +57,7 @@ export class MapViewer extends LitElement {
       #controls-container {
           position: absolute;
           bottom: 1rem;
-          right: 20px;
+          right: 1rem;
           display: flex;
           flex-direction: column;
           gap: 10px;
@@ -86,12 +86,11 @@ export class MapViewer extends LitElement {
           left: 1rem;
           background: rgba(255, 255, 255, 0.8);
           border-radius: 8px;
-          padding: 10px;
+          padding: 8px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       button:hover, label:hover {
-          background-color: #f0f0f0;
           transform: scale(1.1);
       }
 
@@ -174,10 +173,13 @@ export class MapViewer extends LitElement {
             resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
             matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
           }),
-        }), visible: true,
-      }),], view: new View({
+        }),
+        visible: true,
+      }),],
+      view: new View({
         center: [600000, 6225000], zoom: 9, projection: epsg25832,
-      }), controls: [],
+      }),
+      controls: [],
     });
   }
 
