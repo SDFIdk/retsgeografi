@@ -147,7 +147,6 @@ export class MapViewer extends LitElement {
       fetch(this.xmlFile)
         .then(response => response.text())
         .then(xmlData => {
-          console.log('XML Data:', xmlData);  // Log the fetched XML data
           this.loadMetadata(xmlData);
         })
         .catch(error => console.error('Error loading XML:', error));
@@ -196,6 +195,7 @@ export class MapViewer extends LitElement {
       pointer-events: none;
       position: absolute;
       display: none;
+      width: max-content;
     `;
 
     // Append the container to the shadow root
@@ -722,7 +722,6 @@ export class MapViewer extends LitElement {
       </div>
       <a href="#bekendtgorelse" role="button">Bekendtgørelse</a>
       <a href="#map" role="button">Kort</a>
-      <a href="#knapper" role="button">Link-knap</a>
     `;
   }
 }
