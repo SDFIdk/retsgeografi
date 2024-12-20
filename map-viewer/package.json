@@ -9,11 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dataforsyningen/designsystem": "^8.3.0",
+    "@dataforsyningen/designsystem": "^8.5.0",
     "@nieuwlandgeo/sldreader": "^0.4.3",
     "lit": "^3.2.1",
-    "ol": "^10.2.1",
-    "proj4": "^2.14.0"
+    "ol": "^10.3.1",
+    "proj4": "^2.15.0"
   },
   "devDependencies": {
     "vite": "^5.4.11"

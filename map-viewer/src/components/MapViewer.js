@@ -405,7 +405,6 @@ export class MapViewer extends LitElement {
 
   applyFeatureGroupsToMap(featureGroups, sldString) {
     const viewProjection = this.map1.getView().getProjection();
-    console.log("SLD String:", sldString);  // Log the SLD string to verify the format
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
     Object.keys(featureGroups).forEach(type => {
@@ -436,14 +435,15 @@ export class MapViewer extends LitElement {
 
   groupFeaturesByType(features, xmlDoc) {
     return features.reduce((groups, feature, index) => {
-      const featureMember = xmlDoc.getElementsByTagName("gml:featureMember")[index]
-      const firstChildElement = featureMember.firstElementChild
+      const featureMembers = xmlDoc.getElementsByTagNameNS('*', 'featureMember');
+      const featureMember = featureMembers[index];
+      const firstChildElement = featureMember ? featureMember.firstElementChild : null;
       const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
 
-      if (!groups[featureType]) groups[featureType] = []
-      groups[featureType].push(feature)
-      return groups
-    }, {})
+      if (!groups[featureType]) groups[featureType] = [];
+      groups[featureType].push(feature);
+      return groups;
+    }, {});
   }
 
   resetLayers() {
