@@ -6,6 +6,8 @@ A simple map viewer designed for "retsgeografi," allowing users to visualize vec
 ## Features
 
 - **GML Support:** Upload or drag-and-drop GML files to add vector tile data to the map.
+- **SLD Support:** Upload or drag-and-drop SLD files to apply styles to the map - Works when uploading GML simultaneously.
+- **XML Support:** Upload or drag-and-drop XML files to add metadata to the map.
 - **Metadata Handling:** Utilize XML files for metadata, parsed and displayed alongside the map.
 - **Layer Management:** Switch added GML layers on and off as needed.
 - **Responsive UI:** A flexible and modern interface built using Lit and Web Components.
@@ -15,15 +17,15 @@ A simple map viewer designed for "retsgeografi," allowing users to visualize vec
 - **[OpenLayers](https://openlayers.org/):** For rendering maps and handling GML files.
 - **[Lit](https://lit.dev/):** For building reusable and efficient web components.
 - **[Vite](https://vitejs.dev/):** For fast development and optimized production builds.
-- **Web Components:** To encapsulate and modularize the UI.
+- **[Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)::** To encapsulate and modularize the UI.
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Node.js** (version 14 or later)
+- **Node.js** (version 18 or later)
 - **npm** (Node Package Manager, usually included with Node.js)
-
+ 
 ### Installation
 
 1. **Clone the repository:**
@@ -32,7 +34,7 @@ A simple map viewer designed for "retsgeografi," allowing users to visualize vec
     ```
 2. **Navigate to the project directory:**
     ```bash
-    cd retsgeografi-map-viewer
+    cd map-viewer
     ```
 3. **Install dependencies:**
     ```bash
@@ -45,7 +47,7 @@ Start the development server with Vite:
 ```bash
 npm run dev
 ```
-- This command will start a local server, usually at `http://localhost:5173`, where you can see the application in action. The server supports hot module replacement (HMR), so changes to the code will automatically refresh the page.
+- This command will start a local server, usually at `http://localhost:5000`, where you can see the application in action. The server supports hot module replacement (HMR), so changes to the code will automatically refresh the page.
 
 ### Building for Production
 
