@@ -19,6 +19,11 @@ export class Main extends LitElement {
     this._setupRouting(); // Initialize hashchange listener
   }
 
+  /**
+   * Initializes a hashchange listener to update the route dynamically.
+   * The hashchange event is dispatched when the fragment identifier of the URL changes.
+   * @private
+   */
   _setupRouting() {
     window.addEventListener('hashchange', () => {
       this.route = window.location.hash || '#map'; // Update route dynamically

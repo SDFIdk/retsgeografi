@@ -1,5 +1,10 @@
 import {html} from 'lit';
 
+/**
+ * Given a route, returns the appropriate content.
+ * @param {string} route - route to match
+ * @returns {LitElement} - appropriate content
+ */
 export function routing(route) {
   if (route === '#map') {
     return html`
