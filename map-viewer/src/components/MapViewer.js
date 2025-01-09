@@ -105,12 +105,14 @@ export class MapViewer extends LitElement {
       }
   `;
 
+  // Define custom properties
   static properties = {
     gmlFile: {type: String},
     xmlFile: {type: String},
     sldFile: {type: String},
   };
 
+  // Initialize custom properties
   constructor() {
     super();
     this.vectorLayers = [];
@@ -125,28 +127,40 @@ export class MapViewer extends LitElement {
     this.xmlFile = null;
   }
 
+  /**
+   * Called when the component is added to the DOM. Retrieve the GML, SLD and metadata
+   * files and pass them to the respective loading functions.
+   */
   connectedCallback() {
     super.connectedCallback();
     console.log('Connected Properties:', this.gmlFile, this.xmlFile, this.sldFile);
 
     if (this.gmlFile) {
+      // Fetch the GML file
       fetch(this.gmlFile)
         .then(response => response.text())
         .then(gmlString => {
           if (this.sldFile) {
+            // Fetch the SLD file if it exists
             return fetch(this.sldFile)
               .then(response => response.text())
-              .then(sldString => this.loadGML(gmlString, sldString));
+              .then(sldString => {
+                // Load the GML with the SLD file
+                this.loadGML(gmlString, sldString);
+              });
           }
+          // Load the GML without an SLD file
           this.loadGML(gmlString, null);
         })
         .catch(error => console.error('Error loading GML or SLD:', error));
     }
 
     if (this.xmlFile) {
+      // Fetch the metadata XML file
       fetch(this.xmlFile)
         .then(response => response.text())
         .then(xmlData => {
+          // Load the metadata from the XML file
           this.loadMetadata(xmlData);
         })
         .catch(error => console.error('Error loading XML:', error));
@@ -154,29 +168,42 @@ export class MapViewer extends LitElement {
   }
 
   firstUpdated() {
+    // Initialize the two maps
     this.initMaps();
+    // Initialize the hover popup
     this.initHoverPopup();
   }
 
+// Initialize the map
   initMaps() {
+    // Create the first map
     this.map1 = new Map({
-      target: this.shadowRoot.getElementById('map1'), layers: [new TileLayer({
-        source: new WMTS({
-          url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
-          layer: 'topo_skaermkort_daempet',
-          matrixSet: 'View1',
-          format: 'image/jpeg',
-          style: 'default',
-          tileGrid: new WMTSTileGrid({
-            extent: [120000, 5900000, 1000000, 6500000],
-            resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
-            matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+      // Set the target element
+      target: this.shadowRoot.getElementById('map1'),
+
+      // Set the layers
+      layers: [
+        new TileLayer({
+          source: new WMTS({
+            url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
+            layer: 'topo_skaermkort_daempet',
+            matrixSet: 'View1',
+            format: 'image/jpeg',
+            style: 'default',
+            tileGrid: new WMTSTileGrid({
+              extent: [120000, 5900000, 1000000, 6500000],
+              resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
+              matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+            }),
           }),
+          visible: true,
         }),
-        visible: true,
-      }),],
+      ],
+      // Set the view
       view: new View({
-        center: [600000, 6225000], zoom: 9, projection: epsg25832,
+        center: [600000, 6225000],
+        zoom: 9,
+        projection: epsg25832,
       }),
       controls: [],
     });
@@ -235,16 +262,23 @@ export class MapViewer extends LitElement {
     });
   }
 
+  // Zoom in on map
   zoomIn() {
     const view = this.map1.getView();
     view.setZoom(view.getZoom() + 1);
   }
-
+  // Zoom out on map
   zoomOut() {
     const view = this.map1.getView();
     view.setZoom(view.getZoom() - 1);
   }
 
+  /**
+   * Gets the style for the given geometry type
+   * @param {string} geometryType The type of geometry (Polygon, MultiPolygon, LineString, Point)
+   * @param {Style} [sldStyle] The SLD style to use (optional)
+   * @returns {Style} The style for the given geometry type
+   */
   getStyle(geometryType, sldStyle = null) {
     if (sldStyle) {
       return sldStyle;
@@ -274,6 +308,10 @@ export class MapViewer extends LitElement {
     }
   }
 
+  /**
+   * Uploads the given files to the map.
+   * @param {Event} event The event containing the files.
+   */
   uploadFiles(event) {
     const files = [...event.target.files];
     const gmlFile = files.find(file => file.name.endsWith('.gml'));
@@ -287,10 +325,19 @@ export class MapViewer extends LitElement {
         if (sldFile) {
           const sldFileReader = new FileReader();
           sldFileReader.onload = () => {
+            /**
+             * Loads the GML file onto the map using the given SLD style.
+             * @param {string} gml The GML file contents.
+             * @param {string} sld The SLD file contents.
+             */
             this.loadGML(gmlReader.result, sldFileReader.result);
           };
           sldFileReader.readAsText(sldFile);
         } else {
+          /**
+           * Loads the GML file onto the map without any SLD style.
+           * @param {string} gml The GML file contents.
+           */
           this.loadGML(gmlReader.result, null);
         }
       };
@@ -300,6 +347,10 @@ export class MapViewer extends LitElement {
     if (geojsonFile) {
       const geojsonReader = new FileReader();
       geojsonReader.onload = () => {
+        /**
+         * Loads the metadata from the given GeoJSON file.
+         * @param {string} geojson The GeoJSON file contents.
+         */
         this.loadMetadata(JSON.parse(geojsonReader.result));
       };
       geojsonReader.readAsText(geojsonFile);
@@ -307,12 +358,26 @@ export class MapViewer extends LitElement {
     if (xmlFile) {
       const xmlReader = new FileReader();
       xmlReader.onload = () => {
+        /**
+         * Loads the metadata from the given XML file.
+         * @param {string} xml The XML file contents.
+         */
         this.loadMetadata(xmlReader.result);
       };
       xmlReader.readAsText(xmlFile);
     }
   }
 
+  /**
+   * Loads metadata from a given string or object.
+   *
+   * If the metadata is a string, it is assumed to be in XML format and is parsed using a DOMParser.
+   * If the metadata is an object, it is assumed to have a 'properties' property that contains the metadata.
+   *
+   * The metadata is then displayed on the map or in a designated UI element.
+   *
+   * @param {string|object} metadata - The metadata to load.
+   */
   loadMetadata(metadata) {
     let properties;
 
@@ -374,6 +439,15 @@ export class MapViewer extends LitElement {
     });
   }
 
+  /**
+   * Loads GML data from a given string and applies it to the map.
+   *
+   * The GML data is parsed using a DOMParser and then grouped by feature type.
+   * The feature groups are then applied to the map using the applyFeatureGroupsToMap method.
+   *
+   * @param {string} gmlString - The GML data to load.
+   * @param {string} [sldString] - The SLD data to use for styling.
+   */
   loadGML(gmlString, sldString = null) {
     // Parse the GML data and get the features
     const {features, xmlDoc} = this.parseGML(gmlString);
@@ -403,6 +477,15 @@ export class MapViewer extends LitElement {
     }
   }
 
+  /**
+   * Applies feature groups to the map, optionally using SLD styles for styling.
+   *
+   * This function iterates over the feature groups and adds them to the map with appropriate styles.
+   * If SLD data is provided, it will attempt to apply the SLD styles to the features.
+   *
+   * @param {Object} featureGroups - An object containing groups of features categorized by type.
+   * @param {string} [sldString] - The SLD data to use for styling the features.
+   */
   applyFeatureGroupsToMap(featureGroups, sldString) {
     const viewProjection = this.map1.getView().getProjection();
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
@@ -417,6 +500,15 @@ export class MapViewer extends LitElement {
     this.requestUpdate();
   }
 
+  /**
+   * Parses GML data from a given string, returning features and the XML document.
+   *
+   * This function attempts to parse the provided GML string using the GML32 format.
+   * It returns an object containing the parsed features and the XML document.
+   *
+   * @param {string} gmlString - The GML data to parse.
+   * @returns {Object} An object with 'features' array and 'xmlDoc' XML document.
+   */
   parseGML(gmlString) {
     try {
       const format = new GML32();
@@ -433,6 +525,17 @@ export class MapViewer extends LitElement {
     }
   }
 
+  /**
+   * Groups features by their feature type.
+   *
+   * This function takes the parsed features and an XML document as input and
+   * groups the features by their feature type. The feature type is determined by
+   * the local name of the first child element of the feature member element.
+   *
+   * @param {Array<ol/Feature>} features - The parsed features to group.
+   * @param {XMLDocument} xmlDoc - The XML document containing the feature members.
+   * @returns {Object} An object with feature type as keys and arrays of features as values.
+   */
   groupFeaturesByType(features, xmlDoc) {
     return features.reduce((groups, feature, index) => {
       const featureMembers = xmlDoc.getElementsByTagNameNS('*', 'featureMember');
@@ -446,6 +549,12 @@ export class MapViewer extends LitElement {
     }, {});
   }
 
+  /**
+   * Removes all vector layers from the map and resets the data toggle.
+   *
+   * This function is called when a new GML file is selected and we want to remove all the
+   * previously added vector layers from the map and reset the data toggle.
+   */
   resetLayers() {
     this.vectorLayers.forEach((layer) => {
       this.map1.removeLayer(layer)
@@ -454,6 +563,20 @@ export class MapViewer extends LitElement {
     this.shadowRoot.getElementById('data-toggle').innerHTML = ''
   }
 
+  /**
+   * Applies SLD styles to the map.
+   *
+   * This function takes an SLD object, a feature type and the view projection as input and
+   * applies the SLD styles to the map. If the SLD object is null, null is returned. If the
+   * feature type is not found in the SLD object, a warning is logged and null is returned. If
+   * the feature type is found but the style is not found, a warning is logged and null is
+   * returned.
+   *
+   * @param {Object} sldObject - The SLD object to apply styles from.
+   * @param {string} type - The feature type to apply the styles to.
+   * @param {ol/proj/Projection} viewProjection - The view projection of the map.
+   * @returns {ol/style/StyleFunction} The style function to apply to the map.
+   */
   applySLDStyles(sldObject, type, viewProjection) {
     if (!sldObject) return null;
 
@@ -480,6 +603,19 @@ export class MapViewer extends LitElement {
     });
   }
 
+  /**
+   * Updates the style of the given vector layer with the given style options.
+   *
+   * The style options are:
+   * - `fillColor`: The color to use for filling polygons.
+   * - `strokeColor`: The color to use for drawing lines.
+   * - `strokeWidth`: The width of lines.
+   *
+   * The style function is then applied to the vector layer.
+   *
+   * @param {ol/layer/Vector} vectorLayer - The vector layer to update the style of.
+   * @param {{fillColor: string, strokeColor: string, strokeWidth: number}} styleOptions - The style options to apply.
+   */
   updateLayerStyle(vectorLayer, {fillColor, strokeColor, strokeWidth}) {
     vectorLayer.setStyle((feature) => {
       const geometryType = feature.getGeometry().getType();
@@ -516,6 +652,17 @@ export class MapViewer extends LitElement {
     });
   }
 
+  /**
+   * Creates a checkbox to toggle the visibility of a layer.
+   *
+   * The checkbox is wrapped in a container element with class 'checkbox-container'.
+   * The checkbox is given an ID of the form `checkbox-${type}`, where type is the type of the layer.
+   * The checkbox is also given an event listener that toggles the visibility of the layer when changed.
+   *
+   * @param {string} type - The type of the layer.
+   * @param {ol/layer/Layer} vectorLayer - The vector layer to toggle the visibility of.
+   * @returns {HTMLElement} The container element containing the checkbox.
+   */
   createLayerToggleCheckbox(type, vectorLayer) {
     const checkboxContainer = document.createElement('div');
     checkboxContainer.className = 'checkbox-container';
@@ -538,6 +685,17 @@ export class MapViewer extends LitElement {
     return checkboxContainer;
   }
 
+  /**
+   * Creates color pickers for a layer and adds them to the given container.
+   * The color pickers are three `input` elements with types `color`, `color`, and `number`.
+   * The first two are for the fill and stroke colors, respectively, and the third is for the stroke width.
+   * Each color picker is given an event listener that updates the style of the given layer
+   * when the color picker is changed.
+   *
+   * @param {HTMLElement} container - The container element to add the color pickers to.
+   * @param {string} type - The type of the layer.
+   * @param {ol/layer/Layer} vectorLayer - The vector layer to update the style of when the color picker is changed.
+   */
   addColorPickers(container, type, vectorLayer) {
     const fillColorInput = document.createElement('input');
     fillColorInput.type = 'color';
@@ -573,6 +731,17 @@ export class MapViewer extends LitElement {
     container.appendChild(strokeWidthInput);
   }
 
+/**
+ * Adds a vector layer to the map with controls for visibility and styling.
+ *
+ * This function creates a vector layer using the provided vector source and style function.
+ * It also adds a checkbox to toggle the visibility of the layer, and color pickers
+ * for adjusting the layer's fill color, stroke color, and stroke width.
+ *
+ * @param {string} type - The type or name of the layer.
+ * @param {ol/source/Vector} vectorSource - The vector source for the layer.
+ * @param {function} [sldStyleFunction] - Optional style function for the layer.
+ */
   addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
       source: vectorSource, style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType())),
@@ -624,6 +793,13 @@ export class MapViewer extends LitElement {
     this.shadowRoot.getElementById('data-toggle').appendChild(layerToggleDiv);
   }
 
+  /**
+   * Creates a color input field with a label and an event listener that calls the `onChange` function with the new value.
+   * @param {string} label - The label for the color input field.
+   * @param {string} initialValue - The initial color value.
+   * @param {function} onChange - The function to call when the color is changed.
+   * @returns {HTMLElement} The container element containing the color input field.
+   */
   createColorInput(label, initialValue, onChange) {
     const container = document.createElement('div');
     container.style.marginBottom = '5px';
@@ -641,6 +817,13 @@ export class MapViewer extends LitElement {
     return container;
   }
 
+  /**
+   * Creates a number input field with a label and an event listener that calls the `onChange` function with the new value.
+   * @param {string} label - The label for the number input field.
+   * @param {number} initialValue - The initial number value.
+   * @param {function} onChange - The function to call when the number is changed.
+   * @returns {HTMLElement} The container element containing the number input field.
+   */
   createNumberInput(label, initialValue, onChange) {
     const container = document.createElement('div');
     container.style.marginBottom = '5px';
@@ -659,6 +842,7 @@ export class MapViewer extends LitElement {
     return container;
   }
 
+  // Drag and Drop Functions
   onDragOver(event) {
     event.preventDefault();
     const dropZone = this.shadowRoot.getElementById('drop-zone');
@@ -725,4 +909,3 @@ export class MapViewer extends LitElement {
     `;
   }
 }
-
