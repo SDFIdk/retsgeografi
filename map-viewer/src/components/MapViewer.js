@@ -29,7 +29,8 @@ const epsg25832 = get('EPSG:25832');
 
 export class MapViewer extends LitElement {
   static styles = css`
-      #map-container {
+
+      .map-container {
           display: flex;
           justify-content: center;
           align-items: center;
@@ -42,6 +43,7 @@ export class MapViewer extends LitElement {
           width: 100%;
           height: 100%;
       }
+
 
       #compass-container {
           position: absolute;
@@ -875,7 +877,7 @@ export class MapViewer extends LitElement {
 
   render() {
     return html`
-      <div id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+      <div class="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
         <div id="map1" class="map"></div>
 
         <div id="data-toggle"></div>
