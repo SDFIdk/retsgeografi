@@ -6,9 +6,9 @@ export class Bekendtgorelse extends LitElement {
   `;
 
 	render() {
-      const gmlFile = '/2019/713/data_demo.gml';
-      const xmlFile = '/2019/713/metadata.xml';
-      const sldFile = '/2019/713/styles.sld';
+      const gmlFile = '/src/examples/2019/713/data_demo.gml';
+      const xmlFile = '/src/examples/2019/713/metadata.xml';
+      const sldFile = '/src/examples/2019/713/styles.sld';
       console.log("Bekendtgørelse XML", xmlFile);
       console.log('Bekendtgørelse GML', gmlFile);
       console.log('Bekendtgørelse SLD', sldFile);

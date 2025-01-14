@@ -81,6 +81,17 @@ npm run preview
 ```plaintext
 src/
 │
+├── examples/       # Example files for the application.
+│  └── 2019/        # Example files for 2019.
+│        └── example2019.js  # Example file for 2019.
+│  └── 2022/        # Example files for 2023.
+│        └── example2022.js  # Example file for 2022.
+│  └── 2024/        # Example files for 2024.
+│        └── example2024.js  # Example file for 2024.
+│
+├── router/         # Routing logic for the application.
+│  └── router.js    # Routing logic for the application.
+│
 ├── MapViewer.js  # The custom web component for the map viewer.
 ├── MapTemplate.js  # The custom web component for the map template.
 │

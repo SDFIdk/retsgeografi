@@ -3,7 +3,7 @@ import { html, LitElement } from 'lit';
 import './src/MapViewer.js';
 import '/src/index.css';
 import { MapViewer } from './src/MapViewer.js';
-import { Bekendtgorelse } from './public/2019/713/Bekendtgorelse.js';
+import { Bekendtgorelse } from './src/examples/2019/713/Bekendtgorelse.js';
 import { routing } from './src/router/router.js';
 import { ThemeToggle } from '@dataforsyningen/designsystem/assets/designsystem.js'
 

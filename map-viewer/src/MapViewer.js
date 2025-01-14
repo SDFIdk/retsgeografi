@@ -44,7 +44,7 @@ export class MapViewer extends LitElement {
           align-items: center;
           width: 100%;
           height: 100%;
-          position: static;
+          position: relative;
       }
 
       .map {
@@ -889,6 +889,8 @@ export class MapViewer extends LitElement {
         <div id="map" class="map"></div>
 
         <div id="data-toggle"></div>
+        <div id="metadata"></div>
+        
 
         <div id="controls-container">
           <label class="control-icon" title="Zoom In" @click="${this.zoomIn}">
