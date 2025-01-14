@@ -81,8 +81,8 @@ npm run preview
 ```plaintext
 src/
 │
-├── components/
-│   └── MapViewer.js  # The custom web component for the map viewer.
+├── MapViewer.js  # The custom web component for the map viewer.
+├── MapTemplate.js  # The custom web component for the map template.
 │
 ├── main.js           # The entry point of the application.
 │

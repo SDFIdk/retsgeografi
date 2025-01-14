@@ -1,7 +1,9 @@
 {
   "name": "map-viewer",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A plugin to render and interact with GML map data using OpenLayers and Lit.",
+  "main": "map-viewer/main.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,13 +11,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dataforsyningen/designsystem": "^8.5.0",
+    "@dataforsyningen/designsystem": "^8.6.0",
     "@nieuwlandgeo/sldreader": "^0.4.3",
     "lit": "^3.2.1",
     "ol": "^10.3.1",
     "proj4": "^2.15.0"
   },
   "devDependencies": {
-    "vite": "^5.4.11"
+    "vite": "^6.0.7"
+  },
+  "author": "Rasmus Tønder, Dataforsyningen",
+  "licence": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SDFIdk/retsgeografi"
   }
 }

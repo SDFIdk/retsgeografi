@@ -30,13 +30,21 @@ const epsg25832 = get('EPSG:25832');
 export class MapViewer extends LitElement {
   static styles = css`
 
+      :host {
+          display: block;
+          width: var(--map-viewer-width, 100%);
+          height: var(--map-viewer-height, 100%);
+          border: var(--map-viewer-border, none);
+          box-shadow: var(--map-viewer-box-shadow, none);
+      }
+
       .map-container {
           display: flex;
           justify-content: center;
           align-items: center;
           width: 100%;
           height: 100%;
-          position: relative;
+          position: static;
       }
 
       .map {
@@ -179,9 +187,9 @@ export class MapViewer extends LitElement {
 // Initialize the map
   initMaps() {
     // Create the first map
-    this.map1 = new Map({
+    this.map = new Map({
       // Set the target element
-      target: this.shadowRoot.getElementById('map1'),
+      target: this.shadowRoot.getElementById('map'),
 
       // Set the layers
       layers: [
@@ -236,11 +244,11 @@ export class MapViewer extends LitElement {
     });
 
     // Add overlay to the map
-    this.map1.addOverlay(this.overlay);
+    this.map.addOverlay(this.overlay);
 
     // Set up hover event to display feature information
-    this.map1.on('pointermove', (event) => {
-      const feature = this.map1.forEachFeatureAtPixel(event.pixel, (feat) => feat);
+    this.map.on('pointermove', (event) => {
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feat) => feat);
       if (feature) {
         const rgeoNavn = feature.get('navn');
         const rgeoType = feature.get('type');
@@ -266,12 +274,12 @@ export class MapViewer extends LitElement {
 
   // Zoom in on map
   zoomIn() {
-    const view = this.map1.getView();
+    const view = this.map.getView();
     view.setZoom(view.getZoom() + 1);
   }
   // Zoom out on map
   zoomOut() {
-    const view = this.map1.getView();
+    const view = this.map.getView();
     view.setZoom(view.getZoom() - 1);
   }
 
@@ -471,8 +479,8 @@ export class MapViewer extends LitElement {
     });
     // Adjust the map view to fit all features
     if (allFeaturesExtent) {
-      this.map1.getView().fit(allFeaturesExtent, {
-        size: this.map1.getSize(),
+      this.map.getView().fit(allFeaturesExtent, {
+        size: this.map.getSize(),
         padding: [50, 50, 50, 50],
         maxZoom: 18,
       });
@@ -489,7 +497,7 @@ export class MapViewer extends LitElement {
    * @param {string} [sldString] - The SLD data to use for styling the features.
    */
   applyFeatureGroupsToMap(featureGroups, sldString) {
-    const viewProjection = this.map1.getView().getProjection();
+    const viewProjection = this.map.getView().getProjection();
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
     Object.keys(featureGroups).forEach(type => {
@@ -498,7 +506,7 @@ export class MapViewer extends LitElement {
       this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
     });
 
-    this.map1.render();
+    this.map.render();
     this.requestUpdate();
   }
 
@@ -559,7 +567,7 @@ export class MapViewer extends LitElement {
    */
   resetLayers() {
     this.vectorLayers.forEach((layer) => {
-      this.map1.removeLayer(layer)
+      this.map.removeLayer(layer)
     })
     this.vectorLayers = []
     this.shadowRoot.getElementById('data-toggle').innerHTML = ''
@@ -597,10 +605,10 @@ export class MapViewer extends LitElement {
     const featureTypeStyle = sldStyle.featuretypestyles[0];
     return SLDReader.createOlStyleFunction(featureTypeStyle, {
       convertResolution: viewResolution => {
-        const viewCenter = this.map1.getView().getCenter();
+        const viewCenter = this.map.getView().getCenter();
         return getPointResolution(viewProjection, viewResolution, viewCenter);
       }, imageLoadedCallback: () => {
-        this.map1.changed();
+        this.map.changed();
       },
     });
   }
@@ -749,7 +757,7 @@ export class MapViewer extends LitElement {
       source: vectorSource, style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType())),
     });
 
-    this.map1.addLayer(vectorLayer);
+    this.map.addLayer(vectorLayer);
     this.vectorLayers.push(vectorLayer);
 
     // Create a checkbox and color pickers for the layer
@@ -877,8 +885,8 @@ export class MapViewer extends LitElement {
 
   render() {
     return html`
-      <div class="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
-        <div id="map1" class="map"></div>
+      <div part="map-container" class="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+        <div id="map" class="map"></div>
 
         <div id="data-toggle"></div>
 

@@ -2,14 +2,6 @@ import { LitElement, html, css } from 'lit';
 
 export class MapTemplate extends LitElement {
   static styles = css`
-      .map-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-          position: relative;
-      }   
   `;
 
   render() {
@@ -23,13 +15,11 @@ export class MapTemplate extends LitElement {
 
 
     return html`
-        <div class="map-container">
           <map-viewer
               .gmlFile="${gmlFile}"
               .xmlFile="${xmlFile}"
               .sldFile="${sldFile}">
           </map-viewer>
-        </div>
       `;
   }
 }
