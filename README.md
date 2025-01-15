@@ -1,7 +1,7 @@
 
-# Retsgeografi Map Viewer
+# Map Viewer Plugin
 
-A simple map viewer designed for "retsgeografi," allowing users to visualize vector tile data from GML files with associated XML metadata. Built using OpenLayers, Lit, Vite, and Web Components to provide a modern, responsive, and lightweight application.
+A customizable map viewer component that supports GML, XML and SLD files. Built using Lit, Openlayers and Web Components
 
 ## Features
 
@@ -81,23 +81,23 @@ npm run preview
 ```plaintext
 src/
 │
-├── examples/       # Example files for the application.
-│  └── 2019/        # Example files for 2019.
-│        └── example2019.js  # Example file for 2019.
-│  └── 2022/        # Example files for 2023.
-│        └── example2022.js  # Example file for 2022.
-│  └── 2024/        # Example files for 2024.
-│        └── example2024.js  # Example file for 2024.
+├── examples/                 # Example files for the application.
+│  └── 2019/
+│        └── example2019.js   # Example file for 2019.
+│  └── 2022/
+│        └── example2022.js   # Example file for 2022.
+│  └── 2024/
+│        └── example2024.js   # Example file for 2024.
 │
-├── router/         # Routing logic for the application.
-│  └── router.js    # Routing logic for the application.
+├── router/                   # Routing logic for the application.
+│  └── router.js             
 │
-├── MapViewer.js  # The custom web component for the map viewer.
-├── MapTemplate.js  # The custom web component for the map template.
+├── MapViewer.js              # The custom web component for the map viewer.
+├── MapTemplate.js            # The custom web component for the map template.
 │
-├── main.js           # The entry point of the application.
+├── main.js                   # The entry point of the application.
 │
-└── index.html        # The main HTML file for the application.
+└── index.css                # CSS index for global styles
 ```
 
 ## Code Overview

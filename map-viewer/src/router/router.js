@@ -14,4 +14,8 @@ export function routing(route) {
     return html`
     <bekendtgorelse-page></bekendtgorelse-page>`
   }
+  if (route === '#map-template') {
+    return html`
+    <map-template></map-template>`
+  }
 }
