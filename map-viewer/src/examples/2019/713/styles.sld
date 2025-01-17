@@ -94,7 +94,7 @@
                                     <se:SvgParameter name="fill">#6e6e6e</se:SvgParameter>
                                 </se:Fill>
                             </se:Mark>
-                            <se:Size>21</se:Size>
+                            <se:Size>16</se:Size>
                             <se:Rotation>
                                 <ogc:Literal>90</ogc:Literal>
                             </se:Rotation>
@@ -126,7 +126,7 @@
                                     <se:SvgParameter name="fill">#76c5fe</se:SvgParameter>
                                 </se:Fill>
                             </se:Mark>
-                            <se:Size>21</se:Size>
+                            <se:Size>14</se:Size>
                             <se:Rotation>
                                 <ogc:Literal>90</ogc:Literal>
                             </se:Rotation>
@@ -157,7 +157,7 @@
                                     <se:SvgParameter name="stroke-width">0.5</se:SvgParameter>
                                 </se:Stroke>
                             </se:Mark>
-                            <se:Size>18</se:Size>
+                            <se:Size>14</se:Size>
                         </se:Graphic>
                     </se:PointSymbolizer>
                 </se:Rule>
@@ -185,7 +185,7 @@
                                     <se:SvgParameter name="stroke-width">0.5</se:SvgParameter>
                                 </se:Stroke>
                             </se:Mark>
-                            <se:Size>18</se:Size>
+                            <se:Size>14</se:Size>
                         </se:Graphic>
                     </se:PointSymbolizer>
                 </se:Rule>
