@@ -6,7 +6,6 @@ import { MapViewer } from './src/MapViewer.js';
 import { MapTemplate } from './src/MapTemplate.js';
 import { Bekendtgorelse } from './src/examples/2019/713/Bekendtgorelse.js';
 import { routing } from './src/router/router.js';
-import { ThemeToggle } from '@dataforsyningen/designsystem/assets/designsystem.js'
 
 
 export class Main extends LitElement {
@@ -46,8 +45,7 @@ export class Main extends LitElement {
 }
 
 
-// CSS
-customElements.define('ds-theme-toggle', ThemeToggle)
+
 
 // Register custom elements
 customElements.define('main-component', Main);
