@@ -20,6 +20,9 @@ export class Bekendtgorelse extends LitElement {
               .xmlFile="${xmlFile}"
               .sldFile="${sldFile}">
           </map-viewer>
+          <a href="#bekendtgorelse" role="button">Bekendtgørelse</a>
+          <a href="#map-template" role="button">MapTemplate</a>
+          <a href="#map" role="button">Kort</a>
       `;
   }
 }
