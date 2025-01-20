@@ -1,7 +1,7 @@
 // src/main.js
 import { html, LitElement } from 'lit';
 import './src/MapViewer.js';
-import '/src/index.css';
+import './src/index.css';
 import { MapViewer } from './src/MapViewer.js';
 import { MapTemplate } from './src/MapTemplate.js';
 import { Bekendtgorelse } from './src/examples/2019/713/Bekendtgorelse.js';
