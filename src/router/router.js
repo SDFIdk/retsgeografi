@@ -8,11 +8,11 @@ import {html} from 'lit';
 export function routing(route) {
   if (route === '#map') {
     return html`
-    <map-viewer></map-viewer>`
+    <map-viewer data-theme="light"></map-viewer>`
   }
   if (route === '#bekendtgorelse') {
     return html`
-    <bekendtgorelse-page></bekendtgorelse-page>`
+    <bekendtgorelse-page data-theme="light"></bekendtgorelse-page>`
   }
   if (route === '#map-template') {
     return html`

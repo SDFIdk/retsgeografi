@@ -885,7 +885,7 @@ export class MapViewer extends LitElement {
 
   render() {
     return html`
-      <div part="map-container" class="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+      <div part="map-container" class="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}" data-theme="light">
         <div id="map" class="map"></div>
 
         <div id="data-toggle"></div>
