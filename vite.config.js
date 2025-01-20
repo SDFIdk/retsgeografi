@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   build: {
     lib: {
-      entry: 'src/index.js', // Entry file for your plugin
+      entry: 'main.js', // Entry file for your plugin
       name: 'MapViewerPlugin', // Global name for UMD builds
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },

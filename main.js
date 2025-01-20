@@ -54,3 +54,5 @@ customElements.define('main-component', Main);
 customElements.define('map-viewer', MapViewer);
 customElements.define('map-template', MapTemplate);
 customElements.define('bekendtgorelse-page', Bekendtgorelse);
+
+export { MapViewer, MapTemplate, Bekendtgorelse };
