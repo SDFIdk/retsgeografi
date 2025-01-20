@@ -33,7 +33,7 @@ export class Main extends LitElement {
 
   render() {
     return html`
-      <main data-theme="light">
+      <main>
         ${routing(this.route)} <!-- Pass the current route to the router -->
       </main>
     `;

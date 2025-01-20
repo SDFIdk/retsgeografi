@@ -16,6 +16,6 @@ export function routing(route) {
   }
   if (route === '#map-template') {
     return html`
-    <map-template></map-template>`
+    <map-template data-theme="light"></map-template>`
   }
 }
