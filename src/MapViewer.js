@@ -399,14 +399,21 @@ export class MapViewer extends LitElement {
         return acc;
       }, {});
     } else if (metadata.properties) {
-      properties = metadata.properties
+      properties = metadata.properties;
     } else {
       console.warn('Unsupported metadata format.');
       return;
     }
 
-    // Display metadata on the map or in a designated UI element
-    let metadataBox = this.shadowRoot.getElementById('metadata-box');
+    // Locate the map container
+    const mapContainer = this.shadowRoot.querySelector('#map-container');
+    if (!mapContainer) {
+      console.error('Map container not found');
+      return;
+    }
+
+    // Create or update the metadata box
+    let metadataBox = mapContainer.querySelector('#metadata-box');
     if (!metadataBox) {
       metadataBox = document.createElement('div');
       metadataBox.id = 'metadata-box';
@@ -421,16 +428,19 @@ export class MapViewer extends LitElement {
       max-height: 300px;
       overflow-y: auto;
       max-width: 25rem;
+      z-index: 10;
     `;
-      this.shadowRoot.appendChild(metadataBox);
+      mapContainer.appendChild(metadataBox);
     }
+
+    // Populate metadata content
     let contentHtml = ``;
     for (const [key, value] of Object.entries(properties)) {
       const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
       contentHtml += `<div style="margin-bottom: 8px;"><strong>${displayKey}:</strong> ${value}</div>`;
     }
 
-    // Display metadata with toggle
+    // Toggleable metadata content
     metadataBox.innerHTML = `
     <button id="toggle-metadata" style="background:none; border:none; font-size:1rem; cursor:pointer;">
         Metadata ▼
@@ -448,6 +458,7 @@ export class MapViewer extends LitElement {
       toggleButton.textContent = isVisible ? 'Metadata ▼' : 'Metadata ▲';
     });
   }
+
 
   /**
    * Loads GML data from a given string and applies it to the map.
@@ -885,7 +896,7 @@ export class MapViewer extends LitElement {
 
   render() {
     return html`
-      <div part="map-container" class="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
+      <div part="map-container" class="map-container" id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
         <div id="map" class="map"></div>
 
         <div id="data-toggle"></div>
@@ -916,6 +927,9 @@ export class MapViewer extends LitElement {
           </svg>
         </div>
       </div>
+      <a href="#bekendtgorelse" role="button">Bekendtgørelse</a>
+      <a href="#map-template" role="button">MapTemplate</a>
+      <a href="#map" role="button">Kort</a>
     `;
   }
 }
