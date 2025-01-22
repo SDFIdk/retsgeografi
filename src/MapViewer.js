@@ -117,10 +117,11 @@ export class MapViewer extends LitElement {
 
   // Define custom properties
   static properties = {
-    gmlFile: {type: String},
-    xmlFile: {type: String},
-    sldFile: {type: String},
+    gmlFile: { type: String, reflect: true },
+    xmlFile: { type: String, reflect: true },
+    sldFile: { type: String, reflect: true },
   };
+
 
   // Initialize custom properties
   constructor() {
@@ -659,6 +660,14 @@ export class MapViewer extends LitElement {
 
       // Style for LineString geometries
       if (geometryType === 'LineString') {
+        return new Style({
+          stroke: new Stroke({
+            color: strokeColor, width: strokeWidth,
+          }),
+        });
+      }
+
+      if (geometryType === 'Circle') {
         return new Style({
           stroke: new Stroke({
             color: strokeColor, width: strokeWidth,
