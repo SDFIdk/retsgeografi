@@ -16,9 +16,6 @@ export class MapTemplate extends LitElement {
 
     return html`
           <map-viewer
-              .gmlFile="${gmlFile}"
-              .xmlFile="${xmlFile}"
-              .sldFile="${sldFile}">
           </map-viewer>
       `;
   }
