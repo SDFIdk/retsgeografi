@@ -4,7 +4,7 @@ import './src/MapViewer.js';
 import './index.css';
 import { MapViewer } from './src/MapViewer.js';
 import { MapTemplate } from './src/MapTemplate.js';
-import { Bekendtgorelse } from './src/examples/2019/713/Bekendtgorelse.js';
+import { MapExample } from './src/MapExample.js';
 import { routing } from './src/router/router.js';
 
 
@@ -51,6 +51,6 @@ export class Main extends LitElement {
 customElements.define('main-component', Main);
 customElements.define('map-viewer', MapViewer);
 customElements.define('map-template', MapTemplate);
-customElements.define('bekendtgorelse-page', Bekendtgorelse);
+customElements.define('map-example', MapExample);
 
-export { MapViewer, MapTemplate, Bekendtgorelse };
+export { MapViewer, MapTemplate, MapExample };

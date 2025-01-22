@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
-export class Bekendtgorelse extends LitElement {
+export class MapExample extends LitElement {
 	static styles = css`
   
   `;
@@ -9,9 +9,9 @@ export class Bekendtgorelse extends LitElement {
       const gmlFile = '/src/examples/2019/713/data_demo.gml';
       const xmlFile = '/src/examples/2019/713/metadata.xml';
       const sldFile = '/src/examples/2019/713/styles.sld';
-      console.log("Bekendtgørelse XML", xmlFile);
-      console.log('Bekendtgørelse GML', gmlFile);
-      console.log('Bekendtgørelse SLD', sldFile);
+      console.log("MapExample XML", xmlFile);
+      console.log('MapExample GML', gmlFile);
+      console.log('MapExample SLD', sldFile);
 
 
       return html`
@@ -20,7 +20,7 @@ export class Bekendtgorelse extends LitElement {
               .xmlFile="${xmlFile}"
               .sldFile="${sldFile}">
           </map-viewer>
-          <a href="#bekendtgorelse" role="button">Bekendtgørelse</a>
+          <a href="#map-example" role="button">MapExample</a>
           <a href="#map-template" role="button">MapTemplate</a>
           <a href="#map" role="button">Kort</a>
       `;

@@ -10,9 +10,9 @@ export function routing(route) {
     return html`
     <map-viewer></map-viewer>`
   }
-  if (route === '#bekendtgorelse') {
+  if (route === '#map-example') {
     return html`
-    <bekendtgorelse-page></bekendtgorelse-page>`
+    <map-example></map-example>`
   }
   if (route === '#map-template') {
     return html`
