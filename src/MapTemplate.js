@@ -1,25 +1,34 @@
 import { LitElement, html, css } from 'lit';
 
 export class MapTemplate extends LitElement {
-  static styles = css`
-  `;
+  static styles = css``;
+
+  // Define reactive properties for the component
+  static properties = {
+    gmlFile: { type: String },
+    xmlFile: { type: String },
+    sldFile: { type: String },
+  };
+
+  constructor() {
+    super();
+    // Initialize default values
+    this.gmlFile = '';
+    this.xmlFile = '';
+    this.sldFile = '';
+  }
 
   render() {
-    // Insert your code here
-    const gmlFile = 'path/gml.gml';
-    const xmlFile = 'path/metadata.xml';
-    const sldFile = 'path/styles.sld';
-    console.log("XML", xmlFile);
-    console.log('GML', gmlFile);
-    console.log('SLD', sldFile);
-
+    console.log('XML:', this.xmlFile);
+    console.log('GML:', this.gmlFile);
+    console.log('SLD:', this.sldFile);
 
     return html`
-          <map-viewer
-              .gmlFile="${gmlFile}"
-              .xmlFile="${xmlFile}"
-              .sldFile="${sldFile}">
-          </map-viewer>
-      `;
+      <map-viewer
+          .gmlFile="${this.gmlFile}"
+          .xmlFile="${this.xmlFile}"
+          .sldFile="${this.sldFile}">
+      </map-viewer>
+    `;
   }
 }
