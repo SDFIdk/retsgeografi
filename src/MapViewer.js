@@ -1,6 +1,6 @@
 // MapViewer.js
 
-import {css, html, LitElement} from 'lit';
+import {css, html, LitElement} from '../node_modules/lit-element/lit-element.js';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';

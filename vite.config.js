@@ -8,18 +8,15 @@ export default defineConfig({
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },
     rollupOptions: {
-      external: ['lit', 'ol'], // Mark these as external dependencies
+      external: [], // Remove 'lit' and 'ol' from here
       output: {
-        globals: {
-          lit: 'lit',
-          ol: 'ol',
-        },
+        globals: {}, // No need for globals if everything is bundled
       },
     },
   },
   server: {
-    open: true, // Automatically opens the app in the default browser
-    port: 5000, // You can change the port if needed
+    open: true,
+    port: 5000,
     middlewareMode: false,
   },
 });
