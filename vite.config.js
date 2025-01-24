@@ -1,22 +1,42 @@
 import { defineConfig } from 'vite';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
+  base: './', // Relative base path
   build: {
     lib: {
-      entry: 'main.js', // Entry file for your plugin
-      name: 'MapViewerPlugin', // Global name for UMD builds
+      entry: 'main.js',
+      name: 'MapViewerPlugin',
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },
     rollupOptions: {
-      external: [], // Remove 'lit' and 'ol' from here
+      external: ['lit', 'ol'], // Keep 'lit' and 'ol' external
       output: {
-        globals: {}, // No need for globals if everything is bundled
+        globals: {
+          lit: 'lit',
+          ol: 'ol',
+        },
       },
+      input: 'index.html', // Include index.html
     },
+    outDir: 'dist', // Output directory
   },
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/examples', // Copy the src/examples folder
+          dest: '.', // Place in the root of /dist
+        },
+        {
+          src: 'node_modules/@dataforsyningen/designsystem/**/*', // Copy everything from the package
+          dest: 'designsystem', // Place in /dist/designsystem
+        },
+      ],
+    }),
+  ],
   server: {
     open: true,
     port: 5000,
-    middlewareMode: false,
   },
 });

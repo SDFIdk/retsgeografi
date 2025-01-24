@@ -15,7 +15,7 @@ export class Main extends LitElement {
 
   constructor() {
     super();
-    this.route = window.location.hash || '#map'; // Set initial route
+    this.route = window.location.hash || '#map-viewer'; // Set initial route
     this._setupRouting(); // Initialize hashchange listener
   }
 
@@ -26,7 +26,7 @@ export class Main extends LitElement {
    */
   _setupRouting() {
     window.addEventListener('hashchange', () => {
-      this.route = window.location.hash || '#map'; // Update route dynamically
+      this.route = window.location.hash || '#map-viewer'; // Update route dynamically
     });
   }
 

@@ -6,7 +6,7 @@ import {html} from '../../node_modules/lit-element/lit-element.js';
  * @returns {LitElement} - appropriate content
  */
 export function routing(route) {
-  if (route === '#map') {
+  if (route === '#map-viewer') {
     return html`
     <map-viewer></map-viewer>`
   }
