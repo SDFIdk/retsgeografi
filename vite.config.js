@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  base: './', // Relative base path
+  base: 'retsgeografi', // Relative base path
   build: {
     lib: {
       entry: 'main.js',
@@ -25,7 +25,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'src/examples', // Copy the src/examples folder
+          src: 'public/examples', // Copy the src/examples folder
           dest: '.', // Place in the root of /dist
         },
         {
