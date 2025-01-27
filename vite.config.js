@@ -29,14 +29,16 @@ export default defineConfig({
           dest: '.', // Place in the root of /dist
         },
         {
-          src: 'node_modules/@dataforsyningen/designsystem/**/*', // Copy everything from the package
-          dest: 'designsystem', // Place in /dist/designsystem
+          src: 'node_modules/@dataforsyningen', // Copy everything from the package
+          dest: '', // Place in /dist/designsystem
         },
       ],
     }),
   ],
+  assetsInclude: ['**/*.svg'],
   server: {
     open: true,
     port: 5000,
+    cors: true,
   },
 });

@@ -9,7 +9,8 @@ import {WMTS} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
-import svg from '@dataforsyningen/designsystem/assets/icons.svg'
+import svg from '../node_modules/@dataforsyningen/designsystem/assets/icons.svg'
+import minus from '../node_modules/@dataforsyningen/designsystem/assets/icons/minus.svg'
 import {Circle, Fill, Stroke, Style} from 'ol/style.js';
 import GML32 from 'ol/format/GML32.js';
 import {register} from 'ol/proj/proj4';
@@ -914,25 +915,41 @@ export class MapViewer extends LitElement {
 
         <div id="controls-container">
           <label class="control-icon" title="Zoom In" @click="${this.zoomIn}">
-            <svg>
-              <use href="${svg}#plus"></use>
+            <svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g stroke="var(--ds-icon-color, black)" stroke-linejoin="round" stroke-linecap="round" stroke-width="var(--ds-icon-stroke, 1)">
+                <path d="M0.5 14.5H28.5M14.5 0.5L14.5 28.5"/>
+              </g>
             </svg>
           </label>
           <label class="control-icon" title="Zoom Out" @click="${this.zoomOut}">
-            <svg>
-              <use href="${svg}#minus"></use>
+            <svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g stroke="var(--ds-icon-color, black)" stroke-linejoin="round" stroke-linecap="round" stroke-width="var(--ds-icon-stroke, 1)">
+                <path d="M0.5 14.5H28.5"/>
+              </g>
             </svg>
           </label>
           <label class="control-icon" id="drop-zone" title="Upload Files">
             <input type="file" multiple @change="${this.uploadFiles}"/>
-            <svg>
-              <use href="${svg}#upload"></use>
+            <svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g stroke="var(--ds-icon-color, black)" stroke-linecap="round" fill="none" stroke-width="var(--ds-icon-stroke, 1)">
+                <path d="M1.5 26.5H27.5"/>
+                <path d="M2 13.0858L13.7929 1.29292C14.1834 0.902398 14.8166 0.902399 15.2071 1.29292L27 13.0858M14.5 1.08582L14.5 20.4999"/>
+              </g>
             </svg>
           </label>
         </div>
         <div id="compass-container">
-          <svg>
-            <use href="${svg}#compass"></use>
+          <svg class="ds-icon" width="40" height="40" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="15.5" cy="15.5" r="15" fill="var(--c8, black)" stroke="var(--white, white)" stroke-width="var(--ds-icon-stroke, 1)"/>
+            <g stroke="var(--white, white)" stroke-linecap="round" stroke-linejoin="round">
+              <path id="west" d="M3.9 16.79L7.12 15.5L3.9 14.21"/>
+              <path id="east" d="M23.88 16.79L27.1 14.21M25.81 16.79H25.16C24.45 16.79 23.88 16.21 23.88 15.5C23.88 14.79 24.45 14.21 25.16 14.21H25.81C26.52 14.21 27.1 14.79 27.1 15.5C27.1 16.21 26.52 16.79 25.81 16.79Z"/>
+              <path id="south" d="M14.21 26.46C14.21 26.81 14.5 27.1 14.86 27.1H16.06C16.46 27.1 16.79 26.78 16.79 26.38C16.79 26.05 16.56 25.76 16.24 25.68L14.76 25.3C14.44 25.22 14.21 24.93 14.21 24.6C14.21 24.2 14.54 23.88 14.93 23.88H16.14C16.5 23.88 16.79 24.17 16.79 24.52"/>
+              <path id="north" d="M14.21 7.12L14.22 3.9L16.79 7.12V3.9"/>
+            </g>
+            <path id="north-pointer" d="M12.13 15.49C12.12 15.02 12.29 14.72 12.45 14.41L14.96 9.4C15.15 8.99 15.8 9.01 15.99 9.37L18.63 14.65C18.73 14.87 18.85 15.16 18.84 15.49L17.21 15.49C17.21 15.49 17.12 13.78 15.49 13.77C13.86 13.76 13.75 15.49 13.75 15.49L12.13 15.49Z" fill="var(--r5, red)"/>
+            <path id="south-pointer" d="M12.12 15.5C12.12 15.96 12.28 16.26 12.44 16.58L14.95 21.58C15.14 21.99 15.79 21.97 15.98 21.61L18.62 16.33C18.73 16.12 18.84 15.82 18.83 15.49L17.2 15.49C17.2 15.49 17.12 17.2 15.48 17.21C13.85 17.22 13.75 15.5 13.75 15.5L12.12 15.5Z" fill="var(--white, white)"/>
+            <path d="M5.19 5.19L7.77 7.77M25.81 5.19L23.23 7.77M25.81 25.81L23.23 23.23M5.19 25.81L7.77 23.23" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="var(--ds-icon-stroke, 1)"/>
           </svg>
         </div>
       </div>
