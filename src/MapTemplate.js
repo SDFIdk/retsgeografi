@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css } from '../node_modules/lit-element/lit-element.js';
 
 export class MapTemplate extends LitElement {
   static styles = css`
