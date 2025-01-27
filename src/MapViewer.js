@@ -9,8 +9,6 @@ import {WMTS} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
-import svg from '../node_modules/@dataforsyningen/designsystem/assets/icons.svg'
-import minus from '../node_modules/@dataforsyningen/designsystem/assets/icons/minus.svg'
 import {Circle, Fill, Stroke, Style} from 'ol/style.js';
 import GML32 from 'ol/format/GML32.js';
 import {register} from 'ol/proj/proj4';
@@ -953,6 +951,10 @@ export class MapViewer extends LitElement {
           </svg>
         </div>
       </div>
+
+      <a href="#map-example" role="button">MapExample</a>
+      <a href="#map-template" role="button">MapTemplate</a>
+      <a href="#map" role="button">Kort</a>
     `;
   }
 }

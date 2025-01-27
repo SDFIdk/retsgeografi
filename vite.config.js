@@ -32,6 +32,10 @@ export default defineConfig({
           src: 'node_modules/@dataforsyningen', // Copy everything from the package
           dest: '', // Place in /dist/designsystem
         },
+        {
+          src: 'node_modules/@nieuwlandgeo', // Copy everything from the package}
+          dest: '',
+        }
       ],
     }),
   ],
