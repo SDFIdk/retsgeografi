@@ -25,7 +25,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'src/examples', // Copy the src/examples folder
+          src: 'public/examples', // Copy the src/examples folder
           dest: '.', // Place in the root of /dist
         },
         {
