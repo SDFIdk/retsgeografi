@@ -6,9 +6,9 @@ export class MapExample extends LitElement {
   `;
 
 	render() {
-      const gmlFile = './retsgeografi/public/examples/2019/713/data_demo.gml';
-      const xmlFile = './retsgeografi/public/examples/2019/713/metadata.xml';
-      const sldFile = './retsgeografi/public/examples/2019/713/styles.sld';
+      const gmlFile = './examples/2019/713/data_demo.gml';
+      const xmlFile = './examples/2019/713/metadata.xml';
+      const sldFile = './examples/2019/713/styles.sld';
       console.log("MapExample XML", xmlFile);
       console.log('MapExample GML', gmlFile);
       console.log('MapExample SLD', sldFile);
