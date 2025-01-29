@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  base: './', // Relative base path
+  base: './retsgeografi', // Relative base path
   build: {
     lib: {
       entry: 'main.js',
@@ -10,7 +10,7 @@ export default defineConfig({
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },
     rollupOptions: {
-      external: ['lit', 'ol'], // Keep 'lit' and 'ol' external
+      external: ['ol'], // Keep 'lit' and 'ol' external
       output: {
         globals: {
           lit: 'lit',
