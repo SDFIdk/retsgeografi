@@ -18,6 +18,7 @@ export default defineConfig({
       input: 'index.html', // Include index.html
     },
     outDir: 'dist', // Output directory
+    sourcemap: true,
   },
   optimizeDeps: {
     include: ['lit'],
