@@ -1,0 +1,12 @@
+<svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 15,15 m -14,0 a 14,14 0 1,0 28,0 a 14,14 0 1,0 -28,0
+           M 15,15 m -7,0 a 7,7 0 1,1 14,0 a 7,7 0 1,1 -14,0" fill="var(--primary, #0090CC)" fill-rule="evenodd"/>
+
+  <g stroke="var(--white, white)" stroke-linejoin="round" stroke-linecap="round" stroke-width="var(--ds-icon-stroke, 1)">
+    <circle cx="15" cy="15" r="7"/>
+    <path d="m 15,8 v -3.5"/>
+    <path d="m 22,15 h 3.5"/>
+    <path d="m 15,22 v 3.5"/>
+    <path d="m 8,15 h -3.5"/>
+  </g>
+</svg>

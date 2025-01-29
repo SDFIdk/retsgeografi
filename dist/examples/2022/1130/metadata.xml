@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdb:MD_Metadata 	xmlns:mpc="http://standards.iso.org/iso/19115/-3/mpc/1.0" 
+					xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0" 
+					xmlns:mrl="http://standards.iso.org/iso/19115/-3/mrl/2.0" 
+					xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" 
+					xmlns:mac="http://standards.iso.org/iso/19115/-3/mac/2.0" 
+					xmlns:mrs="http://standards.iso.org/iso/19115/-3/mrs/1.0" 
+					xmlns:mrc="http://standards.iso.org/iso/19115/-3/mrc/2.0" 
+					xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0" 
+					xmlns:mrd="http://standards.iso.org/iso/19115/-3/mrd/1.0" 
+					xmlns:mco="http://standards.iso.org/iso/19115/-3/mco/1.0" 
+					xmlns:msr="http://standards.iso.org/iso/19115/-3/msr/2.0" 
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+					xmlns:lan="http://standards.iso.org/iso/19115/-3/lan/1.0" 
+					xmlns:mas="http://standards.iso.org/iso/19115/-3/mas/1.0" 
+					xmlns:gcx="http://standards.iso.org/iso/19115/-3/gcx/1.0" 
+					xmlns:mda="http://standards.iso.org/iso/19115/-3/mda/1.0" 
+					xmlns:xlink="http://www.w3.org/1999/xlink" 
+					xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0" 
+					xmlns:mds="http://standards.iso.org/iso/19115/-3/mds/2.0" 
+					xmlns:gml="http://www.opengis.net/gml/3.2" 
+					xmlns:cat="http://standards.iso.org/iso/19115/-3/cat/1.0" 
+					xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/2.0" 
+					xmlns:mex="http://standards.iso.org/iso/19115/-3/mex/1.0" 
+					xmlns:cit="http://standards.iso.org/iso/19115/-3/cit/2.0" 
+					xmlns:gfc="http://standards.iso.org/iso/19110/gfc/1.1" 
+					xmlns:mdt="http://standards.iso.org/iso/19115/-3/mdt/2.0" 
+					xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0" 
+					xmlns:mmi="http://standards.iso.org/iso/19115/-3/mmi/1.0" 
+					xmlns:mdq="http://standards.iso.org/iso/19157/-2/mdq/1.0" 
+					xsi:schemaLocation="http://standards.iso.org/iso/19115/-3/mdb/2.0 https://schemas.isotc211.org/19115/-3/mdb/2.0/mdb.xsd">
+	<mdb:metadataIdentifier xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1">
+		<mcc:MD_Identifier>
+			<!-- Unik ident for metadata, udfyldes af system -->
+			<mcc:code>
+				<gco:CharacterString>f83a7992-ba25-4226-996f-fc914b39ec82</gco:CharacterString>
+			</mcc:code>
+		</mcc:MD_Identifier>
+	</mdb:metadataIdentifier>
+	<mdb:defaultLocale xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<lan:PT_Locale id="DA">
+			<!-- Sprog anvendt i metadata, altid dansk, udfyldes af system -->
+			<lan:language>
+				<lan:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="dan"/>
+			</lan:language>
+			<lan:characterEncoding>
+				<lan:MD_CharacterSetCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_CharacterSetCode" codeListValue="utf8"/>
+			</lan:characterEncoding>
+		</lan:PT_Locale>
+	</mdb:defaultLocale>
+	<mdb:metadataScope xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<mdb:MD_MetadataScope>
+			<!-- Emne metadata dækker, altid dataset, udfyldes af system -->
+			<mdb:resourceScope>
+				<mcc:MD_ScopeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_ScopeCode" codeListValue="dataset"/>
+				<!--B.3.28 MD_ScopeCode-->
+			</mdb:resourceScope>
+		</mdb:MD_MetadataScope>
+	</mdb:metadataScope>
+	<mdb:contact xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<cit:CI_Responsibility>
+			<!-- Ansvarlig for metadata, pointOfContact -->
+			<cit:role>
+				<cit:CI_RoleCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode" codeListValue="pointOfContact"/>
+				<!--B.3.5 CI_RoleCode-->
+			</cit:role>
+			<cit:party>
+				<cit:CI_Organisation>
+					<cit:name>
+						<gco:CharacterString>By-, Land- og Kirkeministeriet</gco:CharacterString>
+					</cit:name>
+					<cit:contactInfo>
+						<cit:CI_Contact>
+							<cit:onlineResource>
+								<cit:CI_OnlineResource>
+									<cit:linkage>
+										<gco:CharacterString>kirk@kirk.dk</gco:CharacterString>
+									</cit:linkage>
+								</cit:CI_OnlineResource>
+							</cit:onlineResource>
+						</cit:CI_Contact>
+					</cit:contactInfo>			
+				</cit:CI_Organisation>
+			</cit:party>
+		</cit:CI_Responsibility>
+	</mdb:contact>
+	<mdb:dateInfo> 
+		<!-- Dato for metadatas oprettelse og seneste revision, udfyldes af system -->
+		<cit:CI_Date>
+			<cit:date>
+				<gco:Date>2022-06-27</gco:Date>
+			</cit:date>
+			<cit:dateType>
+				<cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="revision"/>
+				<!--B.3.2 CI_DateTypeCode -->
+			</cit:dateType>
+		</cit:CI_Date>
+	</mdb:dateInfo>		
+	<mdb:dateInfo xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1">
+		<cit:CI_Date>
+			<cit:date>
+				<gco:DateTime>2022-02-14T14:20:22.506084Z</gco:DateTime>
+			</cit:date>
+			<cit:dateType>
+				<cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="creation"/>
+				<!--B.3.2 CI_DateTypeCode -->
+			</cit:dateType>
+		</cit:CI_Date>
+	</mdb:dateInfo>
+	<!-- Hvilken metadata standard og version er anvendt til beskrivelsen -->
+	<mdb:metadataStandard xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<cit:CI_Citation>
+			<cit:title>
+				<gco:CharacterString>ISO19115-3:2018</gco:CharacterString>
+			</cit:title>
+			<cit:edition>
+				<gco:CharacterString>1,0</gco:CharacterString>
+			</cit:edition>
+		</cit:CI_Citation>
+	</mdb:metadataStandard>
+	<mdb:metadataStandard xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<cit:CI_Citation>
+			<cit:title>
+				<gco:CharacterString>ISO19115-1</gco:CharacterString>
+			</cit:title>
+			<cit:edition>
+				<gco:CharacterString>2014</gco:CharacterString>
+			</cit:edition>
+		</cit:CI_Citation>
+	</mdb:metadataStandard>
+	<mdb:metadataStandard xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<cit:CI_Citation>
+			<cit:title>
+				<gco:CharacterString>ISO19157-1</gco:CharacterString>
+			</cit:title>
+			<cit:edition>
+				<gco:CharacterString>2023</gco:CharacterString>
+			</cit:edition>
+		</cit:CI_Citation>
+	</mdb:metadataStandard>
+		<mdb:metadataLinkage>   <!-- Hvor kan metadata findes, her skal det være en URL -->
+       <cit:CI_OnlineResource>
+         <cit:linkage>
+            <gco:CharacterString>https://test.geodata-info.dk/srv/api/records/d9c1a01e-d940-4a16-aa08-51652bcc8328</gco:CharacterString>
+         </cit:linkage>
+         <cit:function>
+            <cit:CI_OnLineFunctionCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_OnLineFunctionCode" codeListValue="completeMetadata"/>
+         </cit:function>
+      </cit:CI_OnlineResource>
+  </mdb:metadataLinkage>
+  <mdb:referenceSystemInfo xmlns:gts="http://www.isotc211.org/2005/gts">
+		<mrs:MD_ReferenceSystem>
+			<!-- Koordinatsystem for retsgeografi, udfyldes af system ud fra gml -->
+			<mrs:referenceSystemIdentifier>
+				<mcc:MD_Identifier>
+					<mcc:code>
+						<gcx:Anchor xlink:href="http://www.opengis.net/def/crs/EPSG/0/25832">EPSG:25832</gcx:Anchor>
+					</mcc:code>
+					<mcc:description>
+						<!--Frivilligt -->
+						<gco:CharacterString>ETRS89 / UTM zone 32N</gco:CharacterString>
+					</mcc:description>
+				</mcc:MD_Identifier>
+			</mrs:referenceSystemIdentifier>
+		</mrs:MD_ReferenceSystem>
+	</mdb:referenceSystemInfo>
+	<mdb:identificationInfo  xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1">
+		<mri:MD_DataIdentification>
+			<mri:citation>
+				<!-- Title som retsgeografien er kendt under -->
+				<cit:CI_Citation>
+					<cit:title>
+						<gco:CharacterString>Bekendtgørelse om landsplandirektiv for areal til virksomhed i Allerød</gco:CharacterString>
+					</cit:title>
+					<cit:date>
+						<cit:CI_Date>
+							<cit:date>
+								<!-- Tidsstempel for retsgeografien, udfyldes af system -->
+								<gco:Date>2022-06-27</gco:Date>
+							</cit:date>
+							<cit:dateType>
+								<cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="publication"/>
+								<!--B.3.2 CI_DateTypeCode-->
+							</cit:dateType>
+						</cit:CI_Date>
+					</cit:date>
+					<cit:identifier>
+						<mcc:MD_Identifier>
+							<mcc:code>
+								<gco:CharacterString>https://test.geodata-info.dk/d9c1a01e-d940-4a16-aa08-51652bcc8328</gco:CharacterString>
+							</mcc:code>
+						</mcc:MD_Identifier>
+					</cit:identifier>
+					<!-- Reference til lovgrundlag retsgeografien hører til, udfyldes af system -->
+					<cit:otherCitationDetails>
+                        <gcx:Anchor xlink:href="https://www.retsinformation.dk/eli/lta/2022/1130">BEK nr 1130 af 27/06/2022</gcx:Anchor>
+					</cit:otherCitationDetails>
+				</cit:CI_Citation>
+			</mri:citation>
+			<mri:abstract>
+				<!-- Beskrivelse af hvad retsgeografien viser og hvordan den er skabt -->
+				<gco:CharacterString>Viser placeringen af areal til virksomhed i Allerød. Geografien er dannet ud fra matrikeldata ved brug af matrikelskel samt digitalisering ud fra ortofoto og skærmkort</gco:CharacterString>
+			</mri:abstract>
+				<mri:pointOfContact>
+					<cit:CI_Responsibility>
+						<cit:role>
+							<cit:CI_RoleCode xmlns:gts="http://www.isotc211.org/2005/gts"
+                                   xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.0"
+                                   codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode"
+                                   codeListValue="pointOfContact"/>
+                        </cit:role>
+						<cit:party>
+							<cit:CI_Organisation>
+								<cit:name xmlns:gts="http://www.isotc211.org/2005/gts"
+											   xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.0">
+									<gco:CharacterString>Ministeriet for oplevelser i det åbne land</gco:CharacterString>
+								 </cit:name>
+								<cit:contactInfo>
+									<cit:CI_Contact>
+										<cit:address>
+											<cit:CI_Address>
+												<cit:electronicMailAddress  xmlns:gts="http://www.isotc211.org/2005/gts"
+																						xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.0">
+													<gco:CharacterString>email@min.dk</gco:CharacterString>
+												 </cit:electronicMailAddress>
+											</cit:CI_Address>
+										</cit:address>
+									</cit:CI_Contact>
+								</cit:contactInfo>
+							</cit:CI_Organisation>
+						</cit:party>
+				</cit:CI_Responsibility>
+				</mri:pointOfContact>
+			<mri:spatialRepresentationType>
+				<!-- Angivelse af type af retsgeografi, vector eller raster, Frivillig -->
+				<mcc:MD_SpatialRepresentationTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector"/>
+				<!--3.2.9 MD_SpatialRepresentationTypeCode -->
+			</mri:spatialRepresentationType>
+			<mri:spatialResolution>
+				<!-- Frivillig -->
+				<mri:MD_Resolution>
+					<!-- Viser retsgeografiens målestoksforhold -->
+					<mri:equivalentScale>
+						<mri:MD_RepresentativeFraction>
+							<mri:denominator>
+								<gco:Integer>5000</gco:Integer>
+							</mri:denominator>
+						</mri:MD_RepresentativeFraction>
+					</mri:equivalentScale>
+				</mri:MD_Resolution>
+			</mri:spatialResolution>
+			<mri:topicCategory>
+				<!-- Overordnet emner retsgeografien dækker. Fast liste fra B.3.30 MD_TopicCategoryCode -->
+				<mri:MD_TopicCategoryCode>location</mri:MD_TopicCategoryCode>
+			</mri:topicCategory>
+			<mri:topicCategory>
+				<mri:MD_TopicCategoryCode>planningCadastre</mri:MD_TopicCategoryCode>
+			</mri:topicCategory>
+			<mri:extent>
+				<gex:EX_Extent>
+					<!-- Retsgeografiens udstrækning -->
+					<gex:geographicElement>
+						<gex:EX_GeographicBoundingBox>
+							<!-- Skal være i geografiske koordinater -->
+							<gex:westBoundLongitude>
+								<gco:Decimal>12.3071</gco:Decimal>
+							</gex:westBoundLongitude>
+							<gex:eastBoundLongitude>
+								<gco:Decimal>12.3200</gco:Decimal>
+							</gex:eastBoundLongitude>
+							<gex:southBoundLatitude>
+								<gco:Decimal>55.8376</gco:Decimal>
+							</gex:southBoundLatitude>
+							<gex:northBoundLatitude>
+								<gco:Decimal>55.8430</gco:Decimal>
+							</gex:northBoundLatitude>
+						</gex:EX_GeographicBoundingBox>
+					</gex:geographicElement>
+				</gex:EX_Extent>
+			</mri:extent>
+			<mri:resourceMaintenance>
+				<!--Frivilligt -->
+				<mmi:MD_MaintenanceInformation>
+					<mmi:maintenanceAndUpdateFrequency>
+						<!-- Angivelse af ajourføring af retsgeografien, altid notPlanned, udfyldes af system -->
+						<mmi:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned"/>
+						<!--B.3.21 MD_MaintenanceFrequencyCode -->
+					</mmi:maintenanceAndUpdateFrequency>
+					<mmi:maintenanceNote>
+						<!-- Frivilligt -->
+						<gco:CharacterString>Der er tale om et statisk datasæt</gco:CharacterString>
+					</mmi:maintenanceNote>
+				</mmi:MD_MaintenanceInformation>
+			</mri:resourceMaintenance>
+		</mri:MD_DataIdentification>
+	</mdb:identificationInfo>
+	<mdb:distributionInfo>
+		<mrd:MD_Distribution>
+			<mrd:distributor>
+				<mrd:MD_Distributor>
+					<mrd:distributorContact>
+						<cit:CI_Responsibility>
+							<cit:role>
+								<cit:CI_RoleCode xmlns:gts="http://www.isotc211.org/2005/gts"
+                                         codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode" 
+                                         codeListValue="pointOfContact"/>
+							</cit:role>
+							<cit:party>
+								<cit:CI_Organisation>
+									<cit:name>
+										<gco:CharacterString>By-, Land- og Kirkeministeriet</gco:CharacterString>
+									</cit:name>
+								</cit:CI_Organisation>
+							</cit:party>
+						</cit:CI_Responsibility>
+					</mrd:distributorContact>
+				</mrd:MD_Distributor>
+			</mrd:distributor>
+		</mrd:MD_Distribution>
+	</mdb:distributionInfo>
+	<mdb:dataQualityInfo xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx"> <!-- Det er frivilligt at angive en detaljeret datakvalitetsbeskrivelse -->
+		<mdq:DQ_DataQuality>
+			<mdq:scope>
+				<mcc:MD_Scope>
+					<mcc:level>
+						<mcc:MD_ScopeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_ScopeCode" codeListValue="dataset"/> <!--B3.28 MD_ScopeCode-->
+					</mcc:level>
+				</mcc:MD_Scope>
+			</mdq:scope>
+			<mdq:report>
+				<mdq:DQ_AbsoluteExternalPositionalAccuracy>
+					<!-- Viser retsgeografiens plane nøjagtighed -->
+					<mdq:result>
+						<mdq:DQ_DescriptiveResult>
+							<mdq:statement>
+								<gco:CharacterString>2,0 m</gco:CharacterString>
+							</mdq:statement>
+						</mdq:DQ_DescriptiveResult>
+					</mdq:result>
+				</mdq:DQ_AbsoluteExternalPositionalAccuracy>
+			</mdq:report>
+		</mdq:DQ_DataQuality>
+	</mdb:dataQualityInfo>
+	<mdb:resourceLineage xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<mrl:LI_Lineage>
+			<!-- Beskrivelse af det eller de datasæt der ligger til grund for skabelsen af retsgeografien --> 
+			<!-- Hvis man inkluderer historikken i resumeet kan historikket helt udelades her, specielt fordi den her skal angive for hvert af de datasæt der indgår i retsgeografien og ikke kune en overordnet historikbeskrivelse -->
+			<mrl:source>
+				<mrl:LI_Source>
+					<mrl:sourceSpatialResolution>
+						<mri:MD_Resolution>
+							<mri:equivalentScale>
+								<mri:MD_RepresentativeFraction>
+									<mri:denominator>
+										<gco:Integer>5000</gco:Integer>
+									</mri:denominator>
+								</mri:MD_RepresentativeFraction>
+							</mri:equivalentScale>
+						</mri:MD_Resolution>
+					</mrl:sourceSpatialResolution>
+					<mrl:sourceReferenceSystem>
+						<mrs:MD_ReferenceSystem>
+							<mrs:referenceSystemIdentifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>EPSG:25832</gco:CharacterString>
+									</mcc:code>
+									<mcc:description>
+										<gco:CharacterString>ERTS89</gco:CharacterString>
+									</mcc:description>
+								</mcc:MD_Identifier>
+							</mrs:referenceSystemIdentifier>
+						</mrs:MD_ReferenceSystem>
+					</mrl:sourceReferenceSystem>
+					<mrl:sourceCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Datafordeleren: ortofoto 2021
+							</gco:CharacterString>
+							</cit:title>
+							<cit:edition>
+								<gco:CharacterString>17052021</gco:CharacterString>
+							</cit:edition>
+						</cit:CI_Citation>
+					</mrl:sourceCitation>
+					<mrl:scope>
+						<mcc:MD_Scope>
+							<mcc:level>
+								<mcc:MD_ScopeCode codeListValue="dataset"
+                                          codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_ScopeCode"/>
+							</mcc:level>
+						</mcc:MD_Scope>
+					</mrl:scope>					
+				</mrl:LI_Source>
+			</mrl:source>
+		</mrl:LI_Lineage>
+	</mdb:resourceLineage>
+	<mdb:resourceLineage xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<mrl:LI_Lineage>
+			<mrl:source>
+				<mrl:LI_Source>
+					<mrl:sourceSpatialResolution>
+						<mri:MD_Resolution>
+							<mri:equivalentScale>
+								<mri:MD_RepresentativeFraction>
+									<mri:denominator>
+										<gco:Integer>10000</gco:Integer>
+									</mri:denominator>
+								</mri:MD_RepresentativeFraction>
+							</mri:equivalentScale>
+						</mri:MD_Resolution>
+					</mrl:sourceSpatialResolution>
+					<mrl:sourceReferenceSystem>
+						<mrs:MD_ReferenceSystem>
+							<mrs:referenceSystemIdentifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>EPSG:25832</gco:CharacterString>
+									</mcc:code>
+									<mcc:description>
+										<gco:CharacterString>ERTS89</gco:CharacterString>
+									</mcc:description>
+								</mcc:MD_Identifier>
+							</mrs:referenceSystemIdentifier>
+						</mrs:MD_ReferenceSystem>
+					</mrl:sourceReferenceSystem>
+					<mrl:sourceCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Datafordeleren: skærmkort grå
+							</gco:CharacterString>
+							</cit:title>
+							<cit:edition>
+								<gco:CharacterString>01052022</gco:CharacterString>
+							</cit:edition>
+						</cit:CI_Citation>
+					</mrl:sourceCitation>
+				</mrl:LI_Source>
+			</mrl:source>
+		</mrl:LI_Lineage>
+	</mdb:resourceLineage>
+	<mdb:resourceLineage xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1" xmlns:gmx="http://www.isotc211.org/2005/gmx">
+		<mrl:LI_Lineage>
+			<mrl:source>
+				<mrl:LI_Source>
+					<mrl:sourceSpatialResolution>
+						<mri:MD_Resolution>
+							<mri:equivalentScale>
+								<mri:MD_RepresentativeFraction>
+									<mri:denominator>
+										<gco:Integer>1000</gco:Integer>
+									</mri:denominator>
+								</mri:MD_RepresentativeFraction>
+							</mri:equivalentScale>
+						</mri:MD_Resolution>
+					</mrl:sourceSpatialResolution>
+					<mrl:sourceReferenceSystem>
+						<mrs:MD_ReferenceSystem>
+							<mrs:referenceSystemIdentifier>
+								<mcc:MD_Identifier>
+									<mcc:code>
+										<gco:CharacterString>EPSG:25832</gco:CharacterString>
+									</mcc:code>
+									<mcc:description>
+										<gco:CharacterString>ERTS89</gco:CharacterString>
+									</mcc:description>
+								</mcc:MD_Identifier>
+							</mrs:referenceSystemIdentifier>
+						</mrs:MD_ReferenceSystem>
+					</mrl:sourceReferenceSystem>
+					<mrl:sourceCitation>
+						<cit:CI_Citation>
+							<cit:title>
+								<gco:CharacterString>Dataforsyningen: matrikelkort
+							</gco:CharacterString>
+							</cit:title>
+							<cit:edition>
+								<gco:CharacterString>17092021</gco:CharacterString>
+							</cit:edition>
+						</cit:CI_Citation>
+					</mrl:sourceCitation>
+				</mrl:LI_Source>
+			</mrl:source>
+		</mrl:LI_Lineage>
+	</mdb:resourceLineage>
+</mdb:MD_Metadata>
+

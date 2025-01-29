@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:gmlsf="http://www.opengis.net/gmlsf/2.0"
+        xmlns:rgeo="urn:uuid:71f6895c-fe80-42c0-a9b4-480bb91d03d0"
+        elementFormDefault="qualified"
+        targetNamespace="urn:uuid:71f6895c-fe80-42c0-a9b4-480bb91d03d0"
+        version="1.0.0">
+   <annotation>
+      <appinfo source="http://schemas.opengis.net/gmlsfProfile/2.0/gmlsfLevels.xsd">
+         <ComplianceLevel xmlns="http://www.opengis.net/gmlsf/2.0">0</ComplianceLevel>
+      </appinfo>
+   </annotation>
+   <import namespace="http://www.opengis.net/gml/3.2"
+           schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+   <import namespace="http://www.opengis.net/gmlsf/2.0"
+           schemaLocation="http://schemas.opengis.net/gmlsfProfile/2.0/gmlsfLevels.xsd"/>
+   <element name="FeatureCollection"
+            type="rgeo:FeatureCollectionType"
+            substitutionGroup="gml:AbstractGML"/>
+   <complexType name="FeatureCollectionType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence minOccurs="0" maxOccurs="unbounded">
+               <element name="featureMember">
+                  <complexType>
+                     <complexContent>
+                        <extension base="gml:AbstractFeatureMemberType">
+                           <sequence>
+                              <element ref="gml:AbstractFeature"/>
+                           </sequence>
+                        </extension>
+                     </complexContent>
+                  </complexType>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Arealreservation"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:ArealreservationType">
+      <annotation>
+         <documentation>beskrivelse af hvad en arealreservation er</documentation>
+      </annotation>
+   </element>
+   <complexType name="ArealreservationType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:MultiSurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Kompressorstation"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:KompressorstationType">
+      <annotation>
+         <documentation>beskrivelse af hvad en kompressorstation er</documentation>
+      </annotation>
+   </element>
+   <complexType name="KompressorstationType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+               <element name="navn" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Modtageterminal"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:ModtageterminalType">
+      <annotation>
+         <documentation>beskrivelse af hvad en modtageterminal er</documentation>
+      </annotation>
+   </element>
+   <complexType name="ModtageterminalType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+               <element name="navn" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Station"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:StationType">
+      <annotation>
+         <documentation>beskrivelse af hvad en station er</documentation>
+      </annotation>
+   </element>
+   <complexType name="StationType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:PointPropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+               <element name="navn" type="string"/>
+               <element name="type" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+</schema>

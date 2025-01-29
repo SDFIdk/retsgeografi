@@ -1,0 +1,15 @@
+/*
+ * Container
+ */
+
+/**
+ * Turn a block element into a centered box with standard dimensions.
+ * @var --gap-lg
+ */
+.ds-container,
+.container {
+  width: 100%;
+  max-width: 90rem;
+  padding: var(--gap-lg);
+  margin: 0 auto;
+}

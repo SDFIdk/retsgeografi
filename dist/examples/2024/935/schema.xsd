@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:rgeo="urn:uuid:b80ef4ba-a9d1-4846-bf30-2476d1e749c1"
+        elementFormDefault="qualified"
+        targetNamespace="urn:uuid:b80ef4ba-a9d1-4846-bf30-2476d1e749c1"
+        version="1.0.0">
+   <import namespace="http://www.opengis.net/gml/3.2"
+           schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+   <element name="FeatureCollection"
+            type="rgeo:FeatureCollectionType"
+            substitutionGroup="gml:AbstractGML"/>
+   <complexType name="FeatureCollectionType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence minOccurs="0" maxOccurs="unbounded">
+               <element name="featureMember">
+                  <complexType>
+                     <complexContent>
+                        <extension base="gml:AbstractFeatureMemberType">
+                           <sequence>
+                              <element ref="gml:AbstractFeature"/>
+                           </sequence>
+                        </extension>
+                     </complexContent>
+                  </complexType>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="BoringsnaerBeskyttelsesomraade"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:BoringsnaerBeskyttelsesomraadeType">
+      <annotation>
+         <documentation>definition</documentation>
+      </annotation>
+   </element>
+   <complexType name="BoringsnaerBeskyttelsesomraadeType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="FoelsomIndvindingsomraade"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:FoelsomIndvindingsomraadeType">
+      <annotation>
+         <documentation>definition</documentation>
+      </annotation>
+   </element>
+   <complexType name="FoelsomIndvindingsomraadeType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+               <element name="kategori" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Indsatsomraade"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:IndsatsomraadeType"/>
+   <complexType name="IndsatsomraadeType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+               <element name="kategori" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Indvindingsopland"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:IndvindingsoplandType">
+      <annotation>
+         <documentation>definition</documentation>
+      </annotation>
+   </element>
+   <complexType name="IndvindingsoplandType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="OmraadeMedDrikkevandsinteresser"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:OmraadeMedDrikkevandsinteresserType">
+      <annotation>
+         <documentation>definition</documentation>
+      </annotation>
+   </element>
+   <complexType name="OmraadeMedDrikkevandsinteresserType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+               <element name="kategori" type="string"/>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+</schema>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mdb:MD_Metadata xmlns:mpc="http://standards.iso.org/iso/19115/-3/mpc/1.0"
+                 xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0"
+                 xmlns:mrl="http://standards.iso.org/iso/19115/-3/mrl/2.0"
+                 xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.1"
+                 xmlns:mac="http://standards.iso.org/iso/19115/-3/mac/2.0"
+                 xmlns:mrs="http://standards.iso.org/iso/19115/-3/mrs/1.0"
+                 xmlns:mrc="http://standards.iso.org/iso/19115/-3/mrc/2.0"
+                 xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0"
+                 xmlns:mrd="http://standards.iso.org/iso/19115/-3/mrd/1.0"
+                 xmlns:mco="http://standards.iso.org/iso/19115/-3/mco/1.0"
+                 xmlns:msr="http://standards.iso.org/iso/19115/-3/msr/2.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:lan="http://standards.iso.org/iso/19115/-3/lan/1.0"
+                 xmlns:mas="http://standards.iso.org/iso/19115/-3/mas/1.0"
+                 xmlns:gcx="http://standards.iso.org/iso/19115/-3/gcx/1.0"
+                 xmlns:mda="http://standards.iso.org/iso/19115/-3/mda/1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0"
+                 xmlns:mds="http://standards.iso.org/iso/19115/-3/mds/2.0"
+                 xmlns:gml="http://www.opengis.net/gml/3.2"
+                 xmlns:cat="http://standards.iso.org/iso/19115/-3/cat/1.0"
+                 xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/2.0"
+                 xmlns:mex="http://standards.iso.org/iso/19115/-3/mex/1.0"
+                 xmlns:cit="http://standards.iso.org/iso/19115/-3/cit/2.0"
+                 xmlns:gfc="http://standards.iso.org/iso/19110/gfc/1.1"
+                 xmlns:mdt="http://standards.iso.org/iso/19115/-3/mdt/2.0"
+                 xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0"
+                 xmlns:mmi="http://standards.iso.org/iso/19115/-3/mmi/1.0"
+                 xmlns:mdq="http://standards.iso.org/iso/19157/-2/mdq/1.0"
+                 xsi:schemaLocation="http://standards.iso.org/iso/19115/-3/mdb/2.0 https://schemas.isotc211.org/19115/-3/mdb/2.0/mdb.xsd">
+   <mdb:metadataIdentifier>
+      <mcc:MD_Identifier>
+         <mcc:code>
+            <gco:CharacterString>76654913-ca91-4268-a42d-a0ad2c4463eb</gco:CharacterString> 
+         </mcc:code>
+      </mcc:MD_Identifier>
+  </mdb:metadataIdentifier>
+   <mdb:defaultLocale xmlns:gmx="http://www.isotc211.org/2005/gmx">
+      <lan:PT_Locale>
+         <lan:language>
+            <lan:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="dan"/>
+         </lan:language>
+         <lan:characterEncoding>
+            <lan:MD_CharacterSetCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_CharacterSetCode" codeListValue="utf8"/>
+         </lan:characterEncoding>
+      </lan:PT_Locale>
+   </mdb:defaultLocale>
+   <mdb:metadataScope xmlns:gmx="http://www.isotc211.org/2005/gmx">
+      <mdb:MD_MetadataScope>
+         <mdb:resourceScope>
+            <mcc:MD_ScopeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_ScopeCode" codeListValue="dataset"/>
+         </mdb:resourceScope>
+      </mdb:MD_MetadataScope>
+  </mdb:metadataScope>
+   <mdb:contact xmlns:gmx="http://www.isotc211.org/2005/gmx">
+      <cit:CI_Responsibility>
+         <cit:role>
+            <cit:CI_RoleCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode" codeListValue="owner"/>
+         </cit:role>
+         <cit:party>
+            <cit:CI_Organisation>
+               <cit:name>
+                  <gco:CharacterString>Erhvervstyrelsen</gco:CharacterString>
+               </cit:name>
+            </cit:CI_Organisation>
+         </cit:party>
+      </cit:CI_Responsibility>
+  </mdb:contact>
+   <mdb:dateInfo>
+      <cit:CI_Date>
+         <cit:date>
+			 <gco:Date>2024-09-17</gco:Date>
+         </cit:date>
+         <cit:dateType>
+            <cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="publication"/>
+         </cit:dateType>
+      </cit:CI_Date>
+  </mdb:dateInfo>  
+  <mdb:metadataStandard xmlns:gmx="http://www.isotc211.org/2005/gmx">
+      <cit:CI_Citation>
+         <cit:title>
+            <gco:CharacterString>ISO19115-1:2014</gco:CharacterString>
+         </cit:title>
+      </cit:CI_Citation>
+  </mdb:metadataStandard>
+  <mdb:referenceSystemInfo xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:srv="http://standards.iso.org/iso/19115/-3/srv/2.0" xmlns:dqm="http://standards.iso.org/iso/19157/-2/dqm/1.0">
+      <mrs:MD_ReferenceSystem>
+         <mrs:referenceSystemIdentifier>
+            <mcc:MD_Identifier>
+               <mcc:code>
+                  <gcx:Anchor xlink:href="http://www.opengis.net/def/crs/EPSG/0/25832">EPSG:25832</gcx:Anchor>
+               </mcc:code>
+               <mcc:description>
+                  <gco:CharacterString>ETRS89 / UTM zone 32N (EPSG:25832)</gco:CharacterString>
+               </mcc:description>
+            </mcc:MD_Identifier>
+         </mrs:referenceSystemIdentifier>
+      </mrs:MD_ReferenceSystem>
+  </mdb:referenceSystemInfo>
+   <mdb:identificationInfo>
+      <mri:MD_DataIdentification>
+         <mri:citation>
+            <cit:CI_Citation>
+               <cit:title>
+                  <gco:CharacterString>Baltic Pipe</gco:CharacterString>
+               </cit:title>
+               <cit:date>
+                  <cit:CI_Date>
+                     <cit:date>
+                        <gco:Date>2019-09-12</gco:Date>
+                     </cit:date>
+                     <cit:dateType>
+                        <cit:CI_DateTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_DateTypeCode" codeListValue="publication"/>
+                     </cit:dateType>
+                  </cit:CI_Date>
+               </cit:date>
+			   <cit:otherCitationDetails>
+					<gcx:Anchor xlink:href="https://www.retsinformation.dk/eli/lta/2019/713">BEK nr 713 af 09/07/2019</gcx:Anchor>
+               </cit:otherCitationDetails>
+            </cit:CI_Citation>
+         </mri:citation>
+         <mri:abstract>
+            <gco:CharacterString>Viser placeringen af gastransmissionsledning og deres arealreservation med tilhørende tekniske anlæg til naturgas ved Everdrup. Retsgeografien er digitaliseret oven på Datafordeleren: Skærmkortet - Klassisk</gco:CharacterString>
+         </mri:abstract>
+         <mri:spatialRepresentationType>
+            <mcc:MD_SpatialRepresentationTypeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_SpatialRepresentationTypeCode" codeListValue="vector"/>
+         </mri:spatialRepresentationType>
+         <mri:spatialResolution>
+            <mri:MD_Resolution>
+               <mri:equivalentScale>
+                  <mri:MD_RepresentativeFraction>
+                     <mri:denominator>
+                        <gco:Integer>1000</gco:Integer>
+                     </mri:denominator>
+                  </mri:MD_RepresentativeFraction>
+               </mri:equivalentScale>
+            </mri:MD_Resolution>
+         </mri:spatialResolution>
+         <mri:topicCategory>
+            <mri:MD_TopicCategoryCode>location</mri:MD_TopicCategoryCode>
+         </mri:topicCategory>
+         <mri:topicCategory>
+            <mri:MD_TopicCategoryCode>utilitiesCommunication</mri:MD_TopicCategoryCode>
+         </mri:topicCategory>
+         <mri:extent>
+            <gex:EX_Extent>
+               <gex:geographicElement>
+                  <gex:EX_GeographicBoundingBox>
+                     <gex:westBoundLongitude>
+                        <gco:Decimal>8.1737</gco:Decimal>
+                     </gex:westBoundLongitude>
+                     <gex:eastBoundLongitude>
+                        <gco:Decimal>15.3802</gco:Decimal>
+                     </gex:eastBoundLongitude>
+                     <gex:southBoundLatitude>
+                        <gco:Decimal>54.1085</gco:Decimal>
+                     </gex:southBoundLatitude>
+                     <gex:northBoundLatitude>
+                        <gco:Decimal>55.7637</gco:Decimal>
+                     </gex:northBoundLatitude>
+                  </gex:EX_GeographicBoundingBox>
+               </gex:geographicElement>
+            </gex:EX_Extent>
+         </mri:extent>
+         <mri:resourceMaintenance> 
+            <mmi:MD_MaintenanceInformation>
+               <mmi:maintenanceAndUpdateFrequency>
+                  <mmi:MD_MaintenanceFrequencyCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_MaintenanceFrequencyCode" codeListValue="notPlanned"/>
+               </mmi:maintenanceAndUpdateFrequency>
+               <mmi:maintenanceNote> 
+                  <gco:CharacterString>Der er tale om et statisk datasæt</gco:CharacterString>
+               </mmi:maintenanceNote>
+            </mmi:MD_MaintenanceInformation>
+         </mri:resourceMaintenance>
+      </mri:MD_DataIdentification>
+   </mdb:identificationInfo>
+   <mdb:dataQualityInfo xmlns:gmx="http://www.isotc211.org/2005/gmx"> 
+      <mdq:DQ_DataQuality>
+         <mdq:scope>
+            <mcc:MD_Scope>
+               <mcc:level>
+                  <mcc:MD_ScopeCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_ScopeCode" codeListValue="dataset"/>
+               </mcc:level>
+            </mcc:MD_Scope>
+         </mdq:scope>
+        <mdq:report>
+			<mdq:DQ_AbsoluteExternalPositionalAccuracy>
+				<mdq:result>
+					<mdq:DQ_DescriptiveResult>
+						<mdq:statement>
+							<gco:CharacterString>2,0 m</gco:CharacterString>
+						</mdq:statement>
+					</mdq:DQ_DescriptiveResult>
+				</mdq:result>
+			</mdq:DQ_AbsoluteExternalPositionalAccuracy>
+         </mdq:report>
+      </mdq:DQ_DataQuality>
+  </mdb:dataQualityInfo>
+	 <mdb:resourceLineage xmlns:gmx="http://www.isotc211.org/2005/gmx">
+	   <mrl:LI_Lineage>
+	   <mrl:source> 
+		   <mrl:LI_Source> 
+			 <mrl:sourceSpatialResolution>
+					 <mri:MD_Resolution>
+						<mri:equivalentScale>
+							<mri:MD_RepresentativeFraction>
+								<mri:denominator><gco:Integer>1000</gco:Integer></mri:denominator>
+							</mri:MD_RepresentativeFraction></mri:equivalentScale>
+					</mri:MD_Resolution>
+				 </mrl:sourceSpatialResolution>				 
+				 <mrl:sourceReferenceSystem>
+					 <mrs:MD_ReferenceSystem>
+						 <mrs:referenceSystemIdentifier>
+							 <mcc:MD_Identifier>
+								<mcc:code>
+									<gco:CharacterString>EPSG:25832</gco:CharacterString>
+								</mcc:code>
+								<mcc:description>
+									<gco:CharacterString>ERTS89</gco:CharacterString>
+								</mcc:description>
+							</mcc:MD_Identifier>
+						 </mrs:referenceSystemIdentifier>
+					 </mrs:MD_ReferenceSystem>
+				 </mrl:sourceReferenceSystem>
+				 <mrl:sourceCitation>
+					 <cit:CI_Citation>
+						<cit:title>
+							<gco:CharacterString>Datafordeleren: Skærmkortet - Klassisk
+							</gco:CharacterString>
+						</cit:title>
+						<cit:edition><gco:CharacterString>17092024</gco:CharacterString>
+						</cit:edition>							
+					</cit:CI_Citation>
+				 </mrl:sourceCitation>
+			 </mrl:LI_Source>
+		   </mrl:source>
+      </mrl:LI_Lineage>
+  </mdb:resourceLineage>
+</mdb:MD_Metadata>

@@ -1,0 +1,41 @@
+details {
+  list-style: none;
+}
+
+details summary {
+  position: relative;
+  padding: var(--space-sm) 0 var(--space-sm) 1.75rem;
+  list-style: none;
+  font-size: 1.188rem;
+  font-weight: 500;
+  line-height: 1.10;
+  letter-spacing: 0.01rem;
+  margin-bottom: var(--space-sm);
+  cursor: pointer;
+  list-style: none;
+}
+
+details summary::marker,
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::after {
+  position: absolute;
+  bottom: 0.33rem;
+  left: 0;
+  content: '';
+  display: block;
+  height: var(--space-md);
+  width: var(--space-md);
+  background-color: transparent;
+  background-image: var(--form-icon-arrow-down);
+  background-size: var(--space) auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: transform 0.3s ease-in-out;
+}
+
+details[open] > summary::after {
+  transform: rotate(180deg);
+}

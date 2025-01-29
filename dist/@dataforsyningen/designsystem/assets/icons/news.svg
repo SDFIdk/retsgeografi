@@ -1,0 +1,9 @@
+<svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="var(--ds-icon-color, black)" stroke-linejoin="round" stroke-linecap="round" stroke-width="var(--ds-icon-stroke, 1)">
+    <circle cx="19.5" cy="4.5" r="1.5"/>
+    <circle cx="25.5" cy="2.5" r="1.5"/>
+    <circle cx="26.5" cy="10.5" r="1.5"/>
+    <path d="m 10.5,24.5 c 0,0 4.85,3.4 6,-2.5"/>
+    <path d="M 6,20.25 1,22.5 6.5,28 8.5,23.25 25,16 12,4 Z"/>
+  </g>
+</svg>

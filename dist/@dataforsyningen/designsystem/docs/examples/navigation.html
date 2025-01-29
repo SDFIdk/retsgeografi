@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="da">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>Klimadatastyrelsen Designsystem eksempler</title>
+
+    <link rel="stylesheet" href="../../assets/designsystem.css">
+
+    <link rel="icon" href="../../assets/logo-small.svg">
+
+  </head>
+  <body><article style="padding: var(--space-lg);">
+
+  <style>
+    #responsive-nav-example {
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space);
+      position: relative;
+    }
+  </style>
+
+  <header id="responsive-nav-example" class="header" data-theme="light" style="width: 100%; padding: var(--space-lg); background-color: var(--bg1);">
+    
+    <h1 style="margin: 0;">Navigation lang</h1>
+
+    <ds-nav-responsive>
+      <button slot="toggle" title="Vis menu" class="secondary">
+        <svg><use href="../../assets/icons.svg#burgerbar"/></svg>
+      </button>
+      <nav class="ds-panel ds-nav">
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#cases"/></svg></span>Cases</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#stack"/></svg></span>Data</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#map"/></svg></span>Kort</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#apps"/></svg></span>Web apps</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#user"/></svg></span>Login</a>
+      </nav>
+    </ds-nav-responsive>
+  
+  </header>
+
+  <hr>
+
+  <header id="responsive-nav-example" class="header" data-theme="dark" style="width: 30rem; padding: var(--space-lg);">
+    
+    <h1 style="margin: 0;">Navigation kort</h1>
+
+    <ds-nav-responsive>
+      <button slot="toggle" title="Vis menu" class="secondary">
+        <svg><use href="../../assets/icons.svg#burgerbar"/></svg>
+      </button>
+      <nav class="ds-panel ds-nav">
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#cases"/></svg></span>Cases</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#stack"/></svg></span>Data</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#map"/></svg></span>Kort</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#apps"/></svg></span>Web apps</a>
+        <a href="#"><span class="border-soft"><svg><use href="../../assets/icons.svg#user"/></svg></span>Login</a>
+      </nav>
+    </ds-nav-responsive>
+  
+  </header>
+
+  <hr>
+
+  <h2>.ds-nav class</h2>
+
+  <nav class="ds-nav">
+    <a href="#">Cases</a>
+    <a>Data</a>
+    <button>Kort</button>
+    <a href="#">Web apps</a>
+    <a>Login</a>
+    <button>Kort</button>
+  </nav>
+
+  <hr>
+
+  <h2>.ds-nav-vertical class</h2>
+
+  <nav class="ds-nav-vertical" style="width: 20rem;">
+    <a href="#">Cases</a>
+    <a>Data</a>
+    <button>Kort</button>
+    <a href="#">Web apps</a>
+    <a>Login</a>
+    <button>Kort</button>
+  </nav>
+
+  <hr>
+
+  <h2>ds-nav-scrollable</h2>
+
+  <ds-nav-scrollable style="width: 25rem;">
+    <nav class="ds-panel ds-nav">
+      <a href="#">A link</a>
+      <a href="#">Link</a>
+      <a href="#">Go here</a>
+      <a href="#">A loooooooong link</a>
+      <a href="#">A little link</a>
+      <a href="#">Another link</a>
+      <a href="#">About us</a>
+    </nav>
+  </ds-nav-scrollable>
+
+</article>
+
+<script type="module">
+  import { DSNavResponsive, DSNavScrollable } from '../../assets/designsystem.js'
+  customElements.define('ds-nav-responsive', DSNavResponsive)
+  customElements.define('ds-nav-scrollable', DSNavScrollable)
+</script>  <a style="position: fixed; bottom: var(--space-md); left: var(--space);" role="button" href="../../index.html"><svg><use href="../../assets/icons.svg#arrow-left" /></svg> Tilbage til oversigten</a>
+  
+  <ds-theme-toggle style="position: fixed; bottom: var(--space-md); right: var(--space);"></ds-theme-toggle>
+
+  <script type="module">
+    import { ThemeToggle } from '../../assets/designsystem.js'
+    customElements.define('ds-theme-toggle', ThemeToggle)
+  </script>
+
+</body>
+</html>

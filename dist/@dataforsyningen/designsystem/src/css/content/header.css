@@ -1,0 +1,9 @@
+/**
+ * Page header style
+ */
+.ds-header {
+  background-color: var(--bg1);
+}
+.ds-header ds-logo-title {
+  margin-bottom: var(--space-lg);
+}

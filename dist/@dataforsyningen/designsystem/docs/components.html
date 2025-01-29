@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="da">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>Klimadatastyrelsen Designsystem dokumentation</title>
+
+    <link rel="stylesheet" href="../assets/designsystem.css">
+    <link rel="stylesheet" href="./docs.css">
+
+    <link rel="icon" href="../../assets/logo-small.svg">
+
+  </head>
+  <body>
+
+    <header id="header" class="ds-header">
+      <div class="ds-container">
+        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: var(--space-md);">
+          <ds-logo-title title="Dataforsyningen" by-line="Klimadatastyrelsen"></ds-logo-title>
+          <ds-nav-responsive>
+            <button slot="toggle" title="Menu">
+              <svg><use href="../assets/icons.svg#burgerbar" /></svg>
+            </button>
+            <nav class="ds-nav ds-panel">
+              <a href="../index.html">Introduktion</a>
+              <a href="./css.html">Basis</a>
+              <a href="./icons.html">Ikoner</a>
+              <a href="./components.html">UI-komponenter</a>
+              <a href="./logos.html">Logo</a>
+              <a href="./css-util.html">CSS classes</a>
+              <a href="https://github.com/sdfidk/designsystem">Github</a>
+            </nav>
+          </ds-nav-responsive>
+        </div>
+        <h1>Designsystem v8</h1>
+        <p class="manchet">Reference-implementationer af Klimadatastyrelsens designguide med HTML/CSS</p>
+  
+        <ds-theme-toggle style="position: fixed; bottom: var(--space); right: var(--space); width: auto; z-index: 10;"></ds-theme-toggle>
+
+      </div>
+    </header><main class="ds-container"><section class="index-wrapper">
+
+  <h2>Indholdsfortegnelse</h2>
+
+  <nav class="ds-flexgrid">
+    <a href="#themetoggle">Theme toggle</a>
+    <a href="#tabs">Tabs</a>
+    <a href="#dialog">Dialogboks</a>
+    <a href="#responsivenav">Responsiv navigation</a>
+    <a href="#togglepanel">Skjult panel</a>
+    <a href="#spinner">Loading spinner</a>
+    <a href="#popover">Popover</a>
+    <a href="#toast">Toast</a>
+    <a href="#datatable">Data table</a>
+  </nav>
+  
+</section><section id="themetoggle">
+
+  <h2>Theme toggle</h2>
+
+  <p>Der er en theme-toggle komponent, som brugeren kan bruge til at skifte mellem dark og light mode.</p>
+
+  <ds-theme-toggle></ds-theme-toggle>
+
+  <code-view title="Javascript">
+import { ThemeToggle } from '@dataforsyningen/designsystem/assets/designsystem.js'
+customElements.define('ds-theme-toggle', ThemeToggle)
+  </code-view>
+
+  <code-view title="HTML">
+<ds-theme-toggle></ds-theme-toggle>
+  </code-view>
+  
+</section>
+<section id="tabs">
+
+  <h2>Tabs</h2>
+
+  <p>Tab-komponenten laver automatisk en række indholdselementer om til tabbed elementer, når du omslutter dem med <code>&lt;ds-tabs>&lt;/ds-tabs></code></code></p>
+
+  <div id="ex-tabs-1">
+    <ds-tabs data-selected="2">
+      <article title="Something">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      </article>
+      <article title="Something else">
+        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </article>
+      <article title="Another thing">
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </article>
+    </ds-tabs>
+  </div>
+
+  <code-view title="Javascript">
+import { Tabs } from '@dataforsyningen/designsystem/assets/designsystem.js'
+customElements.define('ds-tabs', Tabs)
+  </code-view>
+
+  <code-view data-snip="ex-tabs-1" title="HTML"></code-view>
+    
+</section>
+<section id="cards">
+
+  <h2>Produktkort/cards</h2> 
+  
+  <p>Produktkort og cards laves nemt ved at sætte class <code>ds-card</code> på et element. Det første <code>&lt;img></code> element i et ds-card bliver altid vist som hovedbilledet.</p>
+
+  <div class="ds-flexgrid" id="ex-card-1">
+
+    <article class="ds-card" data-theme="dark">
+      <img src="https://raw.githubusercontent.com/iamfrank/semstrap/master/assets/images/bg-img-1.jpg" alt="">
+      <div class="ds-padding">
+        <h3>Produktkort titel</h3>
+        <p>Dette er et produktkort/card.</p>      
+      </div>
+      <footer>
+        <button>Handling</button>
+      </footer>
+    </article>
+
+    <article class="ds-card" data-theme="light">
+      <img src="https://raw.githubusercontent.com/iamfrank/semstrap/master/assets/images/bg-img-1.jpg" alt="">
+      <div class="ds-padding">
+        <h3>Produktkort titel</h3>
+        <p>Dette er et produktkort/card.</p>      
+      </div>
+      <footer>
+        <div class="ds-button-group">
+          <button>Ja</button>
+          <button class="secondary">Nej</button>
+        </div>
+      </footer>
+    </article>
+
+  </div>
+
+  <code-view data-snip="ex-card-1"></code-view>
+
+</section>
+<section id="dialog">
+
+  <h2>Dialogboks</h2>
+
+  <div id="ex-dialog-1">
+
+    <button 
+      aria-controls="example-dialog">
+      Vis dialogboks
+    </button>
+
+    <dialog id="example-dialog">
+      <header>
+        <h3 tabindex="0">Dialogboks overskrift</h3>
+        <button 
+          aria-controls="example-dialog"
+          class="quiet"
+          title="Luk dialogboks">
+          <svg><use href="../assets/icons.svg#close" /></svg>
+        </button>
+      </header>
+      <article>
+        <p>Denne dialogbox indeholder en besked til dig.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </article>
+      <footer>
+        <button class="btn-toggle-dialog" aria-controls="example-dialog">OK</button>
+        <button class="quiet btn-toggle-dialog" aria-controls="example-dialog">Not OK</button>
+      </footer>
+    </dialog>
+  </div>
+
+  <script>
+    const dialog_element = document.querySelector('#example-dialog')
+    function toggleDialog() {
+      if (dialog_element.open) {
+        dialog_element.close()
+      } else {
+        dialog_element.showModal()
+      }
+    }
+    document.querySelectorAll('[aria-controls="example-dialog"]').forEach(function(element) {
+      element.addEventListener('click', toggleDialog)
+    })
+  </script>
+
+  <code-view data-snip="ex-dialog-1" title="HTML"></code-view>
+
+  <code-view title="Javascript">
+// Register the dialog element
+const dialog_element = document.querySelector('#example-dialog')
+
+// Toggles the dialog
+function toggleDialog() {
+  if (dialog_element.open) {
+    dialog_element.close()
+  } else {
+    dialog_element.showModal()
+  }
+}
+
+// Add event listeners
+document.querySelectorAll('[aria-controls="example-dialog"]').forEach(function(element) {
+  element.addEventListener('click', toggleDialog)
+})
+  </code-view>
+
+</section>
+<article id="responsivenav">
+
+  <h2>Responsiv navigation</h2>
+
+  <p><a href="examples/navigation.html">Se demoside</a></p>
+
+  <p>Eksempel på `ds-nav-responsive`, der ændrer layout i forhold til pladsen. Prøv at ændre browservinduets størrelse for at se navigationen ændre sig.</p>
+
+
+  <code-view title="Javascript">
+import { DSNavResponsive } from '@dataforsyningen/designsystem'
+customElements.define('ds-nav-responsive', DSNavResponsive)
+  </code-view>
+
+  <div id="ex-resp-nav-2">
+    <ds-nav-responsive>
+      <button slot="toggle" title="Toggle menu">
+        <svg><use href="../assets/icons.svg#burgerbar" /></svg>
+      </button>
+      <nav class="ds-nav ds-panel">
+        <a href="#">A link</a>
+        <a href="#">Link</a>
+        <a href="#">Go here</a>
+        <a href="#">A loooooooong link</a>
+        <a href="#">A little link</a>
+        <a href="#">Another link</a>
+        <a href="#">About us</a>
+      </nav>
+    </ds-nav-responsive>
+  </div>
+    
+  <code-view data-snip="ex-resp-nav-2" title="HTML"></code-view>
+
+  <div id="ex-resp-nav-4" style="width: 20rem;">
+    <ds-nav-responsive class="fill">
+      <nav class="ds-panel">
+        <button><svg><use href="../assets/icons.svg#map"/></svg> Lorem</button>
+        <button><svg><use href="../assets/icons.svg#mail"/></svg> Ipsum</button>
+        <button><svg><use href="../assets/icons.svg#stack"/></svg> Dolor</button>
+        <a href="#" role="button"><svg><use href="../assets/icons.svg#crosshair"/></svg> Hest</a>
+        <a href="#" role="button"><svg><use href="../assets/icons.svg#user"/></svg> Kanin</a>
+        <a href="#" role="button"><svg><use href="../assets/icons.svg#arrow-left"/></svg> Hamster</a>
+      </nav>
+      <button slot="toggle" title="Toggle menu">
+        <svg><use href="../assets/icons.svg#choose" /></svg>
+      </button>
+    </ds-nav-responsive>
+  </div>
+    
+  <code-view data-snip="ex-resp-nav-4" title="HTML"></code-view>
+
+  <hr>
+
+  <p>Med `ds-nav-scrollable` kan man lave tilføje diskret scroll-funktionalitet til nav-elementer, der er lidt for lange til at vise alle links.</p>
+  
+  <div id="ex-resp-nav-3" style="width: 30rem;">
+    <ds-nav-scrollable>
+      <nav class="ds-nav ds-panel">
+        <a href="#">A link</a>
+        <a href="#">Link</a>
+        <a href="#">Go here</a>
+        <a href="#">A loooooooong link</a>
+        <a href="#">A little link</a>
+        <a href="#">Another link</a>
+        <a href="#">About us</a>
+      </nav>
+    </ds-nav-scrollable>
+  </div>
+
+  <code-view title="Javascript">
+import { DSNavScrollable } from '@dataforsyningen/designsystem'
+customElements.define('ds-nav-scrollable', DSNavScrollable)
+  </code-view>
+    
+  <code-view data-snip="ex-resp-nav-3" title="HTML"></code-view>
+
+
+  <div id="ex-resp-nav-1">
+
+    <ds-nav style="width: 10rem;" data-align="left">
+      <a href="#" title="Something" role="button"><svg><use href="../assets/icons.svg#download"/></svg></a>
+      <button title="Something else"><svg><use href="../assets/icons.svg#arrow-right"/></svg></button>
+      <button title="A life well lived"><svg><use href="../assets/icons.svg#message"/></svg></button>
+      <button title="Information"><svg><use href="../assets/icons.svg#copy"/></svg></button>
+      <a href="#" title="Handy" role="button"><svg><use href="../assets/icons.svg#calendar"/></svg></a>
+      <button title="Søg"><svg><use href="../assets/icons.svg#search"/></svg></button>
+    </ds-nav>
+
+    <hr>
+
+    <ds-nav style="width: 15rem;" data-showtitle data-align="left">
+      <button title="Information"><svg><use href="../assets/icons.svg#copy"/></svg></button>
+      <a href="#" title="Handy" role="button"><svg><use href="../assets/icons.svg#calendar"/></svg></a>
+      <button title="Søg"><svg><use href="../assets/icons.svg#search"/></svg></button>
+      <a href="#" title="Something" role="button"><svg><use href="../assets/icons.svg#download"/></svg></a>
+      <button title="Something else"><svg><use href="../assets/icons.svg#arrow-right"/></svg></button>
+      <button title="A life well lived"><svg><use href="../assets/icons.svg#message"/></svg></button>
+    </ds-nav>
+
+    <hr>
+
+    <ds-nav style="width: 20rem;" data-align="right">
+      <a href="#" role="button" class="quiet"><svg><use href="../assets/icons.svg#download"/></svg>Hjælp</a>
+      <a href="#" role="button" class="quiet"><svg><use href="../assets/icons.svg#arrow-left"/></svg>Mere hjælp</a>
+      <button class="quiet"><svg><use href="../assets/icons.svg#message"/></svg>Information</button>
+      <button class="quiet"><svg><use href="../assets/icons.svg#copy"/></svg>Snedkeri</button>
+      <button class="quiet"><svg><use href="../assets/icons.svg#calendar"/></svg>Alt om heste</button>
+      <button class="quiet"><svg><use href="../assets/icons.svg#search"/></svg>Søg</button>
+    </ds-nav>
+
+    <hr>
+
+    <ds-nav style="width: 100%;" data-align="right">
+      <a href="#" role="button"><svg><use href="../assets/icons.svg#download"/></svg>Hjælp</a>
+      <a href="#" role="button"><svg><use href="../assets/icons.svg#arrow-left"/></svg>Mere hjælp</a>
+      <button><svg><use href="../assets/icons.svg#message"/></svg>Information</button>
+      <button><svg><use href="../assets/icons.svg#copy"/></svg>Snedkeri</button>
+      <button><svg><use href="../assets/icons.svg#calendar"/></svg>Alt om heste</button>
+      <button><svg><use href="../assets/icons.svg#search"/></svg>Søg</button>
+    </ds-nav>
+
+  </div>
+
+  <code-view title="Javascript">
+import { DSNav } from '@dataforsyningen/designsystem'
+customElements.define('ds-nav', DSNav)
+  </code-view>
+
+  <code-view data-snip="ex-resp-nav-1" title="HTML"></code-view>
+
+</article><section id="togglepanel">
+
+  <h2>Skjult panel</h2>
+
+  <div id="ex-togglepanel-1" style="display: flex; flex-flow: row nowrap;">
+    <button for="myToggle" class="secondary">Åben panel</button>
+    <ds-toggle-panel title="Vis det usete indhold" class="slide" id="myToggle">
+
+      <button 
+        class="quiet"
+        title="Luk panel"
+        style="float: right;"
+        onclick="this.parentNode.hidden = true">
+        <svg><use href="../assets/icons.svg#close" /></svg>
+      </button>
+
+      <h2>The thing</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      
+    </ds-toggle-panel>
+
+    <ds-toggle-panel title="Vis hemmeligt indhold">
+      <h2>Her er det hemmelige indhold</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </ds-toggle-panel>
+  </div>
+
+  <code-view title="Javascript">
+import { DSTogglePanel } from '@dataforsyningen/designsystem/assets/designsystem.js'
+customElements.define('ds-toggle-panel', DSTogglePanel)
+  </code-view>
+
+  <code-view data-snip="ex-togglepanel-1"></code-view>
+
+</section>
+<section id="spinner">
+
+  <h2 class="ds-flex-row"><ds-spinner style="width: 2rem;"></ds-spinner> Loading spinner</h2>
+
+  <div id="ex-spinner-1">
+    <ds-spinner style="width: 20rem;"></ds-spinner>
+  </div>
+
+  <code-view title="Javascript">
+import { Spinner } from '@dataforsyningen/designsystem/assets/designsystem.js'    
+customElements.define('ds-spinner', Spinner)
+  </code-view>
+
+  <code-view data-snip="ex-spinner-1" title="HTML"></code-view>
+
+</section>
+<section id="popover">
+
+  <h2>Popover</h2>
+
+  <div id="ex-popover-1">
+    
+    <button popovertarget="mypopover">Toggle the popover</button>
+    <div id="mypopover" popover>Popover content</div>
+
+    <script type="module">
+      // Polyfill native popover API for Firefox and Safari
+      import { popoverPolyfill } from '../assets/designsystem.js'
+      popoverPolyfill()
+    </script>
+
+  </div>
+
+  <code-view data-snip="ex-popover-1"></code-view>
+
+</section>
+<section id="toast">
+
+  <h2>Toast</h2>
+
+  <div id="ex-toast-1">
+
+    <button id="toastbutton">Display a toast!</button>
+
+    <script type="module">
+      import { showToast } from '../assets/designsystem.js'
+
+      document.getElementById('toastbutton').addEventListener('click', function(ev) {
+        showToast({
+          message: 'This is a toast',
+          duration: 3000
+        })
+      })
+    </script>
+    
+  </div>
+
+  <code-view data-snip="ex-toast-1"></code-view>
+
+</section>
+<article id="datatable">
+
+  <h2>Data table</h2>
+
+  <p>Data table er en avanceret tabel, hvor indhold kan filtreres og sorteres.</p>
+
+  <p><a href="./examples/datatable.html">Se demo</a></p>
+
+  <p><strong>Events:</strong> Når en data table er renderet på skærmen, dispatcher den en <code>datatable:update</code> event.</p>
+
+  <div id="ex-datatable-1">
+<ds-data-table id="dtable-1"></ds-data-table>
+
+<script>
+  window.addEventListener('load', () => {
+
+    document.querySelector('#dtable-1').data = {
+      headers: ['Simple table', 'Title', 'Title'],
+      body: [
+        ['Some text', 71, 41],
+        ['Another text', 15, 98],
+        ['Wonderful text', 1, 23]
+      ]
+    }
+
+  })
+</script>
+  </div>
+
+  <code-view data-snip="ex-datatable-1"></code-view>
+
+  <div id="ex-datatable-2">
+    <ds-data-table id="dtable-2"></ds-data-table>
+    
+    <script>
+      window.addEventListener('load', () => {
+    
+        document.querySelector('#dtable-2').data = {
+          headers: [
+            'Simple Title', // You can mix and match simple types and object type data.
+            {
+              type: 'string', // 'string' or 'number'. Default is value's `typeof`. Renders with different text alignment according to type.
+              value: 'Advanced title', // This is the actual content
+              sortable: true // Boolean. Default is `true`. `true` means this column should have the sort feature.
+            },
+            {
+              type: 'number',
+              value: 'Another title',
+              sortable: true
+            },
+            {
+              type: 'number',
+              value: 'Just a title',
+              sortable: false 
+            }
+          ],
+          body: [
+            ['Simple strings and numbers', 'Some text', 345.678, -972], // This is the simple syntax
+            [
+              {
+                type: 'string', // 'string' or 'number'. Default is value's `typeof`. Renders with different text alignment according to type.
+                value: 'Advanced cell options', // The actual content
+                editable: true, // Boolean. Default `false`. Whether the content should be wrapped in an input field.
+                editCallback: function(event) { // Function to executes
+                  alert(`This input was edited: ${event.target.value}`)
+                },
+                className: 'custom-css-classname' // class name for this table cell. Useful for custom CSS styling.
+              },
+              {
+                type: 'number',
+                value: 1234.5678,
+              }, 
+              { 
+                type: 'number',
+                value: 1234,
+                editable: true
+              },
+              'You can mix simple and advanced content'
+            ],
+            ['Text and text', 'More text', 0, -1],
+            ['Simple strings and numbers', 'Text', -345.678, 972],
+            ['Some numbers are strings here', '123445', 362, 52],
+          ]
+        }
+    
+      })
+    </script>
+  </div>
+
+  <code-view data-snip="ex-datatable-2"></code-view>
+</article></main><footer class="ds-footer">
+  <div class="ds-container">
+    <ds-logo-title class="transparent" title="Klimadatastyrelsen"></ds-logo-title>
+    <hr>
+    <p>© 2024 Klimadatastyrelsen - <a href="https://github.com/sdfidk/designsystem">Find os på Github</a></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { 
+    CodeView, 
+    ThemeToggle, 
+    Tabs,
+    DSNav,
+    DSNavResponsive,
+    DSNavScrollable,
+    DSTogglePanel,
+    Spinner,
+    DSLogo,
+    DSLogoTitle,
+    DSDataTable
+  } from '../assets/designsystem.js'
+  customElements.define('code-view', CodeView)
+  customElements.define('ds-theme-toggle', ThemeToggle)
+  customElements.define('ds-tabs', Tabs)
+  customElements.define('ds-nav', DSNav)
+  customElements.define('ds-nav-responsive', DSNavResponsive)
+  customElements.define('ds-nav-scrollable', DSNavScrollable)
+  customElements.define('ds-logo', DSLogo)
+  customElements.define('ds-logo-title', DSLogoTitle)
+  customElements.define('ds-spinner', Spinner)
+  customElements.define('ds-data-table', DSDataTable)
+  if (!customElements.get('ds-toggle-panel')) {
+    customElements.define('ds-toggle-panel', DSTogglePanel)
+  }
+  
+</script>
+
+</body>
+</html>

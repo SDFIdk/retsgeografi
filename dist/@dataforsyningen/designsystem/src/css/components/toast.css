@@ -1,0 +1,24 @@
+/* Toast styles */
+.ds-toast-container {
+  position: fixed;
+  z-index: 1000;
+  bottom: var(--space);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ds-toast-item {
+  padding: var(--space) var(--space-md);
+  background-color: var(--bg2);
+  color: var(--color);
+  border: solid 1px var(--primary);
+  font-size: larger;
+  min-width: 20rem;
+  border-radius: var(--space-sm);
+  margin-top: var(--space-sm);
+  box-shadow: 0 var(--space-xs) var(--space) var(--black);
+}
