@@ -10,7 +10,6 @@ export default defineConfig({
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },
     rollupOptions: {
-      external: ['ol'], // Keep 'lit' and 'ol' external
       output: {
         globals: {
           lit: 'lit',

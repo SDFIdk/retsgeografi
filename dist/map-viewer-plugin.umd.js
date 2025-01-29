@@ -182,7 +182,7 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
 
       <a href="#map-example" role="button">MapExample</a>
       <a href="#map-template" role="button">MapTemplate</a>
-      <a href="#map" role="button">Kort</a>
+      <a href="#map-viewer" role="button">Kort</a>
     `}}vn(Vh,"styles",zo`
 
       :host {
@@ -284,7 +284,7 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
           </map-viewer>
           <a href="#map-example" role="button">MapExample</a>
           <a href="#map-template" role="button">MapTemplate</a>
-          <a href="#map" role="button">Kort</a>
+          <a href="#map-viewer" role="button">Kort</a>
       `}}vn(Wf,"styles",zo`
   
   `);function JM(i){if(i==="#map-viewer")return Mn`

@@ -32351,7 +32351,7 @@ northing meters` + i;
 
       <a href="#map-example" role="button">MapExample</a>
       <a href="#map-template" role="button">MapTemplate</a>
-      <a href="#map" role="button">Kort</a>
+      <a href="#map-viewer" role="button">Kort</a>
     `;
     }
   }
@@ -32481,7 +32481,7 @@ northing meters` + i;
           </map-viewer>
           <a href="#map-example" role="button">MapExample</a>
           <a href="#map-template" role="button">MapTemplate</a>
-          <a href="#map" role="button">Kort</a>
+          <a href="#map-viewer" role="button">Kort</a>
       `;
     }
   }
