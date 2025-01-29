@@ -1,5 +1,5 @@
 // src/main.js
-import { html, LitElement } from 'lit-element';
+import { html, LitElement } from './node_modules/lit-element/lit-element.js';
 import './src/MapViewer.js';
 import './index.css';
 import { MapViewer } from './src/MapViewer.js';

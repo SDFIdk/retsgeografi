@@ -13,6 +13,7 @@ export default defineConfig({
       output: {
         globals: {
           ol: 'ol',
+          lit: 'lit',
         },
       },
       input: 'index.html', // Include index.html

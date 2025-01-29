@@ -1,4 +1,4 @@
-import {html} from '/node_modules/lit-element/lit-element.js';
+import {html} from '../../node_modules/lit-element/lit-element.js';
 
 /**
  * Given a route, returns the appropriate content.
