@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  base: './retsgeografi', // Relative base path
+  base: '/retsgeografi/', // Relative base path
   build: {
     lib: {
       entry: 'main.js',
