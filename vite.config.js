@@ -10,16 +10,19 @@ export default defineConfig({
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },
     rollupOptions: {
+      external: ['ol'], // Only keep 'ol' external
       output: {
         globals: {
           ol: 'ol',
-          lit: 'lit',
         },
       },
       input: 'index.html', // Include index.html
     },
     outDir: 'dist', // Output directory
     sourcemap: true,
+  },
+  optimizeDeps: {
+    include: ['lit'],
   },
   plugins: [
     viteStaticCopy({
