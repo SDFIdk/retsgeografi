@@ -32535,3 +32535,4 @@ northing meters` + i;
   customElements.define("map-example", hg);
 });
 export default Z2();
+//# sourceMappingURL=map-viewer-plugin.es.js.map

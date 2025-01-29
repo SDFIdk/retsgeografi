@@ -20,9 +20,6 @@ export default defineConfig({
     outDir: 'dist', // Output directory
     sourcemap: true,
   },
-  optimizeDeps: {
-    include: ['lit'],
-  },
   plugins: [
     viteStaticCopy({
       targets: [

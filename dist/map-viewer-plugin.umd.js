@@ -295,3 +295,4 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
         ${JM(this.route)} <!-- Pass the current route to the router -->
       </main>
     `}createRenderRoot(){return this}}vn(Yf,"properties",{route:{type:String}}),customElements.define("main-component",Yf),customElements.define("map-viewer",Vh),customElements.define("map-template",Hh),customElements.define("map-example",Wf)});
+//# sourceMappingURL=map-viewer-plugin.umd.js.map
