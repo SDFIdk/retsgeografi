@@ -12,7 +12,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         globals: {
-          lit: 'lit',
+          lit: 'LitElement',
           ol: 'ol',
         },
       },
