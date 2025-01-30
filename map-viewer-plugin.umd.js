@@ -276,7 +276,7 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
       </map-viewer>
     `}}vn(Hh,"styles",zo`
       /* Add your styles here */
-  `),vn(Hh,"properties",{gmlFile:{type:String,reflect:!0},xmlFile:{type:String,reflect:!0},sldFile:{type:String,reflect:!0}});class Wf extends Xi{render(){const t="./public/examples/2019/713/data_demo.gml",e="./public/examples/2019/713/metadata.xml",n="./public/examples/2019/713/styles.sld";return console.log("MapExample XML",e),console.log("MapExample GML",t),console.log("MapExample SLD",n),console.log("IS SOMETHING HAPPENING?"),Mn`
+  `),vn(Hh,"properties",{gmlFile:{type:String,reflect:!0},xmlFile:{type:String,reflect:!0},sldFile:{type:String,reflect:!0}});class Wf extends Xi{render(){const t="./examples/2019/713/data_demo.gml",e="./examples/2019/713/metadata.xml",n="./examples/2019/713/styles.sld";return console.log("MapExample XML",e),console.log("MapExample GML",t),console.log("MapExample SLD",n),console.log("Change has been made"),Mn`
           <map-viewer
               .gmlFile="${t}"
               .xmlFile="${e}"

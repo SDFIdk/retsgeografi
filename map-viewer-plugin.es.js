@@ -32472,8 +32472,8 @@ northing meters` + i;
   });
   class hg extends rn {
     render() {
-      const t = "./public/examples/2019/713/data_demo.gml", e = "./public/examples/2019/713/metadata.xml", n = "./public/examples/2019/713/styles.sld";
-      return console.log("MapExample XML", e), console.log("MapExample GML", t), console.log("MapExample SLD", n), console.log("IS SOMETHING HAPPENING?"), bn`
+      const t = "./examples/2019/713/data_demo.gml", e = "./examples/2019/713/metadata.xml", n = "./examples/2019/713/styles.sld";
+      return console.log("MapExample XML", e), console.log("MapExample GML", t), console.log("MapExample SLD", n), console.log("Change has been made"), bn`
           <map-viewer
               .gmlFile="${t}"
               .xmlFile="${e}"
