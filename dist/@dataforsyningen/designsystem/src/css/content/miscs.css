@@ -1,0 +1,89 @@
+/*
+ * Miscs
+ */
+
+/* Reboot based on :
+ - normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
+ - sanitize.css v13.0.0 | CC0 1.0 Universal | github.com/csstools/sanitize.css
+ ––––––––––––––––––––
+
+ 1. Correct the inheritance of border color in Firefox
+ 2. Add the correct box sizing in Firefox
+*/
+hr {
+  height: 1px; /* 2 */
+  border: 0;
+  background-color: var(--border-color);
+  color: inherit; /* 1 */
+  margin: var(--space) 0;
+}
+
+/* Add the correct display in IE 10+ */
+[hidden],
+template {
+  display: none;
+}
+
+/* Some reasonable defaults for images and figures */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  max-width: 100%;
+  margin: 0 0 var(--space);
+  display: block;
+  padding: 0;
+  overflow-x: auto;
+}
+
+figcaption {
+  font-size: smaller;
+  padding: var(--space-xs) 0;
+}
+
+/* Misc. utility classes */
+
+/**
+ * Adds rounded corners to an element 
+ * @var --border-radius
+ */
+.ds-border-round {
+  border-radius: var(--border-radius);
+}
+/**
+ * Paints an element's background with base color 
+ * @var --bg0
+ */
+.ds-bg-0 {
+  background-color: var(--bg0);
+}
+/**
+ * Paints an element's background with slightly tinted color 
+ * @var --bg1
+ */
+.ds-bg-1 {
+  background-color: var(--bg1);
+}
+/**
+ * Paints an element's background with heavily tinted color 
+ * @var --bg2
+ */
+.ds-bg-2 {
+  background-color: var(--bg2);
+}
+/**
+ * Sets an element's width to maximum allowed value  
+ * @var --w-max
+ */
+.ds-w-max {
+  width: var(--w-max);
+}
+/**
+ * Sets an element's width to minimum allowed value  
+ * @var --w-min
+ */
+.ds-w-min {
+  width: var(--w-min);
+}

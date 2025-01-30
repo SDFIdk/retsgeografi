@@ -1,6 +1,6 @@
 // MapViewer.js
 
-import {css, html, LitElement} from '../node_modules/lit-element/lit-element.js';
+import {css, html, LitElement} from 'lit';
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -954,7 +954,7 @@ export class MapViewer extends LitElement {
 
       <a href="#map-example" role="button">MapExample</a>
       <a href="#map-template" role="button">MapTemplate</a>
-      <a href="#map" role="button">Kort</a>
+      <a href="#map-viewer" role="button">Kort</a>
     `;
   }
 }

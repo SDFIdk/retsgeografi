@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:gmlsf="http://www.opengis.net/gmlsf/2.0"
+        xmlns:rgeo="urn:uuid:4cc9a841-7af9-4e34-bc93-60151808bebd"
+        elementFormDefault="qualified"
+        targetNamespace="urn:uuid:4cc9a841-7af9-4e34-bc93-60151808bebd"
+        version="1.0.0">
+   <annotation>
+      <appinfo source="http://schemas.opengis.net/gmlsfProfile/2.0/gmlsfLevels.xsd">
+         <ComplianceLevel xmlns="http://www.opengis.net/gmlsf/2.0">0</ComplianceLevel>
+      </appinfo>
+   </annotation>
+   <import namespace="http://www.opengis.net/gml/3.2"
+           schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+   <import namespace="http://www.opengis.net/gmlsf/2.0"
+           schemaLocation="http://schemas.opengis.net/gmlsfProfile/2.0/gmlsfLevels.xsd"/>
+   <!--XML Schema document created by ShapeChange - http://shapechange.net/-->
+   <element name="Beskyttelseszone"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:BeskyttelseszoneType">
+      <annotation>
+         <documentation>beskrivelse af hvad en beskyttelseszone er</documentation>
+      </annotation>
+   </element>
+   <complexType name="BeskyttelseszoneType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Overvaagningszone"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:OvervaagningszoneType">
+      <annotation>
+         <documentation>beskrivelse af hvad en overvågningszone er</documentation>
+      </annotation>
+   </element>
+   <complexType name="OvervaagningszoneType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+</schema>

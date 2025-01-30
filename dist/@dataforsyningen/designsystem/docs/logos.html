@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="da">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>Klimadatastyrelsen Designsystem dokumentation</title>
+
+    <link rel="stylesheet" href="../assets/designsystem.css">
+    <link rel="stylesheet" href="./docs.css">
+
+    <link rel="icon" href="../../assets/logo-small.svg">
+
+  </head>
+  <body>
+
+    <header id="header" class="ds-header">
+      <div class="ds-container">
+        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: var(--space-md);">
+          <ds-logo-title title="Dataforsyningen" by-line="Klimadatastyrelsen"></ds-logo-title>
+          <ds-nav-responsive>
+            <button slot="toggle" title="Menu">
+              <svg><use href="../assets/icons.svg#burgerbar" /></svg>
+            </button>
+            <nav class="ds-nav ds-panel">
+              <a href="../index.html">Introduktion</a>
+              <a href="./css.html">Basis</a>
+              <a href="./icons.html">Ikoner</a>
+              <a href="./components.html">UI-komponenter</a>
+              <a href="./logos.html">Logo</a>
+              <a href="./css-util.html">CSS classes</a>
+              <a href="https://github.com/sdfidk/designsystem">Github</a>
+            </nav>
+          </ds-nav-responsive>
+        </div>
+        <h1>Designsystem v8</h1>
+        <p class="manchet">Reference-implementationer af Klimadatastyrelsens designguide med HTML/CSS</p>
+  
+        <ds-theme-toggle style="position: fixed; bottom: var(--space); right: var(--space); width: auto; z-index: 10;"></ds-theme-toggle>
+
+      </div>
+    </header><main class="ds-container"><article id="logo-basic">
+
+  <h2>Logo</h2>
+
+  <p><a href="/docs/examples/logo.html">Demoside med logo findes her.</a> <em>Bemærk! Klimadatastyrelsens logo må kun bruges af Klimadatastyrelsen.</em></p>
+  
+  <p>Kom hurtigt i gang med logo fra CDN:</p>
+
+  <style>
+    #ex-logo-03 > div {
+      padding: var(--space);
+    }
+  </style>
+  <div id="ex-logo-03" style="display: flex; flex-flow: column nowrap; gap: var(--space);">
+    <div data-theme="light">
+      <img src="https://cdn.dataforsyningen.dk/assets/designsystem/v8/logo-text-black.svg" alt="Klimadatastyrelsen">
+    </div>
+    <div data-theme="dark">
+      <img src="https://cdn.dataforsyningen.dk/assets/designsystem/v8/logo-text-white.svg" alt="Klimadatastyrelsen">
+    </div>
+  </div>
+
+  <code-view data-snip="ex-logo-03"></code-view>
+
+  <h3>Web component</h3>
+  
+  <p>Du kan bruge <code>&lt;ds-logo></code> elementet til at vise et logo. Det giver dig adgang til at style og skalere logoet.</p>
+
+  <p>Det kræver, at du importerer DSLogoTitle eller DSLogo fra <strong>designsystem.js</strong></p>
+
+  <code-view title="Javascript">
+    // Sådan ville du importere fra designsystem NPM-pakken, som du har installeret
+    import { DSLogoTitle, DSLogo } from '@dataforsyningen/designsystem'
+
+    // Sådan ville du importere fra en lokal mappe PATH
+    import { DSLogoTitle, DSLogo } from 'PATH/assets/designsystem.js'
+
+    customElements.define('ds-logo', DSLogo)
+    customElements.define('ds-logo-title', DSLogoTitle)
+  </code-view>
+
+  <p>Derefter kan logo/bomærke og logotypografi sættes op som vist herunder.</p>
+
+  <div id="ex-logo-5">
+    <p>
+      <ds-logo-title title="Dataforsyningen" byline="Klimadatastyrelsen"></ds-logo-title>
+    </p>
+    <p>
+      <ds-logo-title class="small" title="Dataforsyningen" byline="Klimadatastyrelsen"></ds-logo-title>
+    </p>
+  </div>
+
+  <br>
+
+  <code-view data-snip="ex-logo-5"></code-view>
+
+  <h3>SVG-filer</h3>
+
+  <p>Du kan finde SVG-logofiler under ../assets</p>
+
+  <p id="ex-logo-0">
+    <img width="63" src="../assets/logo-large.svg" alt="">
+    <img width="45" src="../assets/logo-medium.svg" alt="">
+    <img width="25" src="../assets/logo-small.svg" alt="">
+  </p>
+
+  <code-view data-snip="ex-logo-0"></code-view>
+
+  <p>... eller hente SVG-logofiler direkte fra CDN:</p>
+
+  <p id="ex-logo-02">
+    <img width="63" src="https://cdn.dataforsyningen.dk/assets/designsystem/v8/logo-large.svg" alt="">
+    <img width="45" src="https://cdn.dataforsyningen.dk/assets/designsystem/v8/logo-medium.svg" alt="">
+    <img width="25" src="https://cdn.dataforsyningen.dk/assets/designsystem/v8/logo-small.svg" alt="">
+  </p>
+
+  <code-view data-snip="ex-logo-02"></code-view>
+
+  <h3>Logo i forskellige størrelser</h3>
+
+  <p><code>&lt;ds-logo></code>-elementet skalerer selv i forhold til hvor meget plads, der er.</p>
+
+  <p style="display: flex; gap: var(--space); align-items: center;" id="ex-logo-scale">
+    <ds-logo style="width: 12rem;"></ds-logo>
+    <ds-logo style="width: 8rem;"></ds-logo>
+    <ds-logo style="width: 5rem;"></ds-logo>
+    <ds-logo style="width: 3rem;"></ds-logo>
+    <ds-logo style="width: 2rem;"></ds-logo>
+    <ds-logo style="width: 1.5rem;"></ds-logo>
+    <ds-logo style="width: 1.125rem;"></ds-logo>
+  </p>
+
+  <code-view data-snip="ex-logo-scale"></code-view>
+
+  <p>Du kan bruge classes <code>black</code>/<code>white</code>/<code>transparent</code> til at vise forskellige varianter af logoet.</p>
+
+  <style>
+    #ex-logo-2 [data-theme] {
+      padding: var(--space-md);
+      display: inline-flex;
+      gap: var(--space-md);
+    }
+  </style>
+
+  <p id="ex-logo-2">
+    <span data-theme="light">
+      <ds-logo class="black"></ds-logo>
+      <ds-logo class="transparent"></ds-logo>
+    </span>
+    <span data-theme="dark">
+      <ds-logo class="white"></ds-logo>
+      <ds-logo class="transparent"></ds-logo>
+    </span>
+  </p>
+
+  <code-view data-snip="ex-logo-2"></code-view>
+
+  <h3>Favicon/bogmærkeikon</h3>
+
+  <p>Som favicon bruges <code>logo-small.svg</code> <img style="width: var(--space-md); height: auto;" src="../assets/logo-small.svg" alt=""></p>
+  <p>For at bruge det skal du indsætte denne linie i HTML <code>&lt;head></code> sektionen. Sørg for at <code>PATH</code> svarer til logofilens placering på serveren.</p>
+  <p>Du kan også hente favicon direkte fra CDN, som vist her:</p>
+  <code-view>
+<link rel="icon" href="https://cdn.dataforsyningen.dk/assets/designsystem/v8/logo-small.svg">
+  </code-view>
+  <pre>
+  <code>&lt;link rel="icon" href="PATH/logo-small.svg"></code>
+  </pre>
+  <p>
+    Denne fil følger med i <em>@dataforsyningen/designsystem</em> pakken under<br>
+    <code>/assets/logo-small.svg</code>
+  </p>
+
+  <h3>Custom logo</h3>
+
+  <p>Logo kan styles med andre farver, hvis der er behov for det.</p>
+
+  <p id="ex-logo-4">
+    <style>
+      #custom-logo {
+        --ds-logo-color: hsl(300,100%,90%);
+        --ds-logo-background-color: hsl(270,100%,50%);
+        --ds-logo-outline-color: hsl(270,100%,40%);
+      }
+    </style>
+    <ds-logo id="custom-logo"></ds-logo>
+  </p>
+
+  <code-view data-snip="ex-logo-4"></code-view>
+
+</article>
+</main><footer class="ds-footer">
+  <div class="ds-container">
+    <ds-logo-title class="transparent" title="Klimadatastyrelsen"></ds-logo-title>
+    <hr>
+    <p>© 2024 Klimadatastyrelsen - <a href="https://github.com/sdfidk/designsystem">Find os på Github</a></p>
+  </div>
+</footer>
+
+<script type="module">
+  import { 
+    CodeView, 
+    ThemeToggle, 
+    Tabs,
+    DSNav,
+    DSNavResponsive,
+    DSNavScrollable,
+    DSTogglePanel,
+    Spinner,
+    DSLogo,
+    DSLogoTitle,
+    DSDataTable
+  } from '../assets/designsystem.js'
+  customElements.define('code-view', CodeView)
+  customElements.define('ds-theme-toggle', ThemeToggle)
+  customElements.define('ds-tabs', Tabs)
+  customElements.define('ds-nav', DSNav)
+  customElements.define('ds-nav-responsive', DSNavResponsive)
+  customElements.define('ds-nav-scrollable', DSNavScrollable)
+  customElements.define('ds-logo', DSLogo)
+  customElements.define('ds-logo-title', DSLogoTitle)
+  customElements.define('ds-spinner', Spinner)
+  customElements.define('ds-data-table', DSDataTable)
+  if (!customElements.get('ds-toggle-panel')) {
+    customElements.define('ds-toggle-panel', DSTogglePanel)
+  }
+  
+</script>
+
+</body>
+</html>

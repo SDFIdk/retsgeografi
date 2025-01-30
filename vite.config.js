@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
-  base: './', // Relative base path
+  base: '/retsgeografi/', // Relative base path
   build: {
     lib: {
       entry: 'main.js',
@@ -10,23 +10,27 @@ export default defineConfig({
       fileName: (format) => `map-viewer-plugin.${format}.js`,
     },
     rollupOptions: {
-      external: ['lit', 'ol'], // Keep 'lit' and 'ol' external
+      external: ['ol, lit'], // Only keep 'ol' external
       output: {
         globals: {
-          lit: 'lit',
           ol: 'ol',
+          lit: 'lit',
         },
       },
       input: 'index.html', // Include index.html
     },
     outDir: 'dist', // Output directory
+    sourcemap: true,
+  },
+  optimizeDeps: {
+    include: ['lit'],
   },
   plugins: [
     viteStaticCopy({
       targets: [
         {
-          src: 'src/examples', // Copy the src/examples folder
-          dest: '.', // Place in the root of /dist
+          src: 'public/examples', // Copy the src/examples folder
+          dest: '', // Place in the root of /dist
         },
         {
           src: 'node_modules/@dataforsyningen', // Copy everything from the package

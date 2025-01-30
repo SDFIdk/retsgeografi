@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && git add dist && git commit -m 'Deploy' && git push origin main"
   },
   "dependencies": {
     "@dataforsyningen/designsystem": "^8.6.0",

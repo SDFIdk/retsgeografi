@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="da">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>Klimadatastyrelsen Designsystem eksempler</title>
+
+    <link rel="stylesheet" href="../../assets/designsystem.css">
+
+    <link rel="icon" href="../../assets/logo-small.svg">
+
+  </head>
+  <body>    <header id="header" class="ds-header">
+
+      <div class="ds-container">
+
+        <p class="ds-logo">
+          <strong>Dataforsyningen</strong>
+          <span>Klimadatastyrelsen</span>
+        </p>
+      
+        <h1>Designguide eksempler</h1>
+        <p class="blockquote">Reference-implementationer af Klimadatastyrelsens designguide med HTML/CSS</p>
+
+      </div>
+    </header>
+
+    <main id="ex-layout" style="flex-grow: 1; display: flex; flex-flow: column nowrap;">
+
+      <section class="ds-grid ds-margin">
+
+        <article class="ds-padding">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        </article>
+
+        <article class="ds-padding">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.    
+        </article>
+
+        <article class="ds-padding">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.   
+        </article>
+
+        <article class="ds-padding">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.  
+        </article>
+
+      </section>
+
+    </main>
+    
+    <footer>
+      <div class="ds-margin">
+        <code-example data-snip="ex-layout"></code-example>
+      </div>
+      <p class="ds-margin">© 2022 Klimadatastyrelsen</p>
+    </footer>
+
+    <script src="js/code-example-component.js"></script>
+    <script src="js/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll()
+    </script>  <a style="position: fixed; bottom: var(--space-md); left: var(--space);" role="button" href="../../index.html"><svg><use href="../../assets/icons.svg#arrow-left" /></svg> Tilbage til oversigten</a>
+  
+  <ds-theme-toggle style="position: fixed; bottom: var(--space-md); right: var(--space);"></ds-theme-toggle>
+
+  <script type="module">
+    import { ThemeToggle } from '../../assets/designsystem.js'
+    customElements.define('ds-theme-toggle', ThemeToggle)
+  </script>
+
+</body>
+</html>

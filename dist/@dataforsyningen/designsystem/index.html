@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="da">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>Klimadatastyrelsen Designsystem dokumentation</title>
+
+    <link rel="stylesheet" href="./assets/designsystem.css">
+    <link rel="stylesheet" href="./docs/docs.css">
+
+    <link rel="icon" href="./assets/logo-small.svg">
+
+  </head>
+  <body>
+
+    <header id="header" class="ds-header">
+
+      <div class="ds-container">
+
+        <div style="display: flex; flex-flow: row nowrap; justify-content: space-between; gap: var(--space-md);">
+          <ds-logo-title title="Dataforsyningen" by-line="Klimadatastyrelsen"></ds-logo-title>
+          <ds-nav-responsive>
+            <button slot="toggle" title="Menu">
+              <svg><use href="../assets/icons.svg#burgerbar" /></svg>
+            </button>
+            <nav class="ds-nav">
+              <a href="index.html">Introduktion</a>
+              <a href="docs/css.html">Basis</a>
+              <a href="docs/icons.html">Ikoner</a>
+              <a href="docs/components.html">UI-komponenter</a>
+              <a href="docs/logos.html">Logo</a>
+              <a href="docs/css-util.html">CSS classes</a>
+              <a href="https://github.com/sdfidk/designsystem">Github</a>
+            </nav>
+          </ds-nav-responsive>
+        </div>
+
+        <h1>Designsystem v8</h1>
+        <p class="blockquote">Reference-implementationer af Klimadatastyrelsens designguide med HTML/CSS</p>
+
+      </div>
+  
+      <ds-theme-toggle style="position: fixed; bottom: var(--space); right: var(--space); width: auto; z-index: 10;"></ds-theme-toggle>
+
+    </header>
+
+    <main class="ds-container">
+      
+      <article>
+        <p>Dette er dokumentationen til, hvordan du bruger elementerne i Klimadatastyrelsen Designsystem - en implementation af Klimadatastyrelsens design guide.</p>
+        <p><a href="https://www.figma.com/design/JpGgiURXch6SQDEXHCHhFN/2024-Dataforsyningen-Designsystem">Den komplette designguide kan findes på Figma.</a> (Kræver Klimadatastyrelsen login.)</p>
+        <p><a href="https://github.com/sdfidk/designsystem">Koden og tilhørende dokumentation findes på Github.</a></p>
+        <hr>
+        <h2>Sider med eksempler</h2>
+        <ul>
+          <li><a href="./docs/examples/logo.html">Logo</a></li>
+          <li><a href="./docs/examples/typography.html">Typografi</a></li>
+          <li><a href="./docs/examples/color.html">Farve</a></li>
+          <li><a href="./docs/examples/buttons.html">Knapper, links og formularelementer</a></li>
+          <li><a href="./docs/examples/icons.html">Ikon</a></li>
+          <li><a href="./docs/examples/grid.html">Grid og layout</a></li>
+          <li><a href="./docs/examples/navigation.html">Navigationselementer</a></li>
+        </ul>
+      </article>
+
+    </main>
+
+    <footer class="ds-footer">
+      <div class="ds-container">
+        <ds-logo-title class="transparent" title="Klimadatastyrelsen"></ds-logo-title>
+        <hr>
+        <p>© 2024 Klimadatastyrelsen - <a href="https://github.com/sdfidk/designsystem">Find os på Github</a></p>
+      </div>
+    </footer>
+
+    <script type="module">
+      import { DSLogoTitle, ThemeToggle, DSNavResponsive } from './assets/designsystem.js'
+      customElements.define('ds-logo-title', DSLogoTitle)
+      customElements.define('ds-theme-toggle', ThemeToggle)
+      customElements.define('ds-nav-responsive', DSNavResponsive)
+    </script>
+
+  </body>
+</html>
