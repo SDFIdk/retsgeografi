@@ -30,7 +30,7 @@ export default defineConfig({
       targets: [
         {
           src: 'public/examples', // Copy the src/examples folder
-          dest: '.', // Place in the root of /dist
+          dest: '', // Place in the root of /dist
         },
         {
           src: 'node_modules/@dataforsyningen', // Copy everything from the package
