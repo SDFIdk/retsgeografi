@@ -7,8 +7,8 @@ export class MapExample extends LitElement {
 
 	render() {
       const gmlFile = './public/examples/2019/713/data_demo.gml';
-      const xmlFile = './public/2019/713/metadata.xml';
-      const sldFile = './public/2019/713/styles.sld';
+      const xmlFile = './public/examples/2019/713/metadata.xml';
+      const sldFile = './public/examples/2019/713/styles.sld';
       console.log("MapExample XML", xmlFile);
       console.log('MapExample GML', gmlFile);
       console.log('MapExample SLD', sldFile);
