@@ -12,7 +12,7 @@ export class MapExample extends LitElement {
       console.log("MapExample XML", xmlFile);
       console.log('MapExample GML', gmlFile);
       console.log('MapExample SLD', sldFile);
-
+      console.log('IS SOMETHING HAPPENING?')
 
       return html`
           <map-viewer
