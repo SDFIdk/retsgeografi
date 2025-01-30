@@ -1,0 +1,9 @@
+.ds-data-table .button-sort {
+  position: relative;
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+.ds-data-table input[type="search"] {
+  width: 10rem;
+  float: right;
+}

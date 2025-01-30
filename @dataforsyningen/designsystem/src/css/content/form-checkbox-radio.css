@@ -1,0 +1,19 @@
+/**
+ * Form elements
+ * Checkboxes & Radios
+ */
+
+/* Aria-invalid */
+[type="checkbox"],
+[type="checkbox"]:checked,
+[type="radio"],
+[type="radio"]:checked {
+  
+  &[aria-invalid="false"] {
+    --border-color: var(--form-element-valid-border-color);
+  }
+
+  &[aria-invalid="true"] {
+    --border-color: var(--form-element-invalid-border-color);
+  }
+}

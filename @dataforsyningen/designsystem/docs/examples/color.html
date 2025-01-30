@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="da">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=yes">
+    <title>Klimadatastyrelsen Designsystem eksempler</title>
+
+    <link rel="stylesheet" href="../../assets/designsystem.css">
+
+    <link rel="icon" href="../../assets/logo-small.svg">
+
+  </head>
+  <body><main class="ds-container">
+
+  <header style="padding: var(--space-lg) 0">
+    <ds-logo-title></ds-logo-title>
+  </header>
+
+  <div class="ds-grid-2-1">
+    <article>
+      <h1>Layout</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+    </article>
+    <aside>
+      <h2 class="h5">H5 overskrift</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et.</p>
+      <p><a href="#">Action text <svg><use href="../../assets/icons.svg#arrow-single-right" /></svg></a></p>
+    </aside>
+  </div>
+
+</main>
+
+<hr>
+
+<nav class="ds-nav ds-container">
+  <h4>
+    <svg><use href="../../assets/icons.svg#data" /></svg> 
+    Produktnavn
+  </h4>
+  <a class="active" href="#">Første link</a>    
+  <a href="#">Link</a>    
+  <a href="#">Sidste link</a>    
+</nav>
+
+<script type="module">
+  import { DSLogoTitle } from '../../assets/designsystem.js'
+  customElements.define('ds-logo-title', DSLogoTitle)
+</script>  <a style="position: fixed; bottom: var(--space-md); left: var(--space);" role="button" href="../../index.html"><svg><use href="../../assets/icons.svg#arrow-left" /></svg> Tilbage til oversigten</a>
+  
+  <ds-theme-toggle style="position: fixed; bottom: var(--space-md); right: var(--space);"></ds-theme-toggle>
+
+  <script type="module">
+    import { ThemeToggle } from '../../assets/designsystem.js'
+    customElements.define('ds-theme-toggle', ThemeToggle)
+  </script>
+
+</body>
+</html>

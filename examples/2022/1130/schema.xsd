@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:gmlsf="http://www.opengis.net/gmlsf/2.0"
+        xmlns:rgeo="urn:uuid:8ea4c02a-c99d-443d-8997-8974c56bb6da"
+        elementFormDefault="qualified"
+        targetNamespace="urn:uuid:8ea4c02a-c99d-443d-8997-8974c56bb6da"
+        version="1.0.0">
+   <annotation>
+      <appinfo source="http://schemas.opengis.net/gmlsfProfile/2.0/gmlsfLevels.xsd">
+         <ComplianceLevel xmlns="http://www.opengis.net/gmlsf/2.0">0</ComplianceLevel>
+      </appinfo>
+   </annotation>
+   <import namespace="http://www.opengis.net/gml/3.2"
+           schemaLocation="http://schemas.opengis.net/gml/3.2.1/gml.xsd"/>
+   <import namespace="http://www.opengis.net/gmlsf/2.0"
+           schemaLocation="http://schemas.opengis.net/gmlsfProfile/2.0/gmlsfLevels.xsd"/>
+   <element name="FeatureCollection"
+            type="rgeo:FeatureCollectionType"
+            substitutionGroup="gml:AbstractGML"/>
+   <complexType name="FeatureCollectionType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence minOccurs="0" maxOccurs="unbounded">
+               <element name="featureMember">
+                  <complexType>
+                     <complexContent>
+                        <extension base="gml:AbstractFeatureMemberType">
+                           <sequence>
+                              <element ref="gml:AbstractFeature"/>
+                           </sequence>
+                        </extension>
+                     </complexContent>
+                  </complexType>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+   <element name="Planomraade"
+            substitutionGroup="gml:AbstractFeature"
+            type="rgeo:PlanomraadeType">
+      <annotation>
+         <documentation>beskrivelse af hvad et planomåde er</documentation>
+      </annotation>
+   </element>
+   <complexType name="PlanomraadeType">
+      <complexContent>
+         <extension base="gml:AbstractFeatureType">
+            <sequence>
+               <element name="id" type="string">
+                  <annotation>
+                     <documentation>sproglig uafhængig rækkefølge af tegn der er egnet til unikt og permanent at identificere det som det er knyttet til</documentation>
+                  </annotation>
+               </element>
+               <element name="geometri" type="gml:SurfacePropertyType">
+                  <annotation>
+                     <documentation>objektets geografiske placering</documentation>
+                  </annotation>
+               </element>
+            </sequence>
+         </extension>
+      </complexContent>
+   </complexType>
+</schema>

@@ -1,0 +1,108 @@
+/* Logos */
+
+.ds-logo {
+  container-type: inline-size; 
+  background-color: transparent;
+  margin: 0;
+  height: auto;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+
+  & > ds-logo {
+    float: left;
+    clear: right;
+  }
+
+  & > strong {
+    padding-top: 1.33rem;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  & > span:last-child {
+    font-size: 0.9rem;
+  }
+
+  & > :is(strong, span:last-child) {
+    display: block;
+    margin-left: 4.75rem;
+  }
+}
+
+a.ds-logo,
+.ds-logo a {
+  text-decoration: none;
+  color: var(--color);
+}
+
+ds-logo.black {
+  --ds-logo-color: var(--white);
+  --ds-logo-outline-color: var(--black);
+  --ds-logo-background-color: var(--black);
+}
+
+ds-logo.white {
+  --ds-logo-color: var(--black);
+  --ds-logo-outline-color: var(--white);
+  --ds-logo-background-color: var(--white);
+}
+
+ds-logo.transparent {
+  --ds-logo-color: var(--ds-logo-theme-color);
+  --ds-logo-outline-color: var(--ds-logo-theme-color);
+  --ds-logo-background-color: transparent;
+}
+
+/* Contextual position adjustment */
+:is(.ds-container) .ds-logo > :is(strong, span:last-child) {
+  margin-left: 4rem;
+}
+:is(.ds-container) .ds-logo > ds-logo {
+  margin-left: -0.9rem;
+}
+
+/* Styles for smaller logo */
+.ds-logo.small > ds-logo {
+  width: 2rem;
+  height: 2rem;
+}
+.ds-logo.small > strong {
+  padding-top: 0.33rem;
+}
+.ds-logo.small > :is(strong, span:last-child) {
+  margin-left: 3.5rem;
+}
+/* Contextual position adjustment */
+:is(.ds-container) .ds-logo.small > :is(strong, span:last-child) {
+  margin-left: 3rem;
+}
+:is(.ds-container) .ds-logo.small > ds-logo {
+  margin-left: -0.66rem;
+}
+
+/* Styles for links wrapping around logo */
+a[href]:has(ds-logo-title),
+a[href]:link:has(ds-logo-title),
+a[href]:visited:has(ds-logo-title) {
+  background: none;
+  display: inline-block;
+  border-radius: 2.25rem;
+  color: var(--color);
+  text-decoration: none;
+  padding: 0 1.75rem 0 0.75rem;
+  margin-left: -0.75rem;
+  transition: background-color 0.3s;
+}
+a[href]:hover:has(ds-logo-title),
+a[href]:active:has(ds-logo-title) {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+/* Styles for placing logo on map */
+ds-logo-title.map {
+  padding: var(--space) var(--space-lg);
+  background: var(--shadow-1);
+  border-radius: 0 0 var(--space-md) 0;
+}

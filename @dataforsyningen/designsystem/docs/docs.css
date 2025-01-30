@@ -1,0 +1,106 @@
+body {
+  display: flex;
+  flex-flow: column nowrap;
+}
+#header ds-nav-responsive.compact nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 20rem;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  transition: all 1s ease-in-out;
+  transform: translate(-20rem, 0);
+  background-color: var(--bg1);
+  z-index: 100;
+  box-shadow: var(--space-xs) var(--space-xs) var(--space-sm) var(--shadow-2);
+}
+#header ds-nav-responsive.compact.expanded nav {
+  transform: translate(0, 0);
+}
+#header ds-nav-responsive.compact nav a {
+  border-bottom: solid 1px var(--border-color);
+}
+main {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  flex-grow: 1;
+}
+article,
+section {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+code-view {
+  margin: 0 0 var(--space-lg);
+  display: block;
+}
+.colorswatch {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: var(--space);
+  margin: 0;
+}
+.colorswatch span:first-child {
+  width: var(--space-xl);
+  height: var(--space-xl);
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 var(--space-xl);
+}
+.icon-list li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: var(--space);
+  word-wrap: break-word;
+}
+.icon-list li > span:first-child {
+  flex: 0 0 var(--space-xl);
+  width: var(--space-xl);
+}
+.icon-list code {
+  overflow: auto;
+}
+.bordered {
+  padding: var(--padding);
+  border: solid 1px var(--vibrant-steel);
+  border-radius: var(--space-xxs);
+}
+
+#toc-icons {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  gap: var(--space);
+}
+#toc-icons > a {
+  width: 2rem;
+  height: 2rem;
+}
+#toc-icons > a > svg {
+  width: 100%;
+  height: 100%;
+}
+.icon-details h2 {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+.display-svg {
+  width: 2rem;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-sm);
+}
+pre {
+  max-width: 100%;
+  overflow: auto;
+}

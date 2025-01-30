@@ -1,0 +1,73 @@
+/* Common Styles */
+
+:root {
+
+  /* Typography */
+  /* Use 'Roboto' font */
+  --font-family: 'Roboto', sans-serif;
+  --source-font-family: 'Source Code Pro', monospace;
+  --line-height: 1.3;
+  --font-weight: 370;
+  --font-size: 100%;
+  --font-style: normal;
+
+  /* Spacings */
+  --space-xxs:  3px;
+  --space-xs:   0.25rem;
+  --space-sm:   0.5rem;
+  --space:      1rem;
+  --space-md:   1.5rem;
+  --space-lg:   2rem;
+  --space-xl:   3.5rem;
+  --space-xxl:  5rem;
+
+  --gap: 2vw;
+  --gap-lg: 3vw;
+
+  --w-max: 55rem;
+  --w-min: 15rem;
+
+  /* Margins, paddings */
+  --margin: var(--space-md);
+  --padding: var(--space-md) var(--space) var(--space-lg);
+
+  --optical-padding: 0 var(--space-xs);
+  --optical-margin: 0 -(var(--space-xs));
+  
+  --map-element-spacing: var(--space-md) var(--space) var(--space-lg);
+  --modal-margin: 3.5vw 5vw;
+
+  /* Buttons */
+  --button-base-height: 2.5rem;
+
+  /* Forms */
+  --input-base-height: var(--button-base-height);
+
+  /* Icons */
+  --icon-size: calc(var(--space) * 2.5);
+  --ds-icon-stroke: 1.2;
+
+  /* Borders */
+  --border-width: var(--space-xxs);
+  --border: solid var(--border-width) var(--border-color);
+  --border-radius: var(--space-md);
+
+  /* Transitions */
+  --transition: 0.2s ease-in-out;
+}
+
+/* Link */
+a {
+  --text-decoration: none;
+
+  /* Secondary & Contrast */
+  &.secondary,
+  &.contrast {
+    --text-decoration: underline;
+  }
+
+}
+
+kbd {
+  --font-weight: bolder;
+}

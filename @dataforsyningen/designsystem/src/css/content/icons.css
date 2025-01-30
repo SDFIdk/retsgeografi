@@ -1,0 +1,148 @@
+/* Icons */
+
+/* SVG icon default styles */
+
+svg.ds-icon,
+svg:has(use[href*="icon"]) {
+  height: 1.33rem;
+  width: auto;
+  display: inline-block;
+  aspect-ratio: 1/1;
+}
+
+/* Icon variants */
+
+.mini,
+.medium,
+.big,
+.hero,
+.bg-primary,
+.bg-secondary,
+.bg-active,
+.border,
+.border-soft { 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0.33rem;
+  aspect-ratio: 1/1;
+  border: solid 1px transparent;
+}
+/**
+ * Change an icon to size mini.
+ */
+.mini > svg.ds-icon
+.mini > svg:has(use[href*="icons"]) {
+  height: 1rem;
+}
+/**
+ * Change an icon to size medium.
+ */
+.medium > svg.ds-icon,
+.medium > svg:has(use[href*="icons"]) {
+  height: 1.8rem;
+}
+/**
+ * Change an icon to size big.
+ */
+.big {
+  padding: 0.5rem;
+}
+.big > svg.ds-icon,
+.big > svg:has(use[href*="icons"]) {
+  height: 2.66rem;
+}
+/**
+ * Change an icon to size hero (extra large).
+ */
+.hero {
+  padding: 0.75rem;
+}
+.hero > svg.ds-icon,
+.hero > svg:has(use[href*="icons"]) {
+  height: 4.5rem;
+}
+/**
+ * Change an icon's background to the primary color.
+ * @var --primary
+ */
+.bg-primary {
+  --ds-icon-color: var(--white);
+  background-color: var(--primary);
+}
+/**
+ * Change an icon's background to the secondary color.
+ * @var --background-color
+ */
+.bg-secondary {
+  background-color: var(--background-color);
+}
+/**
+ * Change an icon's look to an "active" style.
+ * @var --c6
+ */
+.bg-active {
+  --ds-icon-color: var(--white);
+  background-color: var(--c6);
+}
+/**
+ * Make an element's border more pronounced.
+ * @var --color
+ */
+.border {
+  border-color: var(--color);
+}
+/**
+ * Change an elements border to the standard border color.
+ * @var --border-color
+ */
+.border-soft {
+  border-color: var(--border-color); 
+}
+/**
+ * Make a rounded element appear square.
+ */
+.square {
+  border-radius: 0 !important;
+}
+
+/* Icons in links */
+a:not([role="button"]):has(svg.ds-icon),
+a:not([role="button"]):has(use[href*="icon"]) {
+  --ds-icon-color: var(--link);
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: var(--space-xs);
+  height: auto;
+  width: auto;
+}
+
+/* Icons in buttons */
+:is(button, input[type="submit"], input[type="button"], input[type="reset"], a[role="button"]) {
+  --ds-icon-color: var(--white);
+}
+
+:is(button, input[type="submit"], input[type="button"], input[type="reset"], a[role="button"]).secondary {
+  --ds-icon-color: var(--secondary);
+}
+
+:is(button, input[type="submit"], input[type="button"], input[type="reset"], a[role="button"]).quiet {
+  --ds-icon-color: var(--link);
+}
+
+:is(button, input[type="submit"], input[type="button"], input[type="reset"], a[role="button"]):hover,
+:is(button, input[type="submit"], input[type="button"], input[type="reset"], a[role="button"]):active {
+  --ds-icon-color: var(--white);
+}
+
+/* Styles for warning button icons */
+:is(button, input[type="submit"], input[type="button"], input[type="reset"], a[role="button"]).warning {
+  --ds-icon-color: var(--background-color);
+
+  &:hover,
+  &:active {
+   --ds-icon-color: var(--background-color);
+ }
+}
