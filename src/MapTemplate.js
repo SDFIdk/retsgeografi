@@ -5,34 +5,21 @@ export class MapTemplate extends LitElement {
       /* Add your styles here */
   `;
 
-  static properties = {
-    gmlFile: { type: String, reflect: true },
-    xmlFile: { type: String, reflect: true },
-    sldFile: { type: String, reflect: true },
-  };
-
   constructor() {
     super();
-    this.gmlFile = '';
-    this.xmlFile = '';
-    this.sldFile = '';
-  }
-
-  updated(changedProperties) {
-    // Log updates to ensure properties are being set correctly
-    if (changedProperties.has('gmlFile') || changedProperties.has('xmlFile') || changedProperties.has('sldFile')) {
-      console.log('Updated Properties:', this.gmlFile, this.xmlFile, this.sldFile);
-    }
   }
 
   render() {
-    console.log('Rendering with:', this.gmlFile, this.xmlFile, this.sldFile);
+
+    const gmlFile = ''; // Change this to your GML file
+    const xmlFile = ''; // Change this to your metadata file
+    const sldFile = ''; // Change this to your SLD file
 
     return html`
       <map-viewer
-        .gmlFile="${this.gmlFile}"
-        .xmlFile="${this.xmlFile}"
-        .sldFile="${this.sldFile}">
+        .gmlFile="${gmlFile}"
+        .xmlFile="${xmlFile}"
+        .sldFile="${sldFile}">
       </map-viewer>
     `;
   }

@@ -143,7 +143,6 @@ export class MapViewer extends LitElement {
    */
   connectedCallback() {
     super.connectedCallback();
-    console.log('Connected Properties:', this.gmlFile, this.xmlFile, this.sldFile);
 
     if (this.gmlFile) {
       // Fetch the GML file
