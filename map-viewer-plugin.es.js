@@ -32348,10 +32348,6 @@ northing meters` + i;
           </svg>
         </div>
       </div>
-
-      <a href="#map-example" role="button">MapExample</a>
-      <a href="#map-template" role="button">MapTemplate</a>
-      <a href="#map-viewer" role="button">Kort</a>
     `;
     }
   }
@@ -32479,9 +32475,6 @@ northing meters` + i;
               .xmlFile="${e}"
               .sldFile="${n}">
           </map-viewer>
-          <a href="#map-example" role="button">MapExample</a>
-          <a href="#map-template" role="button">MapTemplate</a>
-          <a href="#map-viewer" role="button">MapViewer</a>
       `;
     }
   }
@@ -32517,6 +32510,9 @@ northing meters` + i;
       return bn`
       <main>
         ${Y2(this.route)} <!-- Pass the current route to the router -->
+        <a href="#map-example" role="button">MapExample</a>
+        <a href="#map-template" role="button">MapTemplate</a>
+        <a href="#map-viewer" role="button">Kort</a>
       </main>
     `;
     }

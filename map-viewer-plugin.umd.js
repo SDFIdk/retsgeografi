@@ -179,10 +179,6 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
           </svg>
         </div>
       </div>
-
-      <a href="#map-example" role="button">MapExample</a>
-      <a href="#map-template" role="button">MapTemplate</a>
-      <a href="#map-viewer" role="button">Kort</a>
     `}}vn(Vh,"styles",zo`
 
       :host {
@@ -282,9 +278,6 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
               .xmlFile="${e}"
               .sldFile="${n}">
           </map-viewer>
-          <a href="#map-example" role="button">MapExample</a>
-          <a href="#map-template" role="button">MapTemplate</a>
-          <a href="#map-viewer" role="button">MapViewer</a>
       `}}vn(Wf,"styles",zo`
   
   `);function JM(i){if(i==="#map-viewer")return Mn`
@@ -293,6 +286,9 @@ northing meters`+i;var d=u/2,m=0,f=0,y,E,x,M,C;return d>0&&(y=1e5/Math.pow(10,d)
     <map-template></map-template>`}class Yf extends Xi{constructor(){super(),this.route=window.location.hash||"#map-viewer",this._setupRouting()}_setupRouting(){window.addEventListener("hashchange",()=>{this.route=window.location.hash||"#map-viewer"})}render(){return Mn`
       <main>
         ${JM(this.route)} <!-- Pass the current route to the router -->
+        <a href="#map-example" role="button">MapExample</a>
+        <a href="#map-template" role="button">MapTemplate</a>
+        <a href="#map-viewer" role="button">Kort</a>
       </main>
     `}createRenderRoot(){return this}}vn(Yf,"properties",{route:{type:String}}),customElements.define("main-component",Yf),customElements.define("map-viewer",Vh),customElements.define("map-template",Hh),customElements.define("map-example",Wf)});
 //# sourceMappingURL=map-viewer-plugin.umd.js.map
