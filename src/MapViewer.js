@@ -951,10 +951,6 @@ export class MapViewer extends LitElement {
           </svg>
         </div>
       </div>
-
-      <a href="#map-example" role="button">MapExample</a>
-      <a href="#map-template" role="button">MapTemplate</a>
-      <a href="#map-viewer" role="button">Kort</a>
     `;
   }
 }

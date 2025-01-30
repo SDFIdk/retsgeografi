@@ -34,6 +34,9 @@ export class Main extends LitElement {
     return html`
       <main>
         ${routing(this.route)} <!-- Pass the current route to the router -->
+        <a href="#map-example" role="button">MapExample</a>
+        <a href="#map-template" role="button">MapTemplate</a>
+        <a href="#map-viewer" role="button">Kort</a>
       </main>
     `;
   }
