@@ -537,6 +537,7 @@ export class MapViewer extends LitElement {
       const features = format.readFeatures(gmlString, {
         featureProjection: epsg25832, dataProjection: epsg25832,
       });
+      console.log(features)
 
       return {features, xmlDoc};
     } catch (error) {
