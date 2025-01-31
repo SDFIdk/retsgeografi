@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "A plugin to render and interact with GML map data using OpenLayers and Lit.",
-  "main": "map-viewer/main.js",
+  "main": "./main.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
