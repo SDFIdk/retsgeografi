@@ -42,13 +42,13 @@ northing meters`+i;var d=u/2,g=0,_=0,v,E,M,w,R;return d>0&&(v=1e5/Math.pow(10,d)
       width: max-content;
     `,this.shadowRoot.appendChild(t),this.overlay=new wx({element:t,offset:[10,10],positioning:"center-left"}),this.map.addOverlay(this.overlay),this.map.on("pointermove",e=>{const n=this.map.forEachFeatureAtPixel(e.pixel,s=>s);if(n){const s=n.get("navn"),r=n.get("type");let a="";s&&(a+=`<strong>${s}</strong><br/>`),r&&(a+=`Type: ${r}`),a?(t.innerHTML=a,t.style.display="block",this.overlay.setPosition(e.coordinate)):t.style.display="none"}else t.style.display="none"})}zoomIn(){const t=this.map.getView();t.setZoom(t.getZoom()+1)}zoomOut(){const t=this.map.getView();t.setZoom(t.getZoom()-1)}getStyle(t,e=null){if(e)return e;const{fillColor:n,strokeColor:s,strokeWidth:r}=this.styles;switch(t){case"Polygon":case"MultiPolygon":return new oe({fill:new je({color:n}),stroke:new Le({color:s,width:r})});case"LineString":return new oe({stroke:new Le({color:s,width:r})});case"Point":return new oe({image:new An({radius:5,fill:new je({color:n}),stroke:new Le({color:s,width:1})})});default:return console.warn(`No style found for geometry type: ${t}`),null}}uploadFiles(t){const e=[...t.target.files],n=e.find(o=>o.name.endsWith(".gml")),s=e.find(o=>o.name.endsWith(".sld")),r=e.find(o=>o.name.endsWith(".geojson")),a=e.find(o=>o.name.endsWith(".xml"));if(n){const o=new FileReader;o.onload=()=>{if(s){const l=new FileReader;l.onload=()=>{this.loadGML(o.result,l.result)},l.readAsText(s)}else this.loadGML(o.result,null)},o.readAsText(n)}if(r){const o=new FileReader;o.onload=()=>{this.loadMetadata(JSON.parse(o.result))},o.readAsText(r)}if(a){const o=new FileReader;o.onload=()=>{this.loadMetadata(o.result)},o.readAsText(a)}}loadMetadata(t){let e;if(typeof t=="string"){const h=new DOMParser().parseFromString(t,"application/xml");e=Array.from(h.documentElement.children).reduce((c,u)=>(c[u.tagName]=u.textContent,c),{})}else if(t.properties)e=t.properties;else{console.warn("Unsupported metadata format.");return}const n=this.shadowRoot.querySelector("#map-container");if(!n){console.error("Map container not found");return}let s=n.querySelector("#metadata-box");s||(s=document.createElement("div"),s.id="metadata-box",s.style.cssText=`
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 1rem;
+      left: 1rem;
       background: rgba(255, 255, 255, 0.95);
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      max-height: 300px;
+      max-height: 52rem;
       overflow-y: auto;
       max-width: 25rem;
       z-index: 10;
