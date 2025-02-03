@@ -2,7 +2,7 @@ var Yg = Object.defineProperty;
 var Zg = (i, t, e) => t in i ? Yg(i, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : i[t] = e;
 var qg = (i, t) => () => (t || i((t = { exports: {} }).exports, t), t.exports);
 var vn = (i, t, e) => Zg(i, typeof t != "symbol" ? t + "" : t, e);
-var R2 = qg((nt) => {
+var Rw = qg((nt) => {
   (function() {
     const t = document.createElement("link").relList;
     if (t && t.supports && t.supports("modulepreload"))
@@ -29004,7 +29004,7 @@ northing meters` + i;
       this.radius_p = 1, this.radius_p2 = 1, this.radius_p_inv2 = 1, this.shape = "sphere";
     this.title || (this.title = "Geostationary Satellite View");
   }
-  function t2(i) {
+  function tw(i) {
     var t = i.x, e = i.y, n, s, r, a;
     if (t = t - this.long0, this.shape === "ellipse") {
       e = Math.atan(this.radius_p2 * Math.tan(e));
@@ -29015,7 +29015,7 @@ northing meters` + i;
     } else this.shape === "sphere" && (n = Math.cos(e), s = Math.cos(t) * n, r = Math.sin(t) * n, a = Math.sin(e), n = this.radius_g - s, this.flip_axis ? (i.x = this.radius_g_1 * Math.atan(r / Se(a, n)), i.y = this.radius_g_1 * Math.atan(a / n)) : (i.x = this.radius_g_1 * Math.atan(r / n), i.y = this.radius_g_1 * Math.atan(a / Se(r, n))));
     return i.x = i.x * this.a, i.y = i.y * this.a, i;
   }
-  function e2(i) {
+  function ew(i) {
     var t = -1, e = 0, n = 0, s, r, a, o;
     if (i.x = i.x / this.a, i.y = i.y / this.a, this.shape === "ellipse") {
       this.flip_axis ? (n = Math.tan(i.y / this.radius_g_1), e = Math.tan(i.x / this.radius_g_1) * Se(1, n)) : (e = Math.tan(i.x / this.radius_g_1), n = Math.tan(i.y / this.radius_g_1) * Se(1, e));
@@ -29030,37 +29030,37 @@ northing meters` + i;
     }
     return i.x = i.x + this.long0, i;
   }
-  var i2 = ["Geostationary Satellite View", "Geostationary_Satellite", "geos"];
-  const n2 = {
+  var iw = ["Geostationary Satellite View", "Geostationary_Satellite", "geos"];
+  const nw = {
     init: Qx,
-    forward: t2,
-    inverse: e2,
-    names: i2
+    forward: tw,
+    inverse: ew,
+    names: iw
   };
   var dr = 1.340264, fr = -0.081106, gr = 893e-6, mr = 3796e-6, ro = Math.sqrt(3) / 2;
-  function s2() {
+  function sw() {
     this.es = 0, this.long0 = this.long0 !== void 0 ? this.long0 : 0;
   }
-  function r2(i) {
+  function rw(i) {
     var t = W(i.x - this.long0), e = i.y, n = Math.asin(ro * Math.sin(e)), s = n * n, r = s * s * s;
     return i.x = t * Math.cos(n) / (ro * (dr + 3 * fr * s + r * (7 * gr + 9 * mr * s))), i.y = n * (dr + fr * s + r * (gr + mr * s)), i.x = this.a * i.x + this.x0, i.y = this.a * i.y + this.y0, i;
   }
-  function a2(i) {
+  function aw(i) {
     i.x = (i.x - this.x0) / this.a, i.y = (i.y - this.y0) / this.a;
     var t = 1e-9, e = 12, n = i.y, s, r, a, o, l, h;
     for (h = 0; h < e && (s = n * n, r = s * s * s, a = n * (dr + fr * s + r * (gr + mr * s)) - i.y, o = dr + 3 * fr * s + r * (7 * gr + 9 * mr * s), n -= l = a / o, !(Math.abs(l) < t)); ++h)
       ;
     return s = n * n, r = s * s * s, i.x = ro * i.x * (dr + 3 * fr * s + r * (7 * gr + 9 * mr * s)) / Math.cos(n), i.y = Math.asin(Math.sin(n) / ro), i.x = W(i.x + this.long0), i;
   }
-  var o2 = ["eqearth", "Equal Earth", "Equal_Earth"];
-  const l2 = {
-    init: s2,
-    forward: r2,
-    inverse: a2,
-    names: o2
+  var ow = ["eqearth", "Equal Earth", "Equal_Earth"];
+  const lw = {
+    init: sw,
+    forward: rw,
+    inverse: aw,
+    names: ow
   };
   var Or = 1e-10;
-  function h2() {
+  function hw() {
     var i;
     if (this.phi1 = this.lat1, Math.abs(this.phi1) < Or)
       throw new Error();
@@ -29069,13 +29069,13 @@ northing meters` + i;
       this.am1 = Math.sin(this.phi1),
       i = Math.cos(this.phi1),
       this.en
-    ), this.am1 = i / (Math.sqrt(1 - this.es * this.am1 * this.am1) * this.am1), this.inverse = u2, this.forward = c2) : (Math.abs(this.phi1) + Or >= N ? this.cphi1 = 0 : this.cphi1 = 1 / Math.tan(this.phi1), this.inverse = f2, this.forward = d2);
+    ), this.am1 = i / (Math.sqrt(1 - this.es * this.am1 * this.am1) * this.am1), this.inverse = uw, this.forward = cw) : (Math.abs(this.phi1) + Or >= N ? this.cphi1 = 0 : this.cphi1 = 1 / Math.tan(this.phi1), this.inverse = fw, this.forward = dw);
   }
-  function c2(i) {
+  function cw(i) {
     var t = W(i.x - (this.long0 || 0)), e = i.y, n, s, r;
     return n = this.am1 + this.m1 - $s(e, s = Math.sin(e), r = Math.cos(e), this.en), s = r * t / (n * Math.sqrt(1 - this.es * s * s)), i.x = n * Math.sin(s), i.y = this.am1 - n * Math.cos(s), i.x = this.a * i.x + (this.x0 || 0), i.y = this.a * i.y + (this.y0 || 0), i;
   }
-  function u2(i) {
+  function uw(i) {
     i.x = (i.x - (this.x0 || 0)) / this.a, i.y = (i.y - (this.y0 || 0)) / this.a;
     var t, e, n, s;
     if (e = Se(i.x, i.y = this.am1 - i.y), s = Jh(this.am1 + this.m1 - e, this.es, this.en), (t = Math.abs(s)) < N)
@@ -29086,24 +29086,24 @@ northing meters` + i;
       throw new Error();
     return i.x = W(n + (this.long0 || 0)), i.y = on(s), i;
   }
-  function d2(i) {
+  function dw(i) {
     var t = W(i.x - (this.long0 || 0)), e = i.y, n, s;
     return s = this.cphi1 + this.phi1 - e, Math.abs(s) > Or ? (i.x = s * Math.sin(n = t * Math.cos(e) / s), i.y = this.cphi1 - s * Math.cos(n)) : i.x = i.y = 0, i.x = this.a * i.x + (this.x0 || 0), i.y = this.a * i.y + (this.y0 || 0), i;
   }
-  function f2(i) {
+  function fw(i) {
     i.x = (i.x - (this.x0 || 0)) / this.a, i.y = (i.y - (this.y0 || 0)) / this.a;
     var t, e, n = Se(i.x, i.y = this.cphi1 - i.y);
     if (e = this.cphi1 + this.phi1 - n, Math.abs(e) > N)
       throw new Error();
     return Math.abs(Math.abs(e) - N) <= Or ? t = 0 : t = n * Math.atan2(i.x, i.y) / Math.cos(e), i.x = W(t + (this.long0 || 0)), i.y = on(e), i;
   }
-  var g2 = ["bonne", "Bonne (Werner lat_1=90)"];
-  const m2 = {
-    init: h2,
-    names: g2
+  var gw = ["bonne", "Bonne (Werner lat_1=90)"];
+  const mw = {
+    init: hw,
+    names: gw
   };
-  function _2(i) {
-    i.Proj.projections.add(Oa), i.Proj.projections.add(Na), i.Proj.projections.add(cE), i.Proj.projections.add(EE), i.Proj.projections.add(RE), i.Proj.projections.add(bE), i.Proj.projections.add(kE), i.Proj.projections.add(BE), i.Proj.projections.add(qE), i.Proj.projections.add(JE), i.Proj.projections.add(mM), i.Proj.projections.add(MM), i.Proj.projections.add(RM), i.Proj.projections.add(LM), i.Proj.projections.add(kM), i.Proj.projections.add(BM), i.Proj.projections.add(qM), i.Proj.projections.add(JM), i.Proj.projections.add(sx), i.Proj.projections.add(hx), i.Proj.projections.add(gx), i.Proj.projections.add(vx), i.Proj.projections.add(Cx), i.Proj.projections.add(Ax), i.Proj.projections.add(Nx), i.Proj.projections.add(Bx), i.Proj.projections.add(qx), i.Proj.projections.add(Jx), i.Proj.projections.add(n2), i.Proj.projections.add(l2), i.Proj.projections.add(m2);
+  function _w(i) {
+    i.Proj.projections.add(Oa), i.Proj.projections.add(Na), i.Proj.projections.add(cE), i.Proj.projections.add(EE), i.Proj.projections.add(RE), i.Proj.projections.add(bE), i.Proj.projections.add(kE), i.Proj.projections.add(BE), i.Proj.projections.add(qE), i.Proj.projections.add(JE), i.Proj.projections.add(mM), i.Proj.projections.add(MM), i.Proj.projections.add(RM), i.Proj.projections.add(LM), i.Proj.projections.add(kM), i.Proj.projections.add(BM), i.Proj.projections.add(qM), i.Proj.projections.add(JM), i.Proj.projections.add(sx), i.Proj.projections.add(hx), i.Proj.projections.add(gx), i.Proj.projections.add(vx), i.Proj.projections.add(Cx), i.Proj.projections.add(Ax), i.Proj.projections.add(Nx), i.Proj.projections.add(Bx), i.Proj.projections.add(qx), i.Proj.projections.add(Jx), i.Proj.projections.add(nw), i.Proj.projections.add(lw), i.Proj.projections.add(mw);
   }
   ue.defaultDatum = "WGS84";
   ue.Proj = li;
@@ -29115,7 +29115,7 @@ northing meters` + i;
   ue.transform = io;
   ue.mgrs = Tv;
   ue.version = "__VERSION__";
-  _2(ue);
+  _w(ue);
   const se = {
     ELEMENT: "element",
     MAP: "map",
@@ -29123,7 +29123,7 @@ northing meters` + i;
     POSITION: "position",
     POSITIONING: "positioning"
   };
-  class p2 extends ti {
+  class pw extends ti {
     /**
      * @param {Options} options Overlay options.
      */
@@ -29400,13 +29400,13 @@ northing meters` + i;
     }
   }
   var or = { exports: {} };
-  const y2 = /* @__PURE__ */ Kr(Cy), v2 = /* @__PURE__ */ Kr(ry), E2 = /* @__PURE__ */ Kr(hy), M2 = /* @__PURE__ */ Kr(z0), x2 = /* @__PURE__ */ Kr(x0);
-  var w2 = or.exports, ju;
-  function C2() {
+  const yw = /* @__PURE__ */ Kr(Cy), vw = /* @__PURE__ */ Kr(ry), Ew = /* @__PURE__ */ Kr(hy), Mw = /* @__PURE__ */ Kr(z0), xw = /* @__PURE__ */ Kr(x0);
+  var ww = or.exports, ju;
+  function Cw() {
     return ju || (ju = 1, function(i, t) {
       (function(e, n) {
-        n(t, y2, v2, E2, M2, x2);
-      })(w2, function(e, n, s, r, a, o) {
+        n(t, yw, vw, Ew, Mw, xw);
+      })(ww, function(e, n, s, r, a, o) {
         var l = "comparison", h = [
           "PropertyIsEqualTo",
           "PropertyIsNotEqualTo",
@@ -31214,7 +31214,7 @@ northing meters` + i;
       });
     }(or, or.exports)), or.exports;
   }
-  var Ia = C2();
+  var Ia = Cw();
   ue.defs("EPSG:25832", "+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs +axis=enu");
   ue.defs("http://www.opengis.net/def/crs/EPSG/0/25832", ue.defs("EPSG:25832"));
   C1(ue);
@@ -31291,7 +31291,7 @@ northing meters` + i;
       position: absolute;
       display: none;
       width: max-content;
-    `, this.shadowRoot.appendChild(t), this.overlay = new p2({
+    `, this.shadowRoot.appendChild(t), this.overlay = new pw({
         element: t,
         offset: [10, 10],
         positioning: "center-left"
@@ -31487,11 +31487,13 @@ northing meters` + i;
      */
     parseGML(t) {
       try {
-        const e = new wt(), s = new DOMParser().parseFromString(t, "application/xml"), r = e.readFeatures(t, {
+        const e = new wt();
+        let s = new DOMParser().parseFromString(t, "application/xml");
+        const a = new XMLSerializer().serializeToString(s).replace(/<rgeo:/g, "<gml:").replace(/<\/rgeo:/g, "</gml:");
+        return { features: e.readFeatures(a, {
           featureProjection: yl,
           dataProjection: yl
-        });
-        return console.log(r), { features: r, xmlDoc: s };
+        }), xmlDoc: s };
       } catch (e) {
         return console.error("Failed to parse GML file:", e), { features: [], xmlDoc: null };
       }
@@ -31887,9 +31889,9 @@ northing meters` + i;
     render() {
       return Pn`
       <map-viewer
-        .gmlFile="${"./examples/2019/713/data.gml"}"
-        .xmlFile="${"./examples/2019/713/metadata.xml"}"
-        .sldFile="${"./examples/2019/713/styles.sld"}">
+        .gmlFile="${""}"
+        .xmlFile="${""}"
+        .sldFile="${""}">
       </map-viewer>
     `;
     }
@@ -31911,7 +31913,7 @@ northing meters` + i;
   vn(Qf, "styles", ql`
   
   `);
-  function S2(i) {
+  function Sw(i) {
     if (i === "#map-viewer")
       return Pn`
     <map-viewer></map-viewer>`;
@@ -31939,7 +31941,7 @@ northing meters` + i;
     render() {
       return Pn`
       <main>
-        ${S2(this.route)} <!-- Pass the current route to the router -->
+        ${Sw(this.route)} <!-- Pass the current route to the router -->
         <a href="#map-example" role="button">MapExample</a>
         <a href="#map-template" role="button">MapTemplate</a>
         <a href="#map-viewer" role="button">Kort</a>
@@ -31960,5 +31962,5 @@ northing meters` + i;
   customElements.define("map-template", Jf);
   customElements.define("map-example", Qf);
 });
-export default R2();
+export default Rw();
 //# sourceMappingURL=map-viewer-plugin.es.js.map
