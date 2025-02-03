@@ -11,9 +11,9 @@ export class MapTemplate extends LitElement {
 
   render() {
 
-    const gmlFile = './examples/2019/713/data.gml';
-    const xmlFile = './examples/2019/713/metadata.xml';
-    const sldFile = './examples/2019/713/styles.sld';
+    const gmlFile = ''; // Change this to your GML file
+    const xmlFile = ''; // Change this to your metadata file
+    const sldFile = ''; // Change this to your SLD file
 
     return html`
       <map-viewer

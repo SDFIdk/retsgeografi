@@ -533,18 +533,24 @@ export class MapViewer extends LitElement {
     try {
       const format = new GML32();
       const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(gmlString, 'application/xml');
-      const features = format.readFeatures(gmlString, {
+      let xmlDoc = parser.parseFromString(gmlString, 'application/xml');
+
+      // Normalize custom prefixes by replacing `rgeo:` with `gml:`
+      const serialized = new XMLSerializer().serializeToString(xmlDoc);
+      const normalizedGML = serialized.replace(/<rgeo:/g, '<gml:').replace(/<\/rgeo:/g, '</gml:');
+
+      // Parse the modified GML
+      const features = format.readFeatures(normalizedGML, {
         featureProjection: epsg25832, dataProjection: epsg25832,
       });
-      console.log(features)
 
-      return {features, xmlDoc};
+      return { features, xmlDoc };
     } catch (error) {
       console.error("Failed to parse GML file:", error);
-      return {features: [], xmlDoc: null};
+      return { features: [], xmlDoc: null };
     }
   }
+
 
   /**
    * Groups features by their feature type.
