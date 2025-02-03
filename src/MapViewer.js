@@ -98,6 +98,9 @@ export class MapViewer extends LitElement {
           padding: 8px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
+      input {
+          accent-color: green;
+      }
 
       button:hover, label:hover {
           transform: scale(1.1);
@@ -587,7 +590,7 @@ export class MapViewer extends LitElement {
       this.map.removeLayer(layer)
     })
     this.vectorLayers = []
-    this.shadowRoot.getElementById('data-toggle').innerHTML = ''
+    this.shadowRoot.getElementById('data-toggle').innerHTML = 'Vælg Lag:'
   }
 
   /**
