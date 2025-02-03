@@ -421,13 +421,13 @@ export class MapViewer extends LitElement {
       metadataBox.id = 'metadata-box';
       metadataBox.style.cssText = `
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 1rem;
+      left: 1rem;
       background: rgba(255, 255, 255, 0.95);
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      max-height: 300px;
+      max-height: 52rem;
       overflow-y: auto;
       max-width: 25rem;
       z-index: 10;
