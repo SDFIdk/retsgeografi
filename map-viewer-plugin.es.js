@@ -31524,7 +31524,7 @@ northing meters` + i;
     resetLayers() {
       this.vectorLayers.forEach((t) => {
         this.map.removeLayer(t);
-      }), this.vectorLayers = [], this.shadowRoot.getElementById("data-toggle").innerHTML = "";
+      }), this.vectorLayers = [], this.shadowRoot.getElementById("data-toggle").innerHTML = "Vælg Lag:";
     }
     /**
      * Applies SLD styles to the map.
@@ -31861,6 +31861,9 @@ northing meters` + i;
           border-radius: 8px;
           padding: 8px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      input {
+          accent-color: green;
       }
 
       button:hover, label:hover {
