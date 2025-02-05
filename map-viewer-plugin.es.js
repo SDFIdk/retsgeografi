@@ -31248,28 +31248,23 @@ northing meters` + i;
     }
     // Initialize the map
     initMaps() {
-      this.map = new Up({
-        // Set the target element
-        target: this.shadowRoot.getElementById("map"),
-        // Set the layers
-        layers: [
-          new Vy({
-            source: new d1({
-              url: "https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi",
-              layer: "topo_skaermkort_daempet",
-              matrixSet: "View1",
-              format: "image/jpeg",
-              style: "default",
-              tileGrid: new jy({
-                extent: [12e4, 59e5, 1e6, 65e5],
-                resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
-                matrixIds: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
-              })
-            }),
-            visible: !0
+      this.baseLayer1 = new Vy({
+        source: new d1({
+          url: "https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi",
+          layer: "topo_skaermkort_daempet",
+          matrixSet: "View1",
+          format: "image/jpeg",
+          style: "default",
+          tileGrid: new jy({
+            extent: [12e4, 59e5, 1e6, 65e5],
+            resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
+            matrixIds: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
           })
-        ],
-        // Set the view
+        }),
+        visible: !0
+      }), this.map = new Up({
+        target: this.shadowRoot.getElementById("map"),
+        layers: [this.baseLayer1],
         view: new ni({
           center: [6e5, 6225e3],
           zoom: 9,
