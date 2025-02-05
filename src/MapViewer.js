@@ -188,30 +188,32 @@ export class MapViewer extends LitElement {
 
 // Initialize the map
   initMaps() {
-    // Create the first map
-    this.map = new Map({
-      // Set the target element
-      target: this.shadowRoot.getElementById('map'),
-
-      // Set the layers
-      layers: [
-        new TileLayer({
-          source: new WMTS({
-            url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
-            layer: 'topo_skaermkort_daempet',
-            matrixSet: 'View1',
-            format: 'image/jpeg',
-            style: 'default',
-            tileGrid: new WMTSTileGrid({
-              extent: [120000, 5900000, 1000000, 6500000],
-              resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
-              matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
-            }),
-          }),
-          visible: true,
+    // Define the two base layers
+    this.baseLayer1 = new TileLayer({
+      source: new WMTS({
+        url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
+        layer: 'topo_skaermkort_daempet',
+        matrixSet: 'View1',
+        format: 'image/jpeg',
+        style: 'default',
+        tileGrid: new WMTSTileGrid({
+          extent: [120000, 5900000, 1000000, 6500000],
+          resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
+          matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
         }),
-      ],
-      // Set the view
+      }),
+      visible: true,
+    });
+/*
+    this.baseLayer2 = new TileLayer({
+      source: new OSM(), // Example alternative layer (OpenStreetMap)
+      visible: false, // Initially hidden
+    });
+*/
+    // Create the map
+    this.map = new Map({
+      target: this.shadowRoot.getElementById('map'),
+      layers: [this.baseLayer1],
       view: new View({
         center: [600000, 6225000],
         zoom: 9,
@@ -219,7 +221,7 @@ export class MapViewer extends LitElement {
       }),
       controls: [],
     });
-  }
+    }
 
   initHoverPopup() {
     const container = document.createElement('div');
