@@ -5,10 +5,6 @@ export class MapTemplate extends LitElement {
       /* Add your styles here */
   `;
 
-  constructor() {
-    super();
-  }
-
   render() {
 
     const gmlFile = ''; // Change this to your GML file

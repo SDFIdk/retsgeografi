@@ -1,9 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 export class MapExample extends LitElement {
-	static styles = css`
-  
-  `;
+	static styles = css``;
 
 	render() {
       const gmlFile = './examples/2019/713/data_demo.gml';

@@ -8,13 +8,13 @@ import {Tile as TileLayer} from 'ol/layer';
 import {WMTS} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
-import {Circle, Fill, Stroke, Style} from 'ol/style.js';
-import GML32 from 'ol/format/GML32.js';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
+import {Circle, Fill, Stroke, Style} from 'ol/style';
+import GML32 from 'ol/format/GML32';
 import {register} from 'ol/proj/proj4';
 import {get, getPointResolution} from 'ol/proj';
 import proj4 from 'proj4';
-import Overlay from 'ol/Overlay.js';
+import Overlay from 'ol/Overlay';
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 import {extend} from 'ol/extent';
 
@@ -190,6 +190,9 @@ export class MapViewer extends LitElement {
   initMaps() {
     // Define the two base layers
     this.baseLayer1 = new TileLayer({
+      visible: true,
+      type: 'base',
+      size: [256, 256],
       source: new WMTS({
         url: 'https://services.datafordeler.dk/DKskaermkort/topo_skaermkort_daempet/1.0.0/wmts?username=QKJBQATHVS&password=ytxCA8UGM5n0Z*zi',
         layer: 'topo_skaermkort_daempet',
@@ -202,18 +205,26 @@ export class MapViewer extends LitElement {
           matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
         }),
       }),
-      visible: true,
     });
-/*
     this.baseLayer2 = new TileLayer({
-      source: new OSM(), // Example alternative layer (OpenStreetMap)
       visible: false, // Initially hidden
+      source: new WMTS({
+        url: 'https://services.datafordeler.dk/GeoDanmarkOrto/orto_foraar_wmts/1.0.0/wmts?username=RNIOENOTLD&password=LaKage!7562Hesten',
+        layer: 'orto_foraar_wmts',
+        matrixSet: 'KortforsyningTilingDK',
+        style: 'default',
+        format: 'image/jpeg',
+        tileGrid: new WMTSTileGrid({
+          extent: [120000, 5900000, 1000000, 6500000],
+          resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
+          matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+        }),
+      }),
     });
-*/
     // Create the map
     this.map = new Map({
       target: this.shadowRoot.getElementById('map'),
-      layers: [this.baseLayer1],
+      layers: [this.baseLayer1, this.baseLayer2],
       view: new View({
         center: [600000, 6225000],
         zoom: 9,
