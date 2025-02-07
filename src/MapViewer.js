@@ -58,7 +58,7 @@ export class MapViewer extends LitElement {
           right: 1rem;
           display: flex;
           flex-direction: column;
-          padding: 8px;
+          padding: 1rem;
           width: 3rem;
           height: 3rem;
       }
@@ -69,9 +69,9 @@ export class MapViewer extends LitElement {
           right: 1rem;
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 0.5rem;
           background: rgba(255, 255, 255, 0.8);
-          border-radius: 8px;
+          border-radius: 1rem;
           padding: 1rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
@@ -95,7 +95,7 @@ export class MapViewer extends LitElement {
           left: 1rem;
           background: rgba(255, 255, 255, 0.8);
           border-radius: 8px;
-          padding: 8px;
+          padding: 0.75rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
       input {
@@ -107,8 +107,8 @@ export class MapViewer extends LitElement {
       }
 
       label svg {
-          width: 20px;
-          height: 20px;
+          width: 1.25rem;
+          height: 1.25rem;
           fill: #333;
       }
 
@@ -229,8 +229,8 @@ export class MapViewer extends LitElement {
     container.style.cssText = `
       background: white;
       border: 1px solid black;
-      padding: 5px;
-      border-radius: 5px;
+      padding: 0.5rem;
+      border-radius: 1rem;
       font-size: 12px;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
       pointer-events: none;
@@ -426,8 +426,8 @@ export class MapViewer extends LitElement {
       top: 1rem;
       left: 1rem;
       background: rgba(255, 255, 255, 0.95);
-      padding: 15px;
-      border-radius: 8px;
+      padding: 1rem;
+      border-radius: 0.5rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       max-height: 52rem;
       overflow-y: auto;
