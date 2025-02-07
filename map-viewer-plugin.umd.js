@@ -52,7 +52,7 @@ northing meters`+i;var d=u/2,g=0,_=0,v,E,M,w,R;return d>0&&(v=1e5/Math.pow(10,d)
       overflow-y: auto;
       max-width: 25rem;
       z-index: 10;
-    `,n.appendChild(s));let r="";for(const[l,h]of Object.entries(e)){const c=l.charAt(0).toUpperCase()+l.slice(1);r+=`<div style="margin-bottom: 8px;"><strong>${c}:</strong> ${h}</div>`}s.innerHTML=`
+    `,n.appendChild(s));let r="";for(const[l,h]of Object.entries(e)){const c=l.replace(/^mdb:/i,"").replace(/([A-Z])/g," $1").trim(),u=c.charAt(0).toUpperCase()+c.slice(1);r+=`<div style="margin-bottom: 8px;"><strong>${u}:</strong> ${h}</div>`}s.innerHTML=`
     <button id="toggle-metadata" style="background:none; border:none; font-size:1rem; cursor:pointer;">
         Metadata ▼
     </button>
@@ -152,13 +152,13 @@ northing meters`+i;var d=u/2,g=0,_=0,v,E,M,w,R;return d>0&&(v=1e5/Math.pow(10,d)
           gap: 10px;
           background: rgba(255, 255, 255, 0.8);
           border-radius: 8px;
-          padding: 10px;
+          padding: 1rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       .control-icon {
-          width: 40px;
-          height: 40px;
+          width: 2.5rem;
+          height: 2.5rem;
           display: flex;
           justify-content: center;
           align-items: center;
