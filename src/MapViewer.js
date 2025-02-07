@@ -72,13 +72,13 @@ export class MapViewer extends LitElement {
           gap: 10px;
           background: rgba(255, 255, 255, 0.8);
           border-radius: 8px;
-          padding: 10px;
+          padding: 1rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
 
       .control-icon {
-          width: 40px;
-          height: 40px;
+          width: 2.5rem;
+          height: 2.5rem;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -437,12 +437,19 @@ export class MapViewer extends LitElement {
       mapContainer.appendChild(metadataBox);
     }
 
-    // Populate metadata content
+// Generate styled HTML for properties
     let contentHtml = ``;
     for (const [key, value] of Object.entries(properties)) {
-      const displayKey = key.charAt(0).toUpperCase() + key.slice(1);
-      contentHtml += `<div style="margin-bottom: 8px;"><strong>${displayKey}:</strong> ${value}</div>`;
+      // Remove "mdb:" prefix (case-insensitive) and format the display key
+      const displayKey = key
+        .replace(/^mdb:/i, '') // Remove "mdb:" prefix
+        .replace(/([A-Z])/g, ' $1') // Add spaces before uppercase letters
+        .trim(); // Trim any leading/trailing spaces
+      const formattedKey = displayKey.charAt(0).toUpperCase() + displayKey.slice(1); // Capitalize first letter
+      contentHtml += `<div style="margin-bottom: 8px;"><strong>${formattedKey}:</strong> ${value}</div>`;
     }
+
+
 
     // Toggleable metadata content
     metadataBox.innerHTML = `
