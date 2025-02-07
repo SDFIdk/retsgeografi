@@ -75,6 +75,19 @@ export class MapViewer extends LitElement {
           padding: 1rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
+      
+      #layer-switcher {
+          position: absolute;
+          bottom: 1rem;
+          right: 6rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          background: rgba(255, 255, 255, 0.8);
+          border-radius: 1rem;
+          padding: 1rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
 
       .control-icon {
           width: 2.5rem;
@@ -232,7 +245,25 @@ export class MapViewer extends LitElement {
       }),
       controls: [],
     });
-    }
+
+    // Add event listener to switch layers
+    this.updateComplete.then(() => {
+      const layerSwitcher = this.shadowRoot.getElementById('layer-switcher');
+      if (layerSwitcher) {
+        layerSwitcher.addEventListener('change', (event) => {
+          if (event.target.name === 'base-layer') {
+            const selectedLayer = event.target.value;
+            this.baseLayer1.setVisible(selectedLayer === "1");
+            this.baseLayer2.setVisible(selectedLayer === "2");
+          }
+        });
+      } else {
+        console.error("Layer switcher element not found");
+      }
+    });
+
+  }
+
 
   initHoverPopup() {
     const container = document.createElement('div');
@@ -965,6 +996,15 @@ export class MapViewer extends LitElement {
             </svg>
           </label>
         </div>
+        <div id="layer-switcher">
+          <label>
+            <input type="radio" name="base-layer" value="1" checked>Skærmkort
+          </label>
+          <label>
+            <input type="radio" name="base-layer" value="2">Ortofoto
+          </label>
+        </div>
+        <div id="map"></div>
         <div id="compass-container">
           <svg class="ds-icon" width="40" height="40" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="15.5" cy="15.5" r="15" fill="var(--c8, black)" stroke="var(--white, white)" stroke-width="var(--ds-icon-stroke, 1)"/>
