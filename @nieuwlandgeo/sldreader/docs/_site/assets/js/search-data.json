@@ -13,30 +13,36 @@
     "relUrl": "/benelux.html"
   }
   ,"2": {
+    "title": "Custom GeoJSON styling",
+    "content": "Custom GeoJSON styling . View code . &lt;/div&gt; .",
+    "url": "http://localhost:4000/custom-geojson.html",
+    "relUrl": "/custom-geojson.html"
+  }
+  ,"3": {
     "title": "Dynamic style properties",
     "content": "Dynamic style properties . View code . &lt;/div&gt; .",
     "url": "http://localhost:4000/dynamic-styling.html",
     "relUrl": "/dynamic-styling.html"
   }
-  ,"3": {
+  ,"4": {
     "title": "Provinces of the netherlands",
     "content": "Provinces of the netherlands . View code . &lt;/div&gt; .",
     "url": "http://localhost:4000/grenzen.html",
     "relUrl": "/grenzen.html"
   }
-  ,"4": {
+  ,"5": {
     "title": "GraphicStroke",
     "content": "GraphicStroke . View code . &lt;/input&gt; Mark &lt;/input&gt; ExternalGraphic &lt;/input&gt; Vendor option: pointPlacement &lt;/input&gt; Alternating graphics",
     "url": "http://localhost:4000/hoogspanning.html",
     "relUrl": "/hoogspanning.html"
   }
-  ,"5": {
+  ,"6": {
     "title": "Tasmania",
     "content": "Openlayers SLD example . Choose a style for the waterbodies Example tries to replicate openlayer 2.13 example Road style uses two overlaying lines. . &lt;/div&gt; .",
     "url": "http://localhost:4000/",
     "relUrl": "/"
   }
-  ,"6": {
+  ,"7": {
     "title": "PointSymbolizer gallery",
     "content": "PointSymbolizer gallery . View code . This page displays all supported PointSymbolizer marks by wellknownname. .",
     "url": "http://localhost:4000/mark-gallery.html",
