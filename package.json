@@ -13,13 +13,13 @@
   },
   "dependencies": {
     "@dataforsyningen/designsystem": "^8.6.0",
-    "@nieuwlandgeo/sldreader": "^0.4.3",
+    "@nieuwlandgeo/sldreader": "^0.4.4",
     "lit": "^3.2.1",
     "ol": "^10.4.0",
     "proj4": "^2.15.0"
   },
   "devDependencies": {
-    "vite": "^6.0.7",
+    "vite": "^6.1.0",
     "vite-plugin-static-copy": "^2.2.0"
   },
   "author": "Rasmus Tønder, Klimadatastyrelsen",
