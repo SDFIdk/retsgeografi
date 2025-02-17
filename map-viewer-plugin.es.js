@@ -31345,39 +31345,6 @@ northing meters` + i;
       t.setZoom(t.getZoom() - 1);
     }
     /**
-     * Gets the style for the given geometry type
-     * @param {string} geometryType The type of geometry (Polygon, MultiPolygon, LineString, Point)
-     * @param {Style} [sldStyle] The SLD style to use (optional)
-     * @returns {Style} The style for the given geometry type
-     */
-    getStyle(t, e = null) {
-      if (e)
-        return e;
-      const { fillColor: n, strokeColor: s, strokeWidth: r } = this.styles;
-      switch (t) {
-        case "Polygon":
-        case "MultiPolygon":
-          return new je({
-            fill: new tn({ color: n }),
-            stroke: new Hi({ color: s, width: r })
-          });
-        case "LineString":
-          return new je({
-            stroke: new Hi({ color: s, width: r })
-          });
-        case "Point":
-          return new je({
-            image: new Us({
-              radius: 5,
-              fill: new tn({ color: n }),
-              stroke: new Hi({ color: s, width: 1 })
-            })
-          });
-        default:
-          return console.warn(`No style found for geometry type: ${t}`), null;
-      }
-    }
-    /**
      * Uploads the given files to the map.
      * @param {Event} event The event containing the files.
      */
@@ -31491,22 +31458,6 @@ northing meters` + i;
       });
     }
     /**
-     * Applies feature groups to the map, optionally using SLD styles for styling.
-     *
-     * This function iterates over the feature groups and adds them to the map with appropriate styles.
-     * If SLD data is provided, it will attempt to apply the SLD styles to the features.
-     *
-     * @param {Object} featureGroups - An object containing groups of features categorized by type.
-     * @param {string} [sldString] - The SLD data to use for styling the features.
-     */
-    applyFeatureGroupsToMap(t, e) {
-      const n = this.map.getView().getProjection(), s = e ? Ia.Reader(e) : null;
-      Object.keys(t).forEach((r) => {
-        const a = new fy({ features: t[r] }), o = this.applySLDStyles(s, r, n);
-        this.addLayerWithControls(r, a, o || this.getStyle(r));
-      }), this.map.render(), this.requestUpdate();
-    }
-    /**
      * Parses GML data from a given string, returning features and the XML document.
      *
      * This function attempts to parse the provided GML string using the GML32 format.
@@ -31527,36 +31478,6 @@ northing meters` + i;
       } catch (e) {
         return console.error("Failed to parse GML file:", e), { features: [], xmlDoc: null };
       }
-    }
-    /**
-     * Groups features by their feature type.
-     *
-     * This function takes the parsed features and an XML document as input and
-     * groups the features by their feature type. The feature type is determined by
-     * the local name of the first child element of the feature member element.
-     *
-     * @param {Array<ol/Feature>} features - The parsed features to group.
-     * @param {XMLDocument} xmlDoc - The XML document containing the feature members.
-     * @returns {Object} An object with feature type as keys and arrays of features as values.
-     */
-    groupFeaturesByType(t, e) {
-      return t.reduce((n, s, r) => {
-        const o = e.getElementsByTagNameNS("*", "featureMember")[r], l = o ? o.firstElementChild : null, h = l ? l.localName : "Unknown Type";
-        return n[h] || (n[h] = []), n[h].push(s), n;
-      }, {});
-    }
-    /**
-     * Removes all vector layers from the map and resets the data toggle.
-     *
-     * This function is called when a new GML file is selected and we want to remove all the
-     * previously added vector layers from the map and reset the data toggle.
-     */
-    resetLayers() {
-      this.vectorLayers.forEach((e) => {
-        this.map.removeLayer(e);
-      }), this.vectorLayers = [];
-      const t = this.shadowRoot.getElementById("data-toggle");
-      t.innerHTML = "Vælg Lag:";
     }
     /**
      * Applies SLD styles to the map.
@@ -31592,16 +31513,95 @@ northing meters` + i;
       });
     }
     /**
-     * Adds a vector layer to the map with controls for visibility and styling.
-     *
-     * This function creates a vector layer using the provided vector source and style function.
-     * It also adds a checkbox to toggle the visibility of the layer, and color pickers
-     * for adjusting the layer's fill color, stroke color, and stroke width.
-     *
-     * @param {string} type - The type or name of the layer.
-     * @param {ol/source/Vector} vectorSource - The vector source for the layer.
-     * @param {function} [sldStyleFunction] - Optional style function for the layer.
+     * Gets the style for the given geometry type
+     * @param {string} geometryType The type of geometry (Polygon, MultiPolygon, LineString, Point)
+     * @param {Style} [sldStyle] The SLD style to use (optional)
+     * @returns {Style} The style for the given geometry type
      */
+    getStyle(t, e = null) {
+      if (e)
+        return e;
+      const { fillColor: n, strokeColor: s, strokeWidth: r } = this.styles;
+      switch (t) {
+        case "Polygon":
+        case "MultiPolygon":
+          return new je({
+            fill: new tn({ color: n }),
+            stroke: new Hi({ color: s, width: r })
+          });
+        case "LineString":
+          return new je({
+            stroke: new Hi({ color: s, width: r })
+          });
+        case "Point":
+          return new je({
+            image: new Us({
+              radius: 5,
+              fill: new tn({ color: n }),
+              stroke: new Hi({ color: s, width: 1 })
+            })
+          });
+        default:
+          return console.warn(`No style found for geometry type: ${t}`), null;
+      }
+    }
+    /**
+     * Applies feature groups to the map, optionally using SLD styles for styling.
+     *
+     * This function iterates over the feature groups and adds them to the map with appropriate styles.
+     * If SLD data is provided, it will attempt to apply the SLD styles to the features.
+     *
+     * @param {Object} featureGroups - An object containing groups of features categorized by type.
+     * @param {string} [sldString] - The SLD data to use for styling the features.
+     */
+    applyFeatureGroupsToMap(t, e) {
+      const n = this.map.getView().getProjection(), s = e ? Ia.Reader(e) : null;
+      Object.keys(t).forEach((r) => {
+        const a = new fy({ features: t[r] }), o = this.applySLDStyles(s, r, n);
+        this.addLayerWithControls(r, a, o || this.getStyle(r));
+      }), this.map.render(), this.requestUpdate();
+    }
+    /**
+     * Groups features by their feature type.
+     *
+     * This function takes the parsed features and an XML document as input and
+     * groups the features by their feature type. The feature type is determined by
+     * the local name of the first child element of the feature member element.
+     *
+     * @param {Array<ol/Feature>} features - The parsed features to group.
+     * @param {XMLDocument} xmlDoc - The XML document containing the feature members.
+     * @returns {Object} An object with feature type as keys and arrays of features as values.
+     */
+    groupFeaturesByType(t, e) {
+      return t.reduce((n, s, r) => {
+        const o = e.getElementsByTagNameNS("*", "featureMember")[r], l = o ? o.firstElementChild : null, h = l ? l.localName : "Unknown Type";
+        return n[h] || (n[h] = []), n[h].push(s), n;
+      }, {});
+    }
+    /**
+     * Removes all vector layers from the map and resets the data toggle.
+     *
+     * This function is called when a new GML file is selected and we want to remove all the
+     * previously added vector layers from the map and reset the data toggle.
+     */
+    resetLayers() {
+      this.vectorLayers.forEach((e) => {
+        this.map.removeLayer(e);
+      }), this.vectorLayers = [];
+      const t = this.shadowRoot.getElementById("data-toggle");
+      t.innerHTML = "Vælg Lag:";
+    }
+    /**
+    * Adds a vector layer to the map with controls for visibility and styling.
+    *
+    * This function creates a vector layer using the provided vector source and style function.
+    * It also adds a checkbox to toggle the visibility of the layer, and color pickers
+    * for adjusting the layer's fill color, stroke color, and stroke width.
+    *
+    * @param {string} type - The type or name of the layer.
+    * @param {ol/source/Vector} vectorSource - The vector source for the layer.
+    * @param {function} [sldStyleFunction] - Optional style function for the layer.
+    */
     addLayerWithControls(t, e, n) {
       const s = new Ny({
         source: e,
