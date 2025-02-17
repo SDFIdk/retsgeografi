@@ -31293,13 +31293,15 @@ northing meters` + i;
         }),
         controls: []
       }), this.updateComplete.then(() => {
-        const t = this.shadowRoot.getElementById("layer-switcher");
-        t ? t.addEventListener("change", (e) => {
-          if (e.target.name === "base-layer") {
-            const n = e.target.value;
-            this.baseLayer1.setVisible(n === "1"), this.baseLayer2.setVisible(n === "2");
+        const t = this.shadowRoot.getElementById("layer-switcher"), e = this.shadowRoot.querySelector(".radio-options");
+        t && e ? (t.addEventListener("click", (n) => {
+          n.target.closest("svg") && (e.style.display = e.style.display === "none" || !e.style.display ? "block" : "none");
+        }), t.addEventListener("change", (n) => {
+          if (n.target.name === "base-layer") {
+            const s = n.target.value;
+            this.baseLayer1.setVisible(s === "1"), this.baseLayer2.setVisible(s === "2");
           }
-        }) : console.error("Layer switcher element not found");
+        })) : console.error("Layer switcher element or radio options not found");
       });
     }
     initHoverPopup() {
@@ -31798,12 +31800,20 @@ northing meters` + i;
           </label>
         </div>
         <div id="layer-switcher">
-          <label>
-            <input type="radio" name="base-layer" value="1" checked>Skærmkort
-          </label>
-          <label>
-            <input type="radio" name="base-layer" value="2">Ortofoto
-          </label>
+          <svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="var(--ds-icon-color, black)" stroke-linejoin="round" stroke-linecap="round" stroke-width="var(--ds-icon-stroke, 1)">
+              <path d="M1.5 14L14.5 20.5L27.5 14M1.5 20L14.5 26.5L27.5 20M14.5 2.5L1.5 8L14.5 14.5L27.5 8L14.5 2.5Z"></path>
+            </g>
+          </svg>
+
+          <div class="radio-options">
+            <label>
+              <input type="radio" name="base-layer" value="1" checked> Skærmkort
+            </label>
+            <label>
+              <input type="radio" name="base-layer" value="2"> Ortofoto
+            </label>
+          </div>
         </div>
         <div id="map"></div>
         <div id="compass-container">
@@ -31878,7 +31888,7 @@ northing meters` + i;
           bottom: 1rem;
           right: 6rem;
           display: flex;
-          flex-direction: column;
+          flex-direction: row-reverse;
           gap: 0.5rem;
           background: rgba(255, 255, 255, 0.8);
           border-radius: 1rem;
@@ -31923,6 +31933,10 @@ northing meters` + i;
       }
 
       input[type="file"] {
+          display: none;
+      }
+      
+      .radio-options {
           display: none;
       }
   `), // Define custom properties
