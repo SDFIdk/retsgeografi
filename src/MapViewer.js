@@ -81,7 +81,7 @@ export class MapViewer extends LitElement {
           bottom: 1rem;
           right: 6rem;
           display: flex;
-          flex-direction: column;
+          flex-direction: row-reverse;
           gap: 0.5rem;
           background: rgba(255, 255, 255, 0.8);
           border-radius: 1rem;
@@ -126,6 +126,10 @@ export class MapViewer extends LitElement {
       }
 
       input[type="file"] {
+          display: none;
+      }
+      
+      .radio-options {
           display: none;
       }
   `;
@@ -249,7 +253,17 @@ export class MapViewer extends LitElement {
     // Add event listener to switch layers
     this.updateComplete.then(() => {
       const layerSwitcher = this.shadowRoot.getElementById('layer-switcher');
-      if (layerSwitcher) {
+      const radioOptions = this.shadowRoot.querySelector('.radio-options');
+
+      if (layerSwitcher && radioOptions) {
+        // Toggle radio button visibility when clicking the SVG
+        layerSwitcher.addEventListener('click', (event) => {
+          if (event.target.closest('svg')) {
+            radioOptions.style.display = radioOptions.style.display === 'none' || !radioOptions.style.display ? 'block' : 'none';
+          }
+        });
+
+        // Listen for changes in radio selection
         layerSwitcher.addEventListener('change', (event) => {
           if (event.target.name === 'base-layer') {
             const selectedLayer = event.target.value;
@@ -258,7 +272,7 @@ export class MapViewer extends LitElement {
           }
         });
       } else {
-        console.error("Layer switcher element not found");
+        console.error("Layer switcher element or radio options not found");
       }
     });
 
@@ -997,12 +1011,20 @@ export class MapViewer extends LitElement {
           </label>
         </div>
         <div id="layer-switcher">
-          <label>
-            <input type="radio" name="base-layer" value="1" checked>Skærmkort
-          </label>
-          <label>
-            <input type="radio" name="base-layer" value="2">Ortofoto
-          </label>
+          <svg class="ds-icon" width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="var(--ds-icon-color, black)" stroke-linejoin="round" stroke-linecap="round" stroke-width="var(--ds-icon-stroke, 1)">
+              <path d="M1.5 14L14.5 20.5L27.5 14M1.5 20L14.5 26.5L27.5 20M14.5 2.5L1.5 8L14.5 14.5L27.5 8L14.5 2.5Z"></path>
+            </g>
+          </svg>
+
+          <div class="radio-options">
+            <label>
+              <input type="radio" name="base-layer" value="1" checked> Skærmkort
+            </label>
+            <label>
+              <input type="radio" name="base-layer" value="2"> Ortofoto
+            </label>
+          </div>
         </div>
         <div id="map"></div>
         <div id="compass-container">
