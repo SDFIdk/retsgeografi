@@ -223,6 +223,10 @@ export class MapViewer extends LitElement {
           matrixIds: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
         }),
       }),
+      view: new View({
+          maxZoom: 14,
+          minZoom: 0
+      })
     });
     this.baseLayer2 = new TileLayer({
       visible: false, // Initially hidden

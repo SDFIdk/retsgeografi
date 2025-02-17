@@ -34,9 +34,11 @@ export class Main extends LitElement {
     return html`
       <main>
         ${routing(this.route)} <!-- Pass the current route to the router -->
-        <a href="#map-example" role="button">MapExample</a>
-        <a href="#map-template" role="button">MapTemplate</a>
-        <a href="#map-viewer" role="button">Kort</a>
+        <div>
+        <div><a href="#map-template" role="button">MapTemplate</a> - Viser et tomt kort, der referer til skabelonen MapTemplate.js, hvor man let kan udfylde med egen data</div>
+        <div><a href="#map-example" role="button">MapExample</a> - Viser et kort med udfyldt datasæt. Samme opsætning som ved MapTemplate</div>
+        <div><a href="#map-viewer" role="button">Kort</a> - Viser et tomt kort, der betegner selve MapViewer.js</div>
+        </div>
       </main>
     `;
   }
