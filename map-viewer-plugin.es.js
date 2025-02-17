@@ -1006,7 +1006,7 @@ var R2 = jg((nt) => {
       super(t), this.key = e, this.oldValue = n;
     }
   }
-  class ti extends kr {
+  class ei extends kr {
     /**
      * @param {Object<string, *>} [values] An object with key-value pairs.
      */
@@ -1135,7 +1135,7 @@ var R2 = jg((nt) => {
       super(t), this.element = e, this.index = n;
     }
   }
-  class ri extends ti {
+  class ri extends ei {
     /**
      * @param {Array<T>} [array] Array.
      * @param {Options} [options] Collection options.
@@ -3009,7 +3009,7 @@ var R2 = jg((nt) => {
     return a && a.length != o && (a.length = o), a;
   }
   const Wc = Be(), Pm = [NaN, NaN];
-  class Eo extends ti {
+  class Eo extends ei {
     constructor() {
       super(), this.extent_ = Oe(), this.extentRevision_ = -1, this.simplifiedGeometryMaxMinSquaredTolerance = 0, this.simplifiedGeometryRevision = 0, this.simplifyTransformedInternal = ld(
         (t, e, n) => {
@@ -4729,7 +4729,7 @@ var R2 = jg((nt) => {
     );
   }
   const Hm = 42, Ah = 256, qo = 0;
-  class ni extends ti {
+  class je extends ei {
     /**
      * @param {ViewOptions} [options] View options.
      */
@@ -5962,7 +5962,7 @@ var R2 = jg((nt) => {
       }
     }
   }
-  class Ph extends ti {
+  class Ph extends ei {
     /**
      * @param {Options} options Control options.
      */
@@ -6331,7 +6331,7 @@ var R2 = jg((nt) => {
   const Qc = {
     ACTIVE: "active"
   };
-  class Br extends ti {
+  class Br extends ei {
     /**
      * @param {InteractionOptions} [options] Options.
      */
@@ -7286,7 +7286,7 @@ var R2 = jg((nt) => {
     SOURCE: "source",
     MAP: "map"
   };
-  class qd extends ti {
+  class qd extends ei {
     /**
      * @param {Options} options Layer options.
      */
@@ -7880,7 +7880,7 @@ var R2 = jg((nt) => {
     isVisible(t) {
       let e;
       const n = this.getMapInternal();
-      !t && n && (t = n.getView()), t instanceof ni ? e = {
+      !t && n && (t = n.getView()), t instanceof je ? e = {
         viewState: t.getState(),
         extent: t.calculateExtent()
       } : e = t, !e.layerStatesArray && n && (e.layerStatesArray = n.getLayerGroup().getLayerStatesArray());
@@ -7909,7 +7909,7 @@ var R2 = jg((nt) => {
       const e = (r = this.getSource()) == null ? void 0 : r.getAttributions();
       if (!e)
         return [];
-      const n = t instanceof ni ? t.getViewStateAndExtent() : t;
+      const n = t instanceof je ? t.getViewStateAndExtent() : t;
       let s = e(n);
       return Array.isArray(s) || (s = [s]), s;
     }
@@ -8728,11 +8728,11 @@ var R2 = jg((nt) => {
     return Array.isArray(i) ? i : (t === void 0 ? t = [i, i] : (t[0] = i, t[1] = i), t);
   }
   let Bn = 0;
-  const _e = 1 << Bn++, yt = 1 << Bn++, xe = 1 << Bn++, je = 1 << Bn++, Gn = 1 << Bn++, ir = 1 << Bn++, va = Math.pow(2, Bn) - 1, zh = {
+  const _e = 1 << Bn++, yt = 1 << Bn++, xe = 1 << Bn++, He = 1 << Bn++, Gn = 1 << Bn++, ir = 1 << Bn++, va = Math.pow(2, Bn) - 1, zh = {
     [_e]: "boolean",
     [yt]: "number",
     [xe]: "string",
-    [je]: "color",
+    [He]: "color",
     [Gn]: "number[]",
     [ir]: "size"
   }, X_ = Object.keys(zh).map(Number).sort(ji);
@@ -8806,8 +8806,8 @@ var R2 = jg((nt) => {
         return new Wt(yt, i);
       }
       case "string": {
-        if (ki(t, je))
-          return new Wt(je, kh(i));
+        if (ki(t, He))
+          return new Wt(He, kh(i));
         if (ki(t, _e))
           return new Wt(_e, !!i);
         if (!sr(t, xe))
@@ -8831,11 +8831,11 @@ var R2 = jg((nt) => {
         );
       return new Wt(ir, i);
     }
-    if (ki(t, je)) {
+    if (ki(t, He)) {
       if (i.length === 3)
-        return new Wt(je, [...i, 1]);
+        return new Wt(He, [...i, 1]);
       if (i.length === 4)
-        return new Wt(je, i);
+        return new Wt(He, i);
       throw new Error(
         `expected an array of 3 or 4 values for a color, got ${i.length}`
       );
@@ -9054,7 +9054,7 @@ var R2 = jg((nt) => {
     ),
     [b.ToString]: it(
       ht(1, 1),
-      Ct(_e | yt | xe | je)
+      Ct(_e | yt | xe | He)
     )
   };
   function ru(i, t, e) {
@@ -9291,7 +9291,7 @@ var R2 = jg((nt) => {
     for (let a = 0; a < r.length; a++) {
       let o;
       try {
-        o = ee(s[a], je, e);
+        o = ee(s[a], He, e);
       } catch (l) {
         throw new Error(
           `failed to parse color at index ${a} in palette expression: ${l.message}`
@@ -9366,11 +9366,11 @@ var R2 = jg((nt) => {
   }
   function Pi(i, t, e) {
     const n = ee(i, t, e);
-    return Qe(n);
+    return ti(n);
   }
-  function Qe(i, t) {
+  function ti(i, t) {
     if (i instanceof Wt) {
-      if (i.type === je && typeof i.value == "string") {
+      if (i.type === He && typeof i.value == "string") {
         const n = kh(i.value);
         return function() {
           return n;
@@ -9395,7 +9395,7 @@ var R2 = jg((nt) => {
       case b.GeometryType:
         return (n) => n.geometryType;
       case b.Concat: {
-        const n = i.args.map((s) => Qe(s));
+        const n = i.args.map((s) => ti(s));
         return (s) => "".concat(...n.map((r) => r(s).toString()));
       }
       case b.Resolution:
@@ -9444,7 +9444,7 @@ var R2 = jg((nt) => {
   function sp(i, t) {
     const e = i.operator, n = i.args.length, s = new Array(n);
     for (let r = 0; r < n; ++r)
-      s[r] = Qe(i.args[r]);
+      s[r] = ti(i.args[r]);
     switch (e) {
       case b.Coalesce:
         return (r) => {
@@ -9515,7 +9515,7 @@ var R2 = jg((nt) => {
     }
   }
   function ap(i, t) {
-    const e = i.operator, n = Qe(i.args[0]), s = Qe(i.args[1]);
+    const e = i.operator, n = ti(i.args[0]), s = ti(i.args[1]);
     switch (e) {
       case b.Equal:
         return (r) => n(r) === s(r);
@@ -9536,7 +9536,7 @@ var R2 = jg((nt) => {
   function op(i, t) {
     const e = i.operator, n = i.args.length, s = new Array(n);
     for (let r = 0; r < n; ++r)
-      s[r] = Qe(i.args[r]);
+      s[r] = ti(i.args[r]);
     switch (e) {
       case b.Any:
         return (r) => {
@@ -9574,7 +9574,7 @@ var R2 = jg((nt) => {
   function lp(i, t) {
     const e = i.operator, n = i.args.length, s = new Array(n);
     for (let r = 0; r < n; ++r)
-      s[r] = Qe(i.args[r]);
+      s[r] = ti(i.args[r]);
     switch (e) {
       case b.Multiply:
         return (r) => {
@@ -9629,7 +9629,7 @@ var R2 = jg((nt) => {
   function hp(i, t) {
     const e = i.args.length, n = new Array(e);
     for (let s = 0; s < e; ++s)
-      n[s] = Qe(i.args[s]);
+      n[s] = ti(i.args[s]);
     return (s) => {
       for (let r = 0; r < e - 1; r += 2)
         if (n[r](s))
@@ -9640,7 +9640,7 @@ var R2 = jg((nt) => {
   function cp(i, t) {
     const e = i.args.length, n = new Array(e);
     for (let s = 0; s < e; ++s)
-      n[s] = Qe(i.args[s]);
+      n[s] = ti(i.args[s]);
     return (s) => {
       const r = n[0](s);
       for (let a = 1; a < e; a += 2)
@@ -9652,7 +9652,7 @@ var R2 = jg((nt) => {
   function up(i, t) {
     const e = i.args.length, n = new Array(e);
     for (let s = 0; s < e; ++s)
-      n[s] = Qe(i.args[s]);
+      n[s] = ti(i.args[s]);
     return (s) => {
       const r = n[0](s), a = n[1](s);
       let o, l;
@@ -9684,12 +9684,12 @@ var R2 = jg((nt) => {
   function dp(i, t) {
     const e = i.operator, n = i.args.length, s = new Array(n);
     for (let r = 0; r < n; ++r)
-      s[r] = Qe(i.args[r]);
+      s[r] = ti(i.args[r]);
     switch (e) {
       case b.ToString:
         return (r) => {
           const a = s[0](r);
-          return i.args[0].type === je ? Gh(a) : a.toString();
+          return i.args[0].type === He ? Gh(a) : a.toString();
         };
       default:
         throw new Error(`Unsupported convert operator ${e}`);
@@ -10038,7 +10038,7 @@ var R2 = jg((nt) => {
       !0
     ), $e.getPattern(t, void 0, i.color);
   }
-  const ef = "10px sans-serif", we = "#000", Os = "round", Ci = [], Si = 0, Ns = "round", Rr = 10, Ir = "#000", Tr = "center", Ya = "middle", An = [0, 0, 0, 0], Ar = 1, Ei = new ti();
+  const ef = "10px sans-serif", we = "#000", Os = "round", Ci = [], Si = 0, Ns = "round", Rr = 10, Ir = "#000", Tr = "center", Ya = "middle", An = [0, 0, 0, 0], Ar = 1, Ei = new ei();
   let os = null, Ll;
   const Ol = {}, vp = function() {
     const t = "32px ", e = ["monospace", "serif"], n = e.length, s = "wmytzilWMYTZIL@#/&?$%10";
@@ -10752,7 +10752,7 @@ var R2 = jg((nt) => {
       this.radius = t, this.render();
     }
   }
-  class He {
+  class Je {
     /**
      * @param {Options} [options] Options.
      */
@@ -10766,7 +10766,7 @@ var R2 = jg((nt) => {
      */
     clone() {
       const t = this.getColor();
-      return new He({
+      return new Je({
         color: Array.isArray(t) ? t.slice() : t || void 0
       });
     }
@@ -11460,7 +11460,7 @@ var R2 = jg((nt) => {
   let sl = null;
   function sf(i, t) {
     if (!sl) {
-      const e = new He({
+      const e = new Je({
         color: "rgba(255,255,255,0.4)"
       }), n = new Pe({
         color: "#3399CC",
@@ -11489,7 +11489,7 @@ var R2 = jg((nt) => {
      * @param {Options} [options] Options.
      */
     constructor(t) {
-      t = t || {}, this.font_ = t.font, this.rotation_ = t.rotation, this.rotateWithView_ = t.rotateWithView, this.keepUpright_ = t.keepUpright, this.scale_ = t.scale, this.scaleArray_ = Re(t.scale !== void 0 ? t.scale : 1), this.text_ = t.text, this.textAlign_ = t.textAlign, this.justify_ = t.justify, this.repeat_ = t.repeat, this.textBaseline_ = t.textBaseline, this.fill_ = t.fill !== void 0 ? t.fill : new He({ color: Sp }), this.maxAngle_ = t.maxAngle !== void 0 ? t.maxAngle : Math.PI / 4, this.placement_ = t.placement !== void 0 ? t.placement : "point", this.overflow_ = !!t.overflow, this.stroke_ = t.stroke !== void 0 ? t.stroke : null, this.offsetX_ = t.offsetX !== void 0 ? t.offsetX : 0, this.offsetY_ = t.offsetY !== void 0 ? t.offsetY : 0, this.backgroundFill_ = t.backgroundFill ? t.backgroundFill : null, this.backgroundStroke_ = t.backgroundStroke ? t.backgroundStroke : null, this.padding_ = t.padding === void 0 ? null : t.padding, this.declutterMode_ = t.declutterMode;
+      t = t || {}, this.font_ = t.font, this.rotation_ = t.rotation, this.rotateWithView_ = t.rotateWithView, this.keepUpright_ = t.keepUpright, this.scale_ = t.scale, this.scaleArray_ = Re(t.scale !== void 0 ? t.scale : 1), this.text_ = t.text, this.textAlign_ = t.textAlign, this.justify_ = t.justify, this.repeat_ = t.repeat, this.textBaseline_ = t.textBaseline, this.fill_ = t.fill !== void 0 ? t.fill : new Je({ color: Sp }), this.maxAngle_ = t.maxAngle !== void 0 ? t.maxAngle : Math.PI / 4, this.placement_ = t.placement !== void 0 ? t.placement : "point", this.overflow_ = !!t.overflow, this.stroke_ = t.stroke !== void 0 ? t.stroke : null, this.offsetX_ = t.offsetX !== void 0 ? t.offsetX : 0, this.offsetY_ = t.offsetY !== void 0 ? t.offsetY : 0, this.backgroundFill_ = t.backgroundFill ? t.backgroundFill : null, this.backgroundStroke_ = t.backgroundStroke ? t.backgroundStroke : null, this.padding_ = t.padding === void 0 ? null : t.padding, this.declutterMode_ = t.declutterMode;
     }
     /**
      * Clones the style.
@@ -11983,7 +11983,7 @@ var R2 = jg((nt) => {
     }
     if (!n)
       return null;
-    const s = new He();
+    const s = new Je();
     return function(r) {
       const a = n(r);
       return a === Dh ? null : (s.setColor(a), s);
@@ -12296,7 +12296,7 @@ var R2 = jg((nt) => {
   function Bh(i, t, e) {
     if (!(t in i))
       return null;
-    const n = Pi(i[t], je, e);
+    const n = Pi(i[t], He, e);
     return function(s) {
       return of(n(s), t);
     };
@@ -12866,7 +12866,7 @@ var R2 = jg((nt) => {
         df(e[n], t);
     }
   }
-  let Xp = class extends ti {
+  let Xp = class extends ei {
     /**
      * @param {MapOptions} [options] Map options.
      */
@@ -12883,8 +12883,8 @@ var R2 = jg((nt) => {
         this.handleLayerGroupChanged_
       ), this.addChangeListener(ae.VIEW, this.handleViewChanged_), this.addChangeListener(ae.SIZE, this.handleSizeChanged_), this.addChangeListener(ae.TARGET, this.handleTargetChanged_), this.setProperties(e.values);
       const n = this;
-      t.view && !(t.view instanceof ni) && t.view.then(function(s) {
-        n.setView(new ni(s));
+      t.view && !(t.view instanceof je) && t.view.then(function(s) {
+        n.setView(new je(s));
       }), this.controls.addEventListener(
         Me.ADD,
         /**
@@ -13767,14 +13767,14 @@ var R2 = jg((nt) => {
      * @api
      */
     setView(t) {
-      if (!t || t instanceof ni) {
+      if (!t || t instanceof je) {
         this.set(ae.VIEW, t);
         return;
       }
-      this.set(ae.VIEW, new ni());
+      this.set(ae.VIEW, new je());
       const e = this;
       t.then(function(n) {
-        e.setView(new ni(n));
+        e.setView(new je(n));
       });
     }
     /**
@@ -13817,7 +13817,7 @@ var R2 = jg((nt) => {
         i.layers
       )
     });
-    e[ae.LAYERGROUP] = n, e[ae.TARGET] = i.target, e[ae.VIEW] = i.view instanceof ni ? i.view : new ni();
+    e[ae.LAYERGROUP] = n, e[ae.TARGET] = i.target, e[ae.VIEW] = i.view instanceof je ? i.view : new je();
     let s;
     i.controls !== void 0 && (Array.isArray(i.controls) ? s = new ri(i.controls.slice()) : (xt(
       typeof /** @type {?} */
@@ -13843,7 +13843,7 @@ var R2 = jg((nt) => {
       values: e
     };
   }
-  class bo extends ti {
+  class bo extends ei {
     /**
      * @param {Geometry|ObjectWithGeometry<Geometry>} [geometryOrProperties]
      *     You may pass a Geometry object directly, or an object literal containing
@@ -16951,7 +16951,7 @@ var R2 = jg((nt) => {
         this.items_[e] = t.items_[e];
     }
   }
-  class vf extends ti {
+  class vf extends ei {
     /**
      * @param {Options} options Source options.
      */
@@ -19414,8 +19414,8 @@ var R2 = jg((nt) => {
               D[3]
             ), Wn = D[4], di = D[5];
             V.geometry = hn, V.feature = et, u in Q || (Q[u] = []);
-            const ei = Q[u];
-            di ? di(c, g, _, 2, ei) : (ei[0] = c[g], ei[1] = c[g + 1], ei.length = 2), h && (h.zIndex = D[6]), Wn(ei, V), ++u;
+            const ii = Q[u];
+            di ? di(c, g, _, 2, ii) : (ii[0] = c[g], ii[1] = c[g + 1], ii.length = 2), h && (h.zIndex = D[6]), Wn(ii, V), ++u;
             break;
           case H.DRAW_IMAGE:
             g = /** @type {number} */
@@ -20018,7 +20018,7 @@ var R2 = jg((nt) => {
   const Iy = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     Circle: zn,
-    Fill: He,
+    Fill: Je,
     Icon: Zr,
     IconImage: $h,
     Image: Xr,
@@ -22267,7 +22267,7 @@ var R2 = jg((nt) => {
         for (const Ut of A[rt]) {
           if (Ut.getState() !== j.LOADED)
             continue;
-          const hn = Ut.tileCoord, Wn = Vt[1] - hn[1], di = Math.round($t[0] - (Wn - 1) * U), ei = Vt[2] - hn[2], cn = Math.round($t[1] - (ei - 1) * dt), Fe = Math.round($t[0] - Wn * U), De = Math.round($t[1] - ei * dt), Oi = di - Fe, fi = cn - De, Xe = mt.length === 1;
+          const hn = Ut.tileCoord, Wn = Vt[1] - hn[1], di = Math.round($t[0] - (Wn - 1) * U), ii = Vt[2] - hn[2], cn = Math.round($t[1] - (ii - 1) * dt), Fe = Math.round($t[0] - Wn * U), De = Math.round($t[1] - ii * dt), Oi = di - Fe, fi = cn - De, Xe = mt.length === 1;
           let un = !1;
           V = [Fe, De, Fe + Oi, De, Fe + Oi, De + fi, Fe, De + fi];
           for (let Ye = 0, gi = st.length; Ye < gi; ++Ye)
@@ -26566,7 +26566,7 @@ var R2 = jg((nt) => {
     var e = t[0], n = t[1];
     !(e in i) && n in i && (i[e] = i[n], t.length === 3 && (i[e] = t[2](i[e])));
   }
-  function ii(i) {
+  function ni(i) {
     return i * D1;
   }
   function kf(i) {
@@ -26618,22 +26618,22 @@ var R2 = jg((nt) => {
       ["k0", "scale_factor"],
       ["latitude_of_center", "Latitude_Of_Center"],
       ["latitude_of_center", "Latitude_of_center"],
-      ["lat0", "latitude_of_center", ii],
+      ["lat0", "latitude_of_center", ni],
       ["longitude_of_center", "Longitude_Of_Center"],
       ["longitude_of_center", "Longitude_of_center"],
-      ["longc", "longitude_of_center", ii],
+      ["longc", "longitude_of_center", ni],
       ["x0", "false_easting", o],
       ["y0", "false_northing", o],
-      ["long0", "central_meridian", ii],
-      ["lat0", "latitude_of_origin", ii],
-      ["lat0", "standard_parallel_1", ii],
-      ["lat1", "standard_parallel_1", ii],
-      ["lat2", "standard_parallel_2", ii],
+      ["long0", "central_meridian", ni],
+      ["lat0", "latitude_of_origin", ni],
+      ["lat0", "standard_parallel_1", ni],
+      ["lat1", "standard_parallel_1", ni],
+      ["lat2", "standard_parallel_2", ni],
       ["azimuth", "Azimuth"],
-      ["alpha", "azimuth", ii],
+      ["alpha", "azimuth", ni],
       ["srsCode", "name"]
     ];
-    h.forEach(l), !i.long0 && i.longc && (i.projName === "Albers_Conic_Equal_Area" || i.projName === "Lambert_Azimuthal_Equal_Area") && (i.long0 = i.longc), !i.lat_ts && i.lat1 && (i.projName === "Stereographic_South_Pole" || i.projName === "Polar Stereographic (variant B)") ? (i.lat0 = ii(i.lat1 > 0 ? 90 : -90), i.lat_ts = i.lat1) : !i.lat_ts && i.lat0 && i.projName === "Polar_Stereographic" && (i.lat_ts = i.lat0, i.lat0 = ii(i.lat0 > 0 ? 90 : -90));
+    h.forEach(l), !i.long0 && i.longc && (i.projName === "Albers_Conic_Equal_Area" || i.projName === "Lambert_Azimuthal_Equal_Area") && (i.long0 = i.longc), !i.lat_ts && i.lat1 && (i.projName === "Stereographic_South_Pole" || i.projName === "Polar Stereographic (variant B)") ? (i.lat0 = ni(i.lat1 > 0 ? 90 : -90), i.lat_ts = i.lat1) : !i.lat_ts && i.lat0 && i.projName === "Polar_Stereographic" && (i.lat_ts = i.lat0, i.lat0 = ni(i.lat0 > 0 ? 90 : -90));
   }
   function Gf(i) {
     var t = F1(i), e = t[0], n = {};
@@ -26720,7 +26720,7 @@ var R2 = jg((nt) => {
   function W(i) {
     return Math.abs(i) <= Qt ? i : i - Hr(i) * Lr;
   }
-  function Je(i, t, e) {
+  function Qe(i, t, e) {
     var n = i * e, s = 0.5 * i;
     return n = Math.pow((1 - n) / (1 + n), s), Math.tan(0.5 * (N - t)) / n;
   }
@@ -26744,7 +26744,7 @@ var R2 = jg((nt) => {
     if (this.sphere)
       n = this.x0 + this.a * this.k0 * W(t - this.long0), s = this.y0 + this.a * this.k0 * Math.log(Math.tan(Rt + 0.5 * e));
     else {
-      var r = Math.sin(e), a = Je(this.e, e, r);
+      var r = Math.sin(e), a = Qe(this.e, e, r);
       n = this.x0 + this.a * this.k0 * W(t - this.long0), s = this.y0 - this.a * this.k0 * Math.log(a);
     }
     return i.x = n, i.y = s, i;
@@ -27995,11 +27995,11 @@ northing meters` + i;
     return t *= e, Math.tan(0.5 * (N + i)) * Math.pow((1 - t) / (1 + t), 0.5 * e);
   }
   function xE() {
-    this.x0 = this.x0 || 0, this.y0 = this.y0 || 0, this.lat0 = this.lat0 || 0, this.long0 = this.long0 || 0, this.coslat0 = Math.cos(this.lat0), this.sinlat0 = Math.sin(this.lat0), this.sphere ? this.k0 === 1 && !isNaN(this.lat_ts) && Math.abs(this.coslat0) <= B && (this.k0 = 0.5 * (1 + Hr(this.lat0) * Math.sin(this.lat_ts))) : (Math.abs(this.coslat0) <= B && (this.lat0 > 0 ? this.con = 1 : this.con = -1), this.cons = Math.sqrt(Math.pow(1 + this.e, 1 + this.e) * Math.pow(1 - this.e, 1 - this.e)), this.k0 === 1 && !isNaN(this.lat_ts) && Math.abs(this.coslat0) <= B && Math.abs(Math.cos(this.lat_ts)) > B && (this.k0 = 0.5 * this.cons * ci(this.e, Math.sin(this.lat_ts), Math.cos(this.lat_ts)) / Je(this.e, this.con * this.lat_ts, this.con * Math.sin(this.lat_ts))), this.ms1 = ci(this.e, this.sinlat0, this.coslat0), this.X0 = 2 * Math.atan(this.ssfn_(this.lat0, this.sinlat0, this.e)) - N, this.cosX0 = Math.cos(this.X0), this.sinX0 = Math.sin(this.X0));
+    this.x0 = this.x0 || 0, this.y0 = this.y0 || 0, this.lat0 = this.lat0 || 0, this.long0 = this.long0 || 0, this.coslat0 = Math.cos(this.lat0), this.sinlat0 = Math.sin(this.lat0), this.sphere ? this.k0 === 1 && !isNaN(this.lat_ts) && Math.abs(this.coslat0) <= B && (this.k0 = 0.5 * (1 + Hr(this.lat0) * Math.sin(this.lat_ts))) : (Math.abs(this.coslat0) <= B && (this.lat0 > 0 ? this.con = 1 : this.con = -1), this.cons = Math.sqrt(Math.pow(1 + this.e, 1 + this.e) * Math.pow(1 - this.e, 1 - this.e)), this.k0 === 1 && !isNaN(this.lat_ts) && Math.abs(this.coslat0) <= B && Math.abs(Math.cos(this.lat_ts)) > B && (this.k0 = 0.5 * this.cons * ci(this.e, Math.sin(this.lat_ts), Math.cos(this.lat_ts)) / Qe(this.e, this.con * this.lat_ts, this.con * Math.sin(this.lat_ts))), this.ms1 = ci(this.e, this.sinlat0, this.coslat0), this.X0 = 2 * Math.atan(this.ssfn_(this.lat0, this.sinlat0, this.e)) - N, this.cosX0 = Math.cos(this.X0), this.sinX0 = Math.sin(this.X0));
   }
   function wE(i) {
     var t = i.x, e = i.y, n = Math.sin(e), s = Math.cos(e), r, a, o, l, h, c, u = W(t - this.long0);
-    return Math.abs(Math.abs(t - this.long0) - Math.PI) <= B && Math.abs(e + this.lat0) <= B ? (i.x = NaN, i.y = NaN, i) : this.sphere ? (r = 2 * this.k0 / (1 + this.sinlat0 * n + this.coslat0 * s * Math.cos(u)), i.x = this.a * r * s * Math.sin(u) + this.x0, i.y = this.a * r * (this.coslat0 * n - this.sinlat0 * s * Math.cos(u)) + this.y0, i) : (a = 2 * Math.atan(this.ssfn_(e, n, this.e)) - N, l = Math.cos(a), o = Math.sin(a), Math.abs(this.coslat0) <= B ? (h = Je(this.e, e * this.con, this.con * n), c = 2 * this.a * this.k0 * h / this.cons, i.x = this.x0 + c * Math.sin(t - this.long0), i.y = this.y0 - this.con * c * Math.cos(t - this.long0), i) : (Math.abs(this.sinlat0) < B ? (r = 2 * this.a * this.k0 / (1 + l * Math.cos(u)), i.y = r * o) : (r = 2 * this.a * this.k0 * this.ms1 / (this.cosX0 * (1 + this.sinX0 * o + this.cosX0 * l * Math.cos(u))), i.y = r * (this.cosX0 * o - this.sinX0 * l * Math.cos(u)) + this.y0), i.x = r * l * Math.sin(u) + this.x0, i));
+    return Math.abs(Math.abs(t - this.long0) - Math.PI) <= B && Math.abs(e + this.lat0) <= B ? (i.x = NaN, i.y = NaN, i) : this.sphere ? (r = 2 * this.k0 / (1 + this.sinlat0 * n + this.coslat0 * s * Math.cos(u)), i.x = this.a * r * s * Math.sin(u) + this.x0, i.y = this.a * r * (this.coslat0 * n - this.sinlat0 * s * Math.cos(u)) + this.y0, i) : (a = 2 * Math.atan(this.ssfn_(e, n, this.e)) - N, l = Math.cos(a), o = Math.sin(a), Math.abs(this.coslat0) <= B ? (h = Qe(this.e, e * this.con, this.con * n), c = 2 * this.a * this.k0 * h / this.cons, i.x = this.x0 + c * Math.sin(t - this.long0), i.y = this.y0 - this.con * c * Math.cos(t - this.long0), i) : (Math.abs(this.sinlat0) < B ? (r = 2 * this.a * this.k0 / (1 + l * Math.cos(u)), i.y = r * o) : (r = 2 * this.a * this.k0 * this.ms1 / (this.cosX0 * (1 + this.sinX0 * o + this.cosX0 * l * Math.cos(u))), i.y = r * (this.cosX0 * o - this.sinX0 * l * Math.cos(u)) + this.y0), i.x = r * l * Math.sin(u) + this.x0, i));
   }
   function CE(i) {
     i.x -= this.x0, i.y -= this.y0;
@@ -28066,12 +28066,12 @@ northing meters` + i;
     else if (g = this.long1, y = this.lat1, _ = this.long2, E = this.lat2, Math.abs(y - E) <= hs || (i = Math.abs(y)) <= hs || Math.abs(i - N) <= hs || Math.abs(Math.abs(this.lat0) - N) <= hs || Math.abs(Math.abs(E) - N) <= hs)
       throw new Error();
     var C = 1 - this.es;
-    t = Math.sqrt(C), Math.abs(this.lat0) > B ? (o = Math.sin(this.lat0), e = Math.cos(this.lat0), i = 1 - this.es * o * o, this.B = e * e, this.B = Math.sqrt(1 + this.es * this.B * this.B / C), this.A = this.B * this.k0 * t / i, n = this.B * t / (e * Math.sqrt(i)), s = n * n - 1, s <= 0 ? s = 0 : (s = Math.sqrt(s), this.lat0 < 0 && (s = -s)), this.E = s += n, this.E *= Math.pow(Je(this.e, this.lat0, o), this.B)) : (this.B = 1 / t, this.A = this.k0, this.E = n = s = 1), w || R ? (w ? (u = Math.asin(Math.sin(M) / n), R || (c = M)) : (u = c, M = Math.asin(n * Math.sin(u))), this.lam0 = d - Math.asin(0.5 * (s - 1 / s) * Math.tan(u)) / this.B) : (r = Math.pow(Je(this.e, y, Math.sin(y)), this.B), a = Math.pow(Je(this.e, E, Math.sin(E)), this.B), s = this.E / r, l = (a - r) / (a + r), h = this.E * this.E, h = (h - a * r) / (h + a * r), i = g - _, i < -Math.pi ? _ -= Lr : i > Math.pi && (_ += Lr), this.lam0 = W(0.5 * (g + _) - Math.atan(h * Math.tan(0.5 * this.B * (g - _)) / l) / this.B), u = Math.atan(2 * Math.sin(this.B * W(g - this.lam0)) / (s - 1 / s)), c = M = Math.asin(n * Math.sin(u))), this.singam = Math.sin(u), this.cosgam = Math.cos(u), this.sinrot = Math.sin(c), this.cosrot = Math.cos(c), this.rB = 1 / this.B, this.ArB = this.A * this.rB, this.BrA = 1 / this.ArB, this.A * this.B, this.no_off ? this.u_0 = 0 : (this.u_0 = Math.abs(this.ArB * Math.atan(Math.sqrt(n * n - 1) / Math.cos(M))), this.lat0 < 0 && (this.u_0 = -this.u_0)), s = 0.5 * u, this.v_pole_n = this.ArB * Math.log(Math.tan(Rt - s)), this.v_pole_s = this.ArB * Math.log(Math.tan(Rt + s));
+    t = Math.sqrt(C), Math.abs(this.lat0) > B ? (o = Math.sin(this.lat0), e = Math.cos(this.lat0), i = 1 - this.es * o * o, this.B = e * e, this.B = Math.sqrt(1 + this.es * this.B * this.B / C), this.A = this.B * this.k0 * t / i, n = this.B * t / (e * Math.sqrt(i)), s = n * n - 1, s <= 0 ? s = 0 : (s = Math.sqrt(s), this.lat0 < 0 && (s = -s)), this.E = s += n, this.E *= Math.pow(Qe(this.e, this.lat0, o), this.B)) : (this.B = 1 / t, this.A = this.k0, this.E = n = s = 1), w || R ? (w ? (u = Math.asin(Math.sin(M) / n), R || (c = M)) : (u = c, M = Math.asin(n * Math.sin(u))), this.lam0 = d - Math.asin(0.5 * (s - 1 / s) * Math.tan(u)) / this.B) : (r = Math.pow(Qe(this.e, y, Math.sin(y)), this.B), a = Math.pow(Qe(this.e, E, Math.sin(E)), this.B), s = this.E / r, l = (a - r) / (a + r), h = this.E * this.E, h = (h - a * r) / (h + a * r), i = g - _, i < -Math.pi ? _ -= Lr : i > Math.pi && (_ += Lr), this.lam0 = W(0.5 * (g + _) - Math.atan(h * Math.tan(0.5 * this.B * (g - _)) / l) / this.B), u = Math.atan(2 * Math.sin(this.B * W(g - this.lam0)) / (s - 1 / s)), c = M = Math.asin(n * Math.sin(u))), this.singam = Math.sin(u), this.cosgam = Math.cos(u), this.sinrot = Math.sin(c), this.cosrot = Math.cos(c), this.rB = 1 / this.B, this.ArB = this.A * this.rB, this.BrA = 1 / this.ArB, this.A * this.B, this.no_off ? this.u_0 = 0 : (this.u_0 = Math.abs(this.ArB * Math.atan(Math.sqrt(n * n - 1) / Math.cos(M))), this.lat0 < 0 && (this.u_0 = -this.u_0)), s = 0.5 * u, this.v_pole_n = this.ArB * Math.log(Math.tan(Rt - s)), this.v_pole_s = this.ArB * Math.log(Math.tan(Rt + s));
   }
   function NE(i) {
     var t = {}, e, n, s, r, a, o, l, h;
     if (i.x = i.x - this.lam0, Math.abs(Math.abs(i.y) - N) > B) {
-      if (a = this.E / Math.pow(Je(this.e, i.y, Math.sin(i.y)), this.B), o = 1 / a, e = 0.5 * (a - o), n = 0.5 * (a + o), r = Math.sin(this.B * i.x), s = (e * this.singam - r * this.cosgam) / n, Math.abs(Math.abs(s) - 1) < B)
+      if (a = this.E / Math.pow(Qe(this.e, i.y, Math.sin(i.y)), this.B), o = 1 / a, e = 0.5 * (a - o), n = 0.5 * (a + o), r = Math.sin(this.B * i.x), s = (e * this.singam - r * this.cosgam) / n, Math.abs(Math.abs(s) - 1) < B)
         throw new Error();
       h = 0.5 * this.ArB * Math.log((1 - s) / (1 + s)), o = Math.cos(this.B * i.x), Math.abs(o) < hs ? l = this.A * i.x : l = this.ArB * Math.atan2(e * this.cosgam + r * this.singam, o);
     } else
@@ -28100,7 +28100,7 @@ northing meters` + i;
     if (this.lat2 || (this.lat2 = this.lat1), this.k0 || (this.k0 = 1), this.x0 = this.x0 || 0, this.y0 = this.y0 || 0, !(Math.abs(this.lat1 + this.lat2) < B)) {
       var i = this.b / this.a;
       this.e = Math.sqrt(1 - i * i);
-      var t = Math.sin(this.lat1), e = Math.cos(this.lat1), n = ci(this.e, t, e), s = Je(this.e, this.lat1, t), r = Math.sin(this.lat2), a = Math.cos(this.lat2), o = ci(this.e, r, a), l = Je(this.e, this.lat2, r), h = Je(this.e, this.lat0, Math.sin(this.lat0));
+      var t = Math.sin(this.lat1), e = Math.cos(this.lat1), n = ci(this.e, t, e), s = Qe(this.e, this.lat1, t), r = Math.sin(this.lat2), a = Math.cos(this.lat2), o = ci(this.e, r, a), l = Qe(this.e, this.lat2, r), h = Qe(this.e, this.lat0, Math.sin(this.lat0));
       Math.abs(this.lat1 - this.lat2) > B ? this.ns = Math.log(n / o) / Math.log(s / l) : this.ns = t, isNaN(this.ns) && (this.ns = t), this.f0 = n / (this.ns * Math.pow(s, this.ns)), this.rh = this.a * this.f0 * Math.pow(h, this.ns), this.title || (this.title = "Lambert Conformal Conic");
     }
   }
@@ -28109,7 +28109,7 @@ northing meters` + i;
     Math.abs(2 * Math.abs(e) - Math.PI) <= B && (e = Hr(e) * (N - 2 * B));
     var n = Math.abs(Math.abs(e) - N), s, r;
     if (n > B)
-      s = Je(this.e, e, Math.sin(e)), r = this.a * this.f0 * Math.pow(s, this.ns);
+      s = Qe(this.e, e, Math.sin(e)), r = this.a * this.f0 * Math.pow(s, this.ns);
     else {
       if (n = e * this.ns, n <= 0)
         return null;
@@ -29123,7 +29123,7 @@ northing meters` + i;
     POSITION: "position",
     POSITIONING: "positioning"
   };
-  class p2 extends ti {
+  class p2 extends ei {
     /**
      * @param {Options} options Overlay options.
      */
@@ -29834,7 +29834,7 @@ northing meters` + i;
           var x = U(f.expression2, m, p);
           return dt(x) ? !1 : !f.matchcase || typeof v == "boolean" || typeof x == "boolean" ? $t(v, x, !1) === 0 : v == x;
         }
-        function ei(f, m, p) {
+        function ii(f, m, p) {
           var v = U(f.expression1, m, p);
           if (dt(v))
             return !1;
@@ -29868,7 +29868,7 @@ northing meters` + i;
             case "propertyislessthanorequalto":
               return di(f, m, p) || Ut(f, m, p);
             case "propertyisnotequalto":
-              return ei(f, m, p);
+              return ii(f, m, p);
             case "propertyisgreaterthan":
               return hn(f, m, p);
             case "propertyisgreaterthanorequalto":
@@ -31266,6 +31266,10 @@ northing meters` + i;
             resolutions: [1638.4, 819.2, 409.6, 204.8, 102.4, 51.2, 25.6, 12.8, 6.4, 3.2, 1.6, 0.8, 0.4, 0.2],
             matrixIds: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
           })
+        }),
+        view: new je({
+          maxZoom: 14,
+          minZoom: 0
         })
       }), this.baseLayer2 = new Pu({
         visible: !1,
@@ -31285,7 +31289,7 @@ northing meters` + i;
       }), this.map = new Xp({
         target: this.shadowRoot.getElementById("map"),
         layers: [this.baseLayer1, this.baseLayer2],
-        view: new ni({
+        view: new je({
           center: [6e5, 6225e3],
           zoom: 9,
           projection: yl
@@ -31354,7 +31358,7 @@ northing meters` + i;
         case "Polygon":
         case "MultiPolygon":
           return new le({
-            fill: new He({ color: n }),
+            fill: new Je({ color: n }),
             stroke: new Pe({ color: s, width: r })
           });
         case "LineString":
@@ -31365,7 +31369,7 @@ northing meters` + i;
           return new le({
             image: new zn({
               radius: 5,
-              fill: new He({ color: n }),
+              fill: new Je({ color: n }),
               stroke: new Pe({ color: s, width: 1 })
             })
           });
@@ -31606,11 +31610,11 @@ northing meters` + i;
         return a === "Point" ? new le({
           image: new zn({
             radius: 5,
-            fill: new He({ color: e }),
+            fill: new Je({ color: e }),
             stroke: new Pe({ color: n, width: s })
           })
         }) : a === "Polygon" || a === "MultiPolygon" ? new le({
-          fill: new He({ color: e }),
+          fill: new Je({ color: e }),
           stroke: new Pe({ color: n, width: s })
         }) : a === "LineString" ? new le({
           stroke: new Pe({
@@ -31623,7 +31627,7 @@ northing meters` + i;
             width: s
           })
         }) : new le({
-          fill: new He({ color: e }),
+          fill: new Je({ color: e }),
           stroke: new Pe({ color: n, width: s })
         });
       });
@@ -32003,9 +32007,11 @@ northing meters` + i;
       return Pn`
       <main>
         ${S2(this.route)} <!-- Pass the current route to the router -->
-        <a href="#map-example" role="button">MapExample</a>
-        <a href="#map-template" role="button">MapTemplate</a>
-        <a href="#map-viewer" role="button">Kort</a>
+        <div>
+        <div><a href="#map-template" role="button">MapTemplate</a> - Viser et tomt kort, der referer til skabelonen MapTemplate.js, hvor man let kan udfylde med egen data</div>
+        <div><a href="#map-example" role="button">MapExample</a> - Viser et kort med udfyldt datasæt. Samme opsætning som ved MapTemplate</div>
+        <div><a href="#map-viewer" role="button">Kort</a> - Viser et tomt kort, der betegner selve MapViewer.js</div>
+        </div>
       </main>
     `;
     }
