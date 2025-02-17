@@ -531,7 +531,6 @@ export class MapViewer extends LitElement {
     });
   }
 
-
   /**
    * Loads GML data from a given string and applies it to the map.
    *
@@ -625,7 +624,6 @@ export class MapViewer extends LitElement {
     }
   }
 
-
   /**
    * Groups features by their feature type.
    *
@@ -705,142 +703,6 @@ export class MapViewer extends LitElement {
     });
   }
 
-  /**
-   * Updates the style of the given vector layer with the given style options.
-   *
-   * The style options are:
-   * - `fillColor`: The color to use for filling polygons.
-   * - `strokeColor`: The color to use for drawing lines.
-   * - `strokeWidth`: The width of lines.
-   *
-   * The style function is then applied to the vector layer.
-   *
-   * @param {ol/layer/Vector} vectorLayer - The vector layer to update the style of.
-   * @param {{fillColor: string, strokeColor: string, strokeWidth: number}} styleOptions - The style options to apply.
-   */
-  updateLayerStyle(vectorLayer, {fillColor, strokeColor, strokeWidth}) {
-    vectorLayer.setStyle((feature) => {
-      const geometryType = feature.getGeometry().getType();
-
-      // Style for Point geometries
-      if (geometryType === 'Point') {
-        return new Style({
-          image: new Circle({
-            radius: 5, fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-          }),
-        });
-      }
-
-      // Style for Polygon and MultiPolygon geometries
-      if (geometryType === 'Polygon' || geometryType === 'MultiPolygon') {
-        return new Style({
-          fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-        });
-      }
-
-      // Style for LineString geometries
-      if (geometryType === 'LineString') {
-        return new Style({
-          stroke: new Stroke({
-            color: strokeColor, width: strokeWidth,
-          }),
-        });
-      }
-
-      if (geometryType === 'Circle') {
-        return new Style({
-          stroke: new Stroke({
-            color: strokeColor, width: strokeWidth,
-          }),
-        });
-      }
-
-      // Default style (if no specific geometry type matches)
-      return new Style({
-        fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-      });
-    });
-  }
-
-  /**
-   * Creates a checkbox to toggle the visibility of a layer.
-   *
-   * The checkbox is wrapped in a container element with class 'checkbox-container'.
-   * The checkbox is given an ID of the form `checkbox-${type}`, where type is the type of the layer.
-   * The checkbox is also given an event listener that toggles the visibility of the layer when changed.
-   *
-   * @param {string} type - The type of the layer.
-   * @param {ol/layer/Layer} vectorLayer - The vector layer to toggle the visibility of.
-   * @returns {HTMLElement} The container element containing the checkbox.
-   */
-  createLayerToggleCheckbox(type, vectorLayer) {
-    const checkboxContainer = document.createElement('div');
-    checkboxContainer.className = 'checkbox-container';
-
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.id = `checkbox-${type}`;
-    checkbox.checked = true;
-    checkbox.addEventListener('change', () => {
-      vectorLayer.setVisible(checkbox.checked);
-    });
-
-    const label = document.createElement('label');
-    label.htmlFor = `checkbox-${type}`;
-    label.textContent = type;
-
-    checkboxContainer.appendChild(checkbox);
-    checkboxContainer.appendChild(label);
-
-    return checkboxContainer;
-  }
-
-  /**
-   * Creates color pickers for a layer and adds them to the given container.
-   * The color pickers are three `input` elements with types `color`, `color`, and `number`.
-   * The first two are for the fill and stroke colors, respectively, and the third is for the stroke width.
-   * Each color picker is given an event listener that updates the style of the given layer
-   * when the color picker is changed.
-   *
-   * @param {HTMLElement} container - The container element to add the color pickers to.
-   * @param {string} type - The type of the layer.
-   * @param {ol/layer/Layer} vectorLayer - The vector layer to update the style of when the color picker is changed.
-   */
-  addColorPickers(container, type, vectorLayer) {
-    const fillColorInput = document.createElement('input');
-    fillColorInput.type = 'color';
-    fillColorInput.value = this.styles.fillColor;
-    fillColorInput.addEventListener('input', () => {
-      this.updateLayerStyle(vectorLayer, {
-        fillColor: fillColorInput.value, strokeColor: strokeColorInput.value, strokeWidth: strokeWidthInput.value
-      });
-    });
-
-    const strokeColorInput = document.createElement('input');
-    strokeColorInput.type = 'color';
-    strokeColorInput.value = this.styles.strokeColor;
-    strokeColorInput.addEventListener('input', () => {
-      this.updateLayerStyle(vectorLayer, {
-        fillColor: fillColorInput.value, strokeColor: strokeColorInput.value, strokeWidth: strokeWidthInput.value
-      });
-    });
-
-    const strokeWidthInput = document.createElement('input');
-    strokeWidthInput.type = 'number';
-    strokeWidthInput.value = this.styles.strokeWidth;
-    strokeWidthInput.min = 1;
-    strokeWidthInput.max = 10;
-    strokeWidthInput.addEventListener('input', () => {
-      this.updateLayerStyle(vectorLayer, {
-        fillColor: fillColorInput.value, strokeColor: strokeColorInput.value, strokeWidth: strokeWidthInput.value
-      });
-    });
-
-    container.appendChild(fillColorInput);
-    container.appendChild(strokeColorInput);
-    container.appendChild(strokeWidthInput);
-  }
-
 /**
  * Adds a vector layer to the map with controls for visibility and styling.
  *
@@ -864,7 +726,6 @@ export class MapViewer extends LitElement {
     const layerToggleDiv = document.createElement('div');
     layerToggleDiv.classList.add('layer-toggle');
 
-
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = true;
@@ -875,83 +736,12 @@ export class MapViewer extends LitElement {
     const label = document.createElement('label');
     label.textContent = type;
 
-    const colorPickerDiv = document.createElement('div');
-    colorPickerDiv.classList.add('color-pickers');
-
-    const fillColorInput = this.createColorInput('Fill', this.styles.fillColor, (value) => {
-      this.styles.fillColor = value;
-      vectorLayer.setStyle(this.getStyle('Polygon'));
-    });
-
-    const strokeColorInput = this.createColorInput('Stroke', this.styles.strokeColor, (value) => {
-      this.styles.strokeColor = value;
-      vectorLayer.setStyle(this.getStyle('Polygon'));
-    });
-
-    const strokeWidthInput = this.createNumberInput('Width', this.styles.strokeWidth, (value) => {
-      this.styles.strokeWidth = value;
-      vectorLayer.setStyle(this.getStyle('Polygon'));
-    });
-
-    colorPickerDiv.appendChild(fillColorInput);
-    colorPickerDiv.appendChild(strokeColorInput);
-    colorPickerDiv.appendChild(strokeWidthInput);
-
     layerToggleDiv.appendChild(checkbox);
     layerToggleDiv.appendChild(label);
-    // layerToggleDiv.appendChild(colorPickerDiv); Disabled color picker
 
     this.shadowRoot.getElementById('data-toggle').appendChild(layerToggleDiv);
   }
 
-  /**
-   * Creates a color input field with a label and an event listener that calls the `onChange` function with the new value.
-   * @param {string} label - The label for the color input field.
-   * @param {string} initialValue - The initial color value.
-   * @param {function} onChange - The function to call when the color is changed.
-   * @returns {HTMLElement} The container element containing the color input field.
-   */
-  createColorInput(label, initialValue, onChange) {
-    const container = document.createElement('div');
-    container.style.marginBottom = '5px';
-
-    const inputLabel = document.createElement('span');
-    inputLabel.textContent = `${label} Color: `;
-    // container.appendChild(inputLabel);
-
-    const input = document.createElement('input');
-    input.type = 'color';
-    input.value = initialValue;
-    input.addEventListener('input', (event) => onChange(event.target.value));
-
-    container.appendChild(input);
-    return container;
-  }
-
-  /**
-   * Creates a number input field with a label and an event listener that calls the `onChange` function with the new value.
-   * @param {string} label - The label for the number input field.
-   * @param {number} initialValue - The initial number value.
-   * @param {function} onChange - The function to call when the number is changed.
-   * @returns {HTMLElement} The container element containing the number input field.
-   */
-  createNumberInput(label, initialValue, onChange) {
-    const container = document.createElement('div');
-    container.style.marginBottom = '5px';
-
-    const inputLabel = document.createElement('span');
-    inputLabel.textContent = `${label}: `;
-    // container.appendChild(inputLabel);
-
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.value = initialValue;
-    input.min = 1;
-    input.addEventListener('input', (event) => onChange(Number(event.target.value)));
-
-    container.appendChild(input);
-    return container;
-  }
 
   // Drag and Drop Functions
   onDragOver(event) {
@@ -990,6 +780,7 @@ export class MapViewer extends LitElement {
         <div id="map" class="map"></div>
 
         <div id="data-toggle"></div>
+        
         <div id="metadata"></div>
         
 
