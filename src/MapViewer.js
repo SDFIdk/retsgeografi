@@ -110,6 +110,7 @@ export class MapViewer extends LitElement {
           border-radius: 8px;
           padding: 0.75rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          display: none;
       }
       input {
           accent-color: green;
@@ -538,6 +539,7 @@ export class MapViewer extends LitElement {
    */
   loadGML(gmlString, sldString = null) {
     // Parse the GML data and get the features
+    this.shadowRoot.getElementById('data-toggle').style.display = 'block'
     const {features, xmlDoc} = this.parseGML(gmlString);
     const featureGroups = this.groupFeaturesByType(features, xmlDoc);
 
@@ -655,7 +657,8 @@ export class MapViewer extends LitElement {
       this.map.removeLayer(layer)
     })
     this.vectorLayers = []
-    this.shadowRoot.getElementById('data-toggle').innerHTML = 'Vælg Lag:'
+    const toggleElement = this.shadowRoot.getElementById('data-toggle')
+    toggleElement.innerHTML = 'Vælg Lag:'
   }
 
   /**
@@ -856,6 +859,7 @@ export class MapViewer extends LitElement {
     // Create a checkbox and color pickers for the layer
     const layerToggleDiv = document.createElement('div');
     layerToggleDiv.classList.add('layer-toggle');
+
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
