@@ -142,7 +142,6 @@ export class MapViewer extends LitElement {
     sldFile: { type: String, reflect: true },
   };
 
-
   // Initialize custom properties
   constructor() {
     super();
@@ -283,7 +282,6 @@ export class MapViewer extends LitElement {
 
   }
 
-
   initHoverPopup() {
     const container = document.createElement('div');
     container.id = 'popup';
@@ -346,41 +344,6 @@ export class MapViewer extends LitElement {
   zoomOut() {
     const view = this.map.getView();
     view.setZoom(view.getZoom() - 1);
-  }
-
-  /**
-   * Gets the style for the given geometry type
-   * @param {string} geometryType The type of geometry (Polygon, MultiPolygon, LineString, Point)
-   * @param {Style} [sldStyle] The SLD style to use (optional)
-   * @returns {Style} The style for the given geometry type
-   */
-  getStyle(geometryType, sldStyle = null) {
-    if (sldStyle) {
-      return sldStyle;
-    }
-
-    const {fillColor, strokeColor, strokeWidth} = this.styles;
-
-    switch (geometryType) {
-      case 'Polygon':
-      case 'MultiPolygon':  // Add MultiPolygon here
-        return new Style({
-          fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-        });
-      case 'LineString':
-        return new Style({
-          stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-        });
-      case 'Point':
-        return new Style({
-          image: new Circle({
-            radius: 5, fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: 1}),
-          }),
-        });
-      default:
-        console.warn(`No style found for geometry type: ${geometryType}`);
-        return null;
-    }
   }
 
   /**
@@ -571,29 +534,6 @@ export class MapViewer extends LitElement {
   }
 
   /**
-   * Applies feature groups to the map, optionally using SLD styles for styling.
-   *
-   * This function iterates over the feature groups and adds them to the map with appropriate styles.
-   * If SLD data is provided, it will attempt to apply the SLD styles to the features.
-   *
-   * @param {Object} featureGroups - An object containing groups of features categorized by type.
-   * @param {string} [sldString] - The SLD data to use for styling the features.
-   */
-  applyFeatureGroupsToMap(featureGroups, sldString) {
-    const viewProjection = this.map.getView().getProjection();
-    const sldObject = sldString ? SLDReader.Reader(sldString) : null;
-
-    Object.keys(featureGroups).forEach(type => {
-      const vectorSource = new VectorSource({features: featureGroups[type]});
-      const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
-      this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
-    });
-
-    this.map.render();
-    this.requestUpdate();
-  }
-
-  /**
    * Parses GML data from a given string, returning features and the XML document.
    *
    * This function attempts to parse the provided GML string using the GML32 format.
@@ -622,45 +562,6 @@ export class MapViewer extends LitElement {
       console.error("Failed to parse GML file:", error);
       return { features: [], xmlDoc: null };
     }
-  }
-
-  /**
-   * Groups features by their feature type.
-   *
-   * This function takes the parsed features and an XML document as input and
-   * groups the features by their feature type. The feature type is determined by
-   * the local name of the first child element of the feature member element.
-   *
-   * @param {Array<ol/Feature>} features - The parsed features to group.
-   * @param {XMLDocument} xmlDoc - The XML document containing the feature members.
-   * @returns {Object} An object with feature type as keys and arrays of features as values.
-   */
-  groupFeaturesByType(features, xmlDoc) {
-    return features.reduce((groups, feature, index) => {
-      const featureMembers = xmlDoc.getElementsByTagNameNS('*', 'featureMember');
-      const featureMember = featureMembers[index];
-      const firstChildElement = featureMember ? featureMember.firstElementChild : null;
-      const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
-
-      if (!groups[featureType]) groups[featureType] = [];
-      groups[featureType].push(feature);
-      return groups;
-    }, {});
-  }
-
-  /**
-   * Removes all vector layers from the map and resets the data toggle.
-   *
-   * This function is called when a new GML file is selected and we want to remove all the
-   * previously added vector layers from the map and reset the data toggle.
-   */
-  resetLayers() {
-    this.vectorLayers.forEach((layer) => {
-      this.map.removeLayer(layer)
-    })
-    this.vectorLayers = []
-    const toggleElement = this.shadowRoot.getElementById('data-toggle')
-    toggleElement.innerHTML = 'Vælg Lag:'
   }
 
   /**
@@ -703,7 +604,104 @@ export class MapViewer extends LitElement {
     });
   }
 
-/**
+  /**
+   * Gets the style for the given geometry type
+   * @param {string} geometryType The type of geometry (Polygon, MultiPolygon, LineString, Point)
+   * @param {Style} [sldStyle] The SLD style to use (optional)
+   * @returns {Style} The style for the given geometry type
+   */
+  getStyle(geometryType, sldStyle = null) {
+    if (sldStyle) {
+      return sldStyle;
+    }
+
+    const {fillColor, strokeColor, strokeWidth} = this.styles;
+
+    switch (geometryType) {
+      case 'Polygon':
+      case 'MultiPolygon':  // Add MultiPolygon here
+        return new Style({
+          fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
+        });
+      case 'LineString':
+        return new Style({
+          stroke: new Stroke({color: strokeColor, width: strokeWidth}),
+        });
+      case 'Point':
+        return new Style({
+          image: new Circle({
+            radius: 5, fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: 1}),
+          }),
+        });
+      default:
+        console.warn(`No style found for geometry type: ${geometryType}`);
+        return null;
+    }
+  }
+
+  /**
+   * Applies feature groups to the map, optionally using SLD styles for styling.
+   *
+   * This function iterates over the feature groups and adds them to the map with appropriate styles.
+   * If SLD data is provided, it will attempt to apply the SLD styles to the features.
+   *
+   * @param {Object} featureGroups - An object containing groups of features categorized by type.
+   * @param {string} [sldString] - The SLD data to use for styling the features.
+   */
+  applyFeatureGroupsToMap(featureGroups, sldString) {
+    const viewProjection = this.map.getView().getProjection();
+    const sldObject = sldString ? SLDReader.Reader(sldString) : null;
+
+    Object.keys(featureGroups).forEach(type => {
+      const vectorSource = new VectorSource({features: featureGroups[type]});
+      const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
+      this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
+    });
+
+    this.map.render();
+    this.requestUpdate();
+  }
+
+  /**
+   * Groups features by their feature type.
+   *
+   * This function takes the parsed features and an XML document as input and
+   * groups the features by their feature type. The feature type is determined by
+   * the local name of the first child element of the feature member element.
+   *
+   * @param {Array<ol/Feature>} features - The parsed features to group.
+   * @param {XMLDocument} xmlDoc - The XML document containing the feature members.
+   * @returns {Object} An object with feature type as keys and arrays of features as values.
+   */
+  groupFeaturesByType(features, xmlDoc) {
+    return features.reduce((groups, feature, index) => {
+      const featureMembers = xmlDoc.getElementsByTagNameNS('*', 'featureMember');
+      const featureMember = featureMembers[index];
+      const firstChildElement = featureMember ? featureMember.firstElementChild : null;
+      const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
+
+      if (!groups[featureType]) groups[featureType] = [];
+      groups[featureType].push(feature);
+      return groups;
+    }, {});
+  }
+
+  /**
+   * Removes all vector layers from the map and resets the data toggle.
+   *
+   * This function is called when a new GML file is selected and we want to remove all the
+   * previously added vector layers from the map and reset the data toggle.
+   */
+  resetLayers() {
+    this.vectorLayers.forEach((layer) => {
+      this.map.removeLayer(layer)
+    })
+    this.vectorLayers = []
+    const toggleElement = this.shadowRoot.getElementById('data-toggle')
+    toggleElement.innerHTML = 'Vælg Lag:'
+  }
+
+  /**
  * Adds a vector layer to the map with controls for visibility and styling.
  *
  * This function creates a vector layer using the provided vector source and style function.
@@ -741,7 +739,6 @@ export class MapViewer extends LitElement {
 
     this.shadowRoot.getElementById('data-toggle').appendChild(layerToggleDiv);
   }
-
 
   // Drag and Drop Functions
   onDragOver(event) {
