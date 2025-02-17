@@ -510,8 +510,8 @@
         childExpression.type = 'literal';
         childExpression.typeHint = parseOptions.typeHint;
         childExpression.value = childNode.textContent;
-      } else {
-        // Add ogc:Literal elements and plain text nodes as type:literal.
+      } else if (childNode.nodeType !== Node.COMMENT_NODE) {
+        // Add ogc:Literal elements and plain non-comment text nodes as type:literal.
         childExpression.type = 'literal';
         childExpression.typeHint = parseOptions.typeHint;
         childExpression.value = childNode.textContent.trim();
@@ -717,10 +717,10 @@
     var parser = new DOMParser();
     var doc = parser.parseFromString(sld, 'application/xml');
 
-    for (var n = doc.firstChild; n; n = n.nextSibling) {
-      result.version = n.getAttribute('version');
-      readNode(n, result);
-    }
+    var rootNode = doc.documentElement;
+    result.version = rootNode.getAttribute('version');
+    readNode(rootNode, result);
+
     return result;
   }
 

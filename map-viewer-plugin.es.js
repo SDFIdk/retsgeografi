@@ -29577,7 +29577,7 @@ northing meters` + i;
               q(k, Ft, "params", {
                 concatenateLiterals: !1
               }), Array.isArray(Ft.params.children) ? G.params = Ft.params.children : G.params = [Ft.params];
-            } else k.nodeName === "#cdata-section" ? (G.type = "literal", G.typeHint = I.typeHint, G.value = k.textContent) : (G.type = "literal", G.typeHint = I.typeHint, G.value = k.textContent.trim());
+            } else k.nodeName === "#cdata-section" ? (G.type = "literal", G.typeHint = I.typeHint, G.value = k.textContent) : k.nodeType !== Node.COMMENT_NODE && (G.type = "literal", G.typeHint = I.typeHint, G.value = k.textContent.trim());
             G.type === "literal" && I.skipEmptyNodes ? G.value.trim() && P.push(G) : P.push(G);
           }
           var bt = I.forceLowerCase ? p.toLowerCase() : p, Dt = $(
@@ -29704,9 +29704,8 @@ northing meters` + i;
             st[p.localName] && st[p.localName](p, m, p.localName);
         }
         function lt(f) {
-          for (var m = {}, p = new DOMParser(), v = p.parseFromString(f, "application/xml"), x = v.firstChild; x; x = x.nextSibling)
-            m.version = x.getAttribute("version"), et(x, m);
-          return m;
+          var m = {}, p = new DOMParser(), v = p.parseFromString(f, "application/xml"), x = v.documentElement;
+          return m.version = x.getAttribute("version"), et(x, m), m;
         }
         var rt = /* @__PURE__ */ new Map();
         function tt(f, m) {
