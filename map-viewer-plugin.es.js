@@ -31473,6 +31473,7 @@ northing meters` + i;
      * @param {string} [sldString] - The SLD data to use for styling.
      */
     loadGML(t, e = null) {
+      this.shadowRoot.getElementById("data-toggle").style.display = "block";
       const { features: n, xmlDoc: s } = this.parseGML(t), r = this.groupFeaturesByType(n, s);
       this.resetLayers(), this.applyFeatureGroupsToMap(r, e);
       const a = n.length > 0 ? n[0].getGeometry().getExtent().slice() : null;
@@ -31547,9 +31548,11 @@ northing meters` + i;
      * previously added vector layers from the map and reset the data toggle.
      */
     resetLayers() {
-      this.vectorLayers.forEach((t) => {
-        this.map.removeLayer(t);
-      }), this.vectorLayers = [], this.shadowRoot.getElementById("data-toggle").innerHTML = "Vælg Lag:";
+      this.vectorLayers.forEach((e) => {
+        this.map.removeLayer(e);
+      }), this.vectorLayers = [];
+      const t = this.shadowRoot.getElementById("data-toggle");
+      t.innerHTML = "Vælg Lag:";
     }
     /**
      * Applies SLD styles to the map.
@@ -31916,6 +31919,7 @@ northing meters` + i;
           border-radius: 8px;
           padding: 0.75rem;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          display: none;
       }
       input {
           accent-color: green;
