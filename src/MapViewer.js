@@ -102,7 +102,7 @@ export class MapViewer extends LitElement {
           transition: background-color 0.3s, transform 0.2s;
       }
 
-      #data-toggle {
+      #map-legend {
           position: absolute;
           bottom: 1rem;
           left: 1rem;
@@ -505,7 +505,7 @@ export class MapViewer extends LitElement {
    */
   loadGML(gmlString, sldString = null) {
     // Parse the GML data and get the features
-    this.shadowRoot.getElementById('data-toggle').style.display = 'block'
+    this.shadowRoot.getElementById('map-legend').style.display = 'block'
     const {features, xmlDoc} = this.parseGML(gmlString);
     const featureGroups = this.groupFeaturesByType(features, xmlDoc);
 
@@ -697,9 +697,10 @@ export class MapViewer extends LitElement {
       this.map.removeLayer(layer)
     })
     this.vectorLayers = []
-    const toggleElement = this.shadowRoot.getElementById('data-toggle')
+    const toggleElement = this.shadowRoot.getElementById('map-legend')
     toggleElement.innerHTML = 'Vælg Lag:'
   }
+  
 
   /**
  * Adds a vector layer to the map with controls for visibility and styling.
@@ -722,7 +723,7 @@ export class MapViewer extends LitElement {
 
     // Create a checkbox and color pickers for the layer
     const layerToggleDiv = document.createElement('div');
-    layerToggleDiv.classList.add('layer-toggle');
+    layerToggleDiv.classList.add('legend-element');
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -737,7 +738,7 @@ export class MapViewer extends LitElement {
     layerToggleDiv.appendChild(checkbox);
     layerToggleDiv.appendChild(label);
 
-    this.shadowRoot.getElementById('data-toggle').appendChild(layerToggleDiv);
+    this.shadowRoot.getElementById('map-legend').appendChild(layerToggleDiv);
   }
 
   // Drag and Drop Functions
@@ -776,7 +777,7 @@ export class MapViewer extends LitElement {
       <div part="map-container" class="map-container" id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
         <div id="map" class="map"></div>
 
-        <div id="data-toggle"></div>
+        <div id="map-legend"></div>
         
         <div id="metadata"></div>
         
