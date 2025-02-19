@@ -605,41 +605,6 @@ export class MapViewer extends LitElement {
   }
 
   /**
-   * Gets the style for the given geometry type
-   * @param {string} geometryType The type of geometry (Polygon, MultiPolygon, LineString, Point)
-   * @param {Style} [sldStyle] The SLD style to use (optional)
-   * @returns {Style} The style for the given geometry type
-   */
-  getStyle(geometryType, sldStyle = null) {
-    if (sldStyle) {
-      return sldStyle;
-    }
-
-    const {fillColor, strokeColor, strokeWidth} = this.styles;
-
-    switch (geometryType) {
-      case 'Polygon':
-      case 'MultiPolygon':  // Add MultiPolygon here
-        return new Style({
-          fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-        });
-      case 'LineString':
-        return new Style({
-          stroke: new Stroke({color: strokeColor, width: strokeWidth}),
-        });
-      case 'Point':
-        return new Style({
-          image: new Circle({
-            radius: 5, fill: new Fill({color: fillColor}), stroke: new Stroke({color: strokeColor, width: 1}),
-          }),
-        });
-      default:
-        console.warn(`No style found for geometry type: ${geometryType}`);
-        return null;
-    }
-  }
-
-  /**
    * Applies feature groups to the map, optionally using SLD styles for styling.
    *
    * This function iterates over the feature groups and adds them to the map with appropriate styles.
@@ -700,7 +665,7 @@ export class MapViewer extends LitElement {
     const toggleElement = this.shadowRoot.getElementById('map-legend')
     toggleElement.innerHTML = 'Vælg Lag:'
   }
-  
+
 
   /**
  * Adds a vector layer to the map with controls for visibility and styling.
