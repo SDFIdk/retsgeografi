@@ -31444,7 +31444,7 @@ northing meters` + i;
      * @param {string} [sldString] - The SLD data to use for styling.
      */
     loadGML(t, e = null) {
-      this.shadowRoot.getElementById("data-toggle").style.display = "block";
+      this.shadowRoot.getElementById("map-legend").style.display = "block";
       const { features: n, xmlDoc: s } = this.parseGML(t), r = this.groupFeaturesByType(n, s);
       this.resetLayers(), this.applyFeatureGroupsToMap(r, e);
       const a = n.length > 0 ? n[0].getGeometry().getExtent().slice() : null;
@@ -31588,7 +31588,7 @@ northing meters` + i;
       this.vectorLayers.forEach((e) => {
         this.map.removeLayer(e);
       }), this.vectorLayers = [];
-      const t = this.shadowRoot.getElementById("data-toggle");
+      const t = this.shadowRoot.getElementById("map-legend");
       t.innerHTML = "Vælg Lag:";
     }
     /**
@@ -31609,13 +31609,13 @@ northing meters` + i;
       });
       this.map.addLayer(s), this.vectorLayers.push(s);
       const r = document.createElement("div");
-      r.classList.add("layer-toggle");
+      r.classList.add("legend-element");
       const a = document.createElement("input");
       a.type = "checkbox", a.checked = !0, a.addEventListener("change", () => {
         s.setVisible(a.checked);
       });
       const o = document.createElement("label");
-      o.textContent = t, r.appendChild(a), r.appendChild(o), this.shadowRoot.getElementById("data-toggle").appendChild(r);
+      o.textContent = t, r.appendChild(a), r.appendChild(o), this.shadowRoot.getElementById("map-legend").appendChild(r);
     }
     // Drag and Drop Functions
     onDragOver(t) {
@@ -31637,7 +31637,7 @@ northing meters` + i;
       <div part="map-container" class="map-container" id="map-container" @dragover="${this.onDragOver}" @dragleave="${this.onDragLeave}" @drop="${this.onDrop}">
         <div id="map" class="map"></div>
 
-        <div id="data-toggle"></div>
+        <div id="map-legend"></div>
         
         <div id="metadata"></div>
         
@@ -31777,7 +31777,7 @@ northing meters` + i;
           transition: background-color 0.3s, transform 0.2s;
       }
 
-      #data-toggle {
+      #map-legend {
           position: absolute;
           bottom: 1rem;
           left: 1rem;
