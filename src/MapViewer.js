@@ -700,7 +700,7 @@ export class MapViewer extends LitElement {
     const toggleElement = this.shadowRoot.getElementById('map-legend')
     toggleElement.innerHTML = 'Vælg Lag:'
   }
-  
+
 
   /**
  * Adds a vector layer to the map with controls for visibility and styling.
@@ -715,8 +715,10 @@ export class MapViewer extends LitElement {
  */
   addLayerWithControls(type, vectorSource, sldStyleFunction) {
     const vectorLayer = new VectorLayer({
-      source: vectorSource, style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType())),
+      source: vectorSource,
+      style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType()))
     });
+    console.log()
 
     this.map.addLayer(vectorLayer);
     this.vectorLayers.push(vectorLayer);
@@ -724,6 +726,16 @@ export class MapViewer extends LitElement {
     // Create a checkbox and color pickers for the layer
     const layerToggleDiv = document.createElement('div');
     layerToggleDiv.classList.add('legend-element');
+
+    // Add a simple symbol div
+    const mapSymbol = document.createElement('div');
+    
+    mapSymbol.style.width = '16px';
+    mapSymbol.style.height = '16px';
+    mapSymbol.style.border = '1px solid #000';
+    mapSymbol.style.backgroundColor = '#7cb5ec'; // Default color, can be adjusted
+    mapSymbol.style.display = 'inline-block';
+    mapSymbol.style.marginRight = '5px';
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -736,6 +748,7 @@ export class MapViewer extends LitElement {
     label.textContent = type;
 
     layerToggleDiv.appendChild(checkbox);
+    layerToggleDiv.appendChild(mapSymbol);
     layerToggleDiv.appendChild(label);
 
     this.shadowRoot.getElementById('map-legend').appendChild(layerToggleDiv);
