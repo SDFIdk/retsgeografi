@@ -1,21 +1,18 @@
 import { LitElement, html, css } from 'lit';
 
 export class MapTemplate extends LitElement {
-  static styles = css`
-      /* Add your styles here */
-  `;
+  static styles = css``;
 
   render() {
-
-    const gmlFile = ''; // Change this to your GML file
-    const xmlFile = ''; // Change this to your metadata file
-    const sldFile = ''; // Change this to your SLD file
+    const gmlFile = './examples/2019/713/data_demo.gml';
+    const xmlFile = './examples/2019/713/metadata.xml';
+    const sldFile = '';
 
     return html`
       <map-viewer
-        .gmlFile="${gmlFile}"
-        .xmlFile="${xmlFile}"
-        .sldFile="${sldFile}">
+          .gmlFile="${gmlFile}"
+          .xmlFile="${xmlFile}"
+          .sldFile="${sldFile}">
       </map-viewer>
     `;
   }
