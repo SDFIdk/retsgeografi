@@ -534,6 +534,22 @@ export class MapViewer extends LitElement {
   }
 
   /**
+   * Removes all vector layers from the map and resets the data toggle.
+   *
+   * This function is called when a new GML file is selected and we want to remove all the
+   * previously added vector layers from the map and reset the data toggle.
+   */
+  resetLayers() {
+    this.vectorLayers.forEach((layer) => {
+      this.map.removeLayer(layer)
+    })
+    this.vectorLayers = []
+    const toggleElement = this.shadowRoot.getElementById('map-legend')
+    toggleElement.innerHTML = 'Vælg Lag:'
+  }
+
+
+  /**
    * Parses GML data from a given string, returning features and the XML document.
    *
    * This function attempts to parse the provided GML string using the GML32 format.
@@ -687,66 +703,159 @@ export class MapViewer extends LitElement {
   }
 
   /**
-   * Removes all vector layers from the map and resets the data toggle.
+   * Adds a vector layer to the map with controls for visibility and styling.
    *
-   * This function is called when a new GML file is selected and we want to remove all the
-   * previously added vector layers from the map and reset the data toggle.
+   * This function creates a vector layer using the provided vector source and style function.
+   * It also adds a checkbox to toggle the visibility of the layer, and color pickers
+   * for adjusting the layer's fill color, stroke color, and stroke width.
+   *
+   * @param {string} type - The type or name of the layer.
+   * @param {ol/source/Vector} vectorSource - The vector source for the layer.
+   * @param {function} [sldStyleFunction] - Optional style function for the layer.
+   * @param sldObject the SLD object to apply styles from
    */
-  resetLayers() {
-    this.vectorLayers.forEach((layer) => {
-      this.map.removeLayer(layer)
-    })
-    this.vectorLayers = []
-    const toggleElement = this.shadowRoot.getElementById('map-legend')
-    toggleElement.innerHTML = 'Vælg Lag:'
-  }
-
-
   /**
- * Adds a vector layer to the map with controls for visibility and styling.
- *
- * This function creates a vector layer using the provided vector source and style function.
- * It also adds a checkbox to toggle the visibility of the layer, and color pickers
- * for adjusting the layer's fill color, stroke color, and stroke width.
- *
- * @param {string} type - The type or name of the layer.
- * @param {ol/source/Vector} vectorSource - The vector source for the layer.
- * @param {function} [sldStyleFunction] - Optional style function for the layer.
- */
-  addLayerWithControls(type, vectorSource, sldStyleFunction) {
+   * Adds a vector layer to the map with controls for visibility and styling.
+   * The map symbol in the legend reflects the actual layer styling.
+   *
+   * @param {string} type - The type or name of the layer.
+   * @param {ol/source/Vector} vectorSource - The vector source for the layer.
+   * @param {function|Style} styleFunction - Style function or style object for the layer.
+   */
+  /**
+   * Adds a vector layer to the map with controls for visibility and styling.
+   * The map symbol in the legend reflects the actual layer styling, including SLD styles.
+   *
+   * @param {string} type - The type or name of the layer.
+   * @param {ol/source/Vector} vectorSource - The vector source for the layer.
+   * @param {function|Style} styleFunction - Style function or style object for the layer.
+   */
+  addLayerWithControls(type, vectorSource, styleFunction) {
     const vectorLayer = new VectorLayer({
       source: vectorSource,
-      style: sldStyleFunction || ((feature) => this.getStyle(feature.getGeometry().getType()))
+      style: styleFunction || ((feature) => this.getStyle(feature.getGeometry().getType()))
     });
-    console.log()
 
     this.map.addLayer(vectorLayer);
     this.vectorLayers.push(vectorLayer);
 
-    // Create a checkbox and color pickers for the layer
+    // Create a checkbox and symbol for the layer
     const layerToggleDiv = document.createElement('div');
     layerToggleDiv.classList.add('legend-element');
+    layerToggleDiv.style.display = 'flex';
+    layerToggleDiv.style.alignItems = 'center';
+    layerToggleDiv.style.marginBottom = '8px';
 
-    // Add a simple symbol div
-    const mapSymbol = document.createElement('div');
-    
-    mapSymbol.style.width = '16px';
-    mapSymbol.style.height = '16px';
-    mapSymbol.style.border = '1px solid #000';
-    mapSymbol.style.backgroundColor = '#7cb5ec'; // Default color, can be adjusted
-    mapSymbol.style.display = 'inline-block';
-    mapSymbol.style.marginRight = '5px';
-
+    // Create checkbox
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = true;
+    checkbox.style.marginRight = '8px';
     checkbox.addEventListener('change', () => {
       vectorLayer.setVisible(checkbox.checked);
     });
 
+    // Create map symbol based on the first feature's geometry type
+    const mapSymbol = document.createElement('div');
+    mapSymbol.style.width = '20px';
+    mapSymbol.style.height = '20px';
+    mapSymbol.style.marginRight = '8px';
+    mapSymbol.style.position = 'relative';
+
+    // Get the first feature to determine geometry type and style
+    const firstFeature = vectorSource.getFeatures()[0];
+    if (firstFeature) {
+      const geometryType = firstFeature.getGeometry().getType();
+      let style;
+
+      // Handle both SLD style functions and regular styles
+      if (typeof styleFunction === 'function') {
+        // For SLD styles, we need to evaluate the style function
+        // Pass required parameters that might be used in the style function
+        const resolution = this.map.getView().getResolution();
+        const styles = styleFunction(firstFeature, resolution);
+        // SLD might return an array of styles, take the first one
+        style = Array.isArray(styles) ? styles[0] : styles;
+      } else {
+        style = styleFunction || this.getStyle(geometryType);
+      }
+
+      // Apply style based on geometry type
+      switch (geometryType) {
+        case 'Polygon':
+        case 'MultiPolygon':
+          if (style) {
+            const fill = style.getFill();
+            const stroke = style.getStroke();
+            if (fill) {
+              mapSymbol.style.backgroundColor = fill.getColor();
+            }
+            if (stroke) {
+              mapSymbol.style.border = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
+            }
+          } else {
+            // Fallback to default styles
+            mapSymbol.style.backgroundColor = this.styles.fillColor;
+            mapSymbol.style.border = `${this.styles.strokeWidth}px solid ${this.styles.strokeColor}`;
+          }
+          break;
+
+        case 'LineString':
+        case 'MultiLineString':
+          if (style) {
+            const stroke = style.getStroke();
+            if (stroke) {
+              mapSymbol.style.borderTop = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
+            }
+          } else {
+            mapSymbol.style.borderTop = `${this.styles.strokeWidth}px solid ${this.styles.strokeColor}`;
+          }
+          mapSymbol.style.height = '0px';
+          mapSymbol.style.top = '50%';
+          break;
+
+        case 'Point':
+        case 'MultiPoint':
+          if (style) {
+            const image = style.getImage();
+            if (image) {
+              if (image instanceof Circle) {
+                const fill = image.getFill();
+                const stroke = image.getStroke();
+                if (fill) {
+                  mapSymbol.style.backgroundColor = fill.getColor();
+                }
+                if (stroke) {
+                  mapSymbol.style.border = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
+                }
+                mapSymbol.style.borderRadius = '50%';
+              } else {
+                // Handle other types of point symbolizers (e.g., icons)
+                const size = image.getSize();
+                if (size) {
+                  mapSymbol.style.width = `${size[0]}px`;
+                  mapSymbol.style.height = `${size[1]}px`;
+                }
+                // If it's an icon, you might want to set a background image
+                // This would require getting the icon URL from the style
+              }
+            }
+          } else {
+            // Fallback to default point style
+            mapSymbol.style.backgroundColor = this.styles.fillColor;
+            mapSymbol.style.border = `1px solid ${this.styles.strokeColor}`;
+            mapSymbol.style.borderRadius = '50%';
+          }
+          break;
+      }
+    }
+
+    // Create label
     const label = document.createElement('label');
     label.textContent = type;
+    label.style.cursor = 'pointer';
 
+    // Assemble the legend element
     layerToggleDiv.appendChild(checkbox);
     layerToggleDiv.appendChild(mapSymbol);
     layerToggleDiv.appendChild(label);
