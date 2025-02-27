@@ -668,10 +668,30 @@ export class MapViewer extends LitElement {
     const viewProjection = this.map.getView().getProjection();
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
-    Object.keys(featureGroups).forEach(type => {
-      const vectorSource = new VectorSource({features: featureGroups[type]});
-      const sldStyleFunction = this.applySLDStyles(sldObject, type, viewProjection);
-      this.addLayerWithControls(type, vectorSource, sldStyleFunction || this.getStyle(type));
+    Object.keys(featureGroups).forEach(groupKey => {
+      const group = featureGroups[groupKey];
+      const features = group.features;
+      const mainType = group.mainType;
+      const subCategory = group.subCategory;
+
+      // Create a display name for the layer
+      let displayName = mainType;
+      if (subCategory) {
+        // Format the sub-category for display
+        const formattedSubCategory = subCategory
+          .replace('eksisterer:true', 'Existing')
+          .replace('eksisterer:false', 'Planned')
+          .replace('type:', '')
+          .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
+
+        displayName = `${mainType} - ${formattedSubCategory}`;
+      }
+
+      const vectorSource = new VectorSource({features: features});
+      const sldStyleFunction = this.applySLDStyles(sldObject, mainType, viewProjection);
+
+      // Use the main type for style lookup but the full display name for the legend
+      this.addLayerWithControls(displayName, vectorSource, sldStyleFunction || this.getStyle(mainType));
     });
 
     this.map.render();
@@ -693,11 +713,58 @@ export class MapViewer extends LitElement {
     return features.reduce((groups, feature, index) => {
       const featureMembers = xmlDoc.getElementsByTagNameNS('*', 'featureMember');
       const featureMember = featureMembers[index];
-      const firstChildElement = featureMember ? featureMember.firstElementChild : null;
-      const featureType = firstChildElement ? firstChildElement.localName : 'Unknown Type';
 
-      if (!groups[featureType]) groups[featureType] = [];
-      groups[featureType].push(feature);
+      if (!featureMember) {
+        // Handle cases where featureMember doesn't exist
+        if (!groups['Unknown']) groups['Unknown'] = [];
+        groups['Unknown'].push(feature);
+        return groups;
+      }
+
+      const firstChildElement = featureMember.firstElementChild;
+      if (!firstChildElement) {
+        // Handle cases where firstChildElement doesn't exist
+        if (!groups['Unknown']) groups['Unknown'] = [];
+        groups['Unknown'].push(feature);
+        return groups;
+      }
+
+      // Get the main feature type (e.g., 'Station')
+      const featureType = firstChildElement.localName || 'Unknown';
+
+      // Look for sub-categorization properties like 'eksisterer'
+      let subCategory = null;
+
+      // First check for 'eksisterer' element
+      const eksisterer = firstChildElement.getElementsByTagNameNS('*', 'eksisterer')[0];
+      if (eksisterer && eksisterer.textContent) {
+        subCategory = 'eksisterer:' + eksisterer.textContent.trim();
+      }
+
+      // Also check for 'type' element as another potential sub-category
+      const typeElement = firstChildElement.getElementsByTagNameNS('*', 'type')[0];
+      if (!subCategory && typeElement && typeElement.textContent) {
+        subCategory = 'type:' + typeElement.textContent.trim();
+      }
+
+      // Define the key for grouping
+      let groupKey = featureType;
+      if (subCategory) {
+        groupKey = `${featureType}_${subCategory}`;
+      }
+
+      // Initialize the group if it doesn't exist
+      if (!groups[groupKey]) {
+        groups[groupKey] = {
+          features: [],
+          mainType: featureType,
+          subCategory: subCategory
+        };
+      }
+
+      // Add the feature to the appropriate group
+      groups[groupKey].features.push(feature);
+
       return groups;
     }, {});
   }
