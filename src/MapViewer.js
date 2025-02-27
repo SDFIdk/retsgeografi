@@ -679,8 +679,8 @@ export class MapViewer extends LitElement {
       if (subCategory) {
         // Format the sub-category for display
         const formattedSubCategory = subCategory
-          .replace('eksisterer:true', 'Existing')
-          .replace('eksisterer:false', 'Planned')
+          .replace('eksisterer:true', 'Eksisterer')
+          .replace('eksisterer:false', 'Planlagt')
           .replace('type:', '')
           .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
 
