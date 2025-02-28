@@ -495,13 +495,12 @@ export class MapViewer extends LitElement {
   }
 
   /**
-   * Loads GML data from a given string and applies it to the map.
+   * Applies feature groups to the map, optionally using SLD styles for styling.
    *
-   * The GML data is parsed using a DOMParser and then grouped by feature type.
-   * The feature groups are then applied to the map using the applyFeatureGroupsToMap method.
+   * This function iterates over the feature groups and adds them to the map with appropriate styles. It also creates a structure with sub-categories.
    *
-   * @param {string} gmlString - The GML data to load.
-   * @param {string} [sldString] - The SLD data to use for styling.
+   * @param {Object} featureGroups - An object containing groups of features categorized by type and sub-category.
+   * @param {string} [sldString] - The SLD data to use for styling the features.
    */
   loadGML(gmlString, sldString = null) {
     // Parse the GML data and get the features
@@ -780,22 +779,6 @@ export class MapViewer extends LitElement {
    * @param {ol/source/Vector} vectorSource - The vector source for the layer.
    * @param {function} [sldStyleFunction] - Optional style function for the layer.
    * @param sldObject the SLD object to apply styles from
-   */
-  /**
-   * Adds a vector layer to the map with controls for visibility and styling.
-   * The map symbol in the legend reflects the actual layer styling.
-   *
-   * @param {string} type - The type or name of the layer.
-   * @param {ol/source/Vector} vectorSource - The vector source for the layer.
-   * @param {function|Style} styleFunction - Style function or style object for the layer.
-   */
-  /**
-   * Adds a vector layer to the map with controls for visibility and styling.
-   * The map symbol in the legend reflects the actual layer styling, including SLD styles.
-   *
-   * @param {string} type - The type or name of the layer.
-   * @param {ol/source/Vector} vectorSource - The vector source for the layer.
-   * @param {function|Style} styleFunction - Style function or style object for the layer.
    */
   addLayerWithControls(type, vectorSource, styleFunction) {
     const vectorLayer = new VectorLayer({
