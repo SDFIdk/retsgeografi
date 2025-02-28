@@ -655,10 +655,10 @@ export class MapViewer extends LitElement {
   }
 
   /**
-   * Applies feature groups to the map, optionally using SLD styles for styling.
+   * Applies feature groups to the map, with improved legend hierarchy.
    *
-   * This function iterates over the feature groups and adds them to the map with appropriate styles.
-   * If SLD data is provided, it will attempt to apply the SLD styles to the features.
+   * This function organizes features by main type, then by subcategory,
+   * creating a hierarchical legend structure.
    *
    * @param {Object} featureGroups - An object containing groups of features categorized by type.
    * @param {string} [sldString] - The SLD data to use for styling the features.
@@ -667,34 +667,344 @@ export class MapViewer extends LitElement {
     const viewProjection = this.map.getView().getProjection();
     const sldObject = sldString ? SLDReader.Reader(sldString) : null;
 
+    // First, organize groups by main type to determine which have multiple subcategories
+    const organizedGroups = {};
+
     Object.keys(featureGroups).forEach(groupKey => {
       const group = featureGroups[groupKey];
-      const features = group.features;
       const mainType = group.mainType;
-      const subCategory = group.subCategory;
 
-      // Create a display name for the layer
-      let displayName = mainType;
-      if (subCategory) {
-        // Format the sub-category for display
-        const formattedSubCategory = subCategory
-          .replace('eksisterer:true', 'Eksisterer')
-          .replace('eksisterer:false', 'Planlagt')
-          .replace('type:', '')
-          .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
-
-        displayName = `${mainType} - ${formattedSubCategory}`;
+      if (!organizedGroups[mainType]) {
+        organizedGroups[mainType] = {
+          subgroups: {},
+          mainTypeFeatures: [],
+          layerCount: 0
+        };
       }
 
-      const vectorSource = new VectorSource({features: features});
-      const sldStyleFunction = this.applySLDStyles(sldObject, mainType, viewProjection);
+      if (group.subCategory) {
+        organizedGroups[mainType].subgroups[group.subCategory] = group;
+        organizedGroups[mainType].layerCount++;
+      } else {
+        // If there's no subcategory, store the features at the main type level
+        organizedGroups[mainType].mainTypeFeatures = organizedGroups[mainType].mainTypeFeatures.concat(group.features);
+      }
+    });
 
-      // Use the main type for style lookup but the full display name for the legend
-      this.addLayerWithControls(displayName, vectorSource, sldStyleFunction || this.getStyle(mainType));
+    // Create a map legend div to hold all legend elements
+    const mapLegend = this.shadowRoot.getElementById('map-legend');
+    mapLegend.innerHTML = ''; // Clear any existing legend items
+
+    // Process each main type and create its legend elements
+    Object.keys(organizedGroups).forEach(mainType => {
+      const mainTypeData = organizedGroups[mainType];
+      const hasMultipleSubgroups = mainTypeData.layerCount > 1;
+
+      // Create main type container
+      const mainTypeContainer = document.createElement('div');
+      mainTypeContainer.classList.add('legend-main-type');
+      mainTypeContainer.style.marginBottom = '16px';
+
+      // Create main type header
+      const mainTypeHeader = document.createElement('div');
+      mainTypeHeader.classList.add('legend-main-header');
+      mainTypeHeader.style.display = 'flex';
+      mainTypeHeader.style.alignItems = 'center';
+      mainTypeHeader.style.marginBottom = '8px';
+
+      // Create main checkbox (for toggling all related layers)
+      const mainCheckbox = document.createElement('input');
+      mainCheckbox.type = 'checkbox';
+      mainCheckbox.checked = true;
+      mainCheckbox.style.marginRight = '8px';
+
+      // Create main label
+      const mainLabel = document.createElement('label');
+      mainLabel.textContent = mainType;
+      mainLabel.style.cursor = 'pointer';
+
+      // Assemble main type header
+      mainTypeHeader.appendChild(mainCheckbox);
+      mainTypeHeader.appendChild(mainLabel);
+      mainTypeContainer.appendChild(mainTypeHeader);
+
+      // Create container for subgroups (if any)
+      const subgroupsContainer = document.createElement('div');
+      subgroupsContainer.classList.add('legend-subgroups');
+      subgroupsContainer.style.paddingLeft = '24px';
+      mainTypeContainer.appendChild(subgroupsContainer);
+
+      // Track all layers for this main type to enable toggling
+      const mainTypeLayers = [];
+      const subgroupCheckboxes = [];
+
+      // If we have features that don't belong to a subgroup, create a layer for them
+      if (mainTypeData.mainTypeFeatures.length > 0) {
+        const vectorSource = new VectorSource({features: mainTypeData.mainTypeFeatures});
+
+        // Get a feature to determine its geometry type for styling
+        const firstFeature = vectorSource.getFeatures()[0];
+        const geometryType = firstFeature ? firstFeature.getGeometry().getType() : 'Polygon';
+
+        // Get style function or direct style
+        let styleToUse;
+        if (sldObject) {
+          const sldStyleFunction = this.applySLDStyles(sldObject, mainType, viewProjection);
+          styleToUse = sldStyleFunction || this.getStyle(geometryType);
+        } else {
+          styleToUse = this.getStyle(geometryType);
+        }
+
+        const vectorLayer = new VectorLayer({
+          source: vectorSource,
+          style: styleToUse
+        });
+
+        this.map.addLayer(vectorLayer);
+        this.vectorLayers.push(vectorLayer);
+        mainTypeLayers.push(vectorLayer);
+
+        // If no subgroups, add a simple legend item under the main type
+        if (!hasMultipleSubgroups) {
+          const symbol = this.createSymbolForLayer(vectorLayer, vectorSource, styleToUse, geometryType);
+          mainTypeHeader.insertBefore(symbol, mainLabel);
+        }
+      }
+
+      // Process each subgroup if we have multiple
+      if (hasMultipleSubgroups) {
+        Object.keys(mainTypeData.subgroups).forEach(subCategory => {
+          const group = mainTypeData.subgroups[subCategory];
+          const features = group.features;
+
+          // Format the sub-category for display
+          const formattedSubCategory = subCategory
+            .replace('eksisterer:true', 'Eksisterer')
+            .replace('eksisterer:false', 'Planlagt')
+            .replace('type:', '')
+            .replace(/^\w/, c => c.toUpperCase()); // Capitalize first letter
+
+          const displayName = formattedSubCategory;
+
+          // Create vector source and layer
+          const vectorSource = new VectorSource({features: features});
+
+          // Get a feature to determine its geometry type for styling
+          const firstFeature = vectorSource.getFeatures()[0];
+          const geometryType = firstFeature ? firstFeature.getGeometry().getType() : 'Polygon';
+
+          // Get style function or direct style
+          let styleToUse;
+          if (sldObject) {
+            const sldStyleFunction = this.applySLDStyles(sldObject, mainType, viewProjection);
+            styleToUse = sldStyleFunction || this.getStyle(geometryType);
+          } else {
+            styleToUse = this.getStyle(geometryType);
+          }
+
+          const vectorLayer = new VectorLayer({
+            source: vectorSource,
+            style: styleToUse
+          });
+
+          this.map.addLayer(vectorLayer);
+          this.vectorLayers.push(vectorLayer);
+          mainTypeLayers.push(vectorLayer);
+
+          // Create subgroup legend item
+          const subgroupItem = document.createElement('div');
+          subgroupItem.classList.add('legend-element');
+          subgroupItem.style.display = 'flex';
+          subgroupItem.style.alignItems = 'center';
+          subgroupItem.style.marginBottom = '6px';
+
+          // Create subgroup checkbox
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = true;
+          checkbox.style.marginRight = '8px';
+          checkbox.addEventListener('change', () => {
+            vectorLayer.setVisible(checkbox.checked);
+
+            // Update main checkbox state based on subgroup checkboxes
+            this.updateMainCheckboxState(mainCheckbox, subgroupCheckboxes);
+          });
+          subgroupCheckboxes.push(checkbox);
+
+          // Create symbol for this subgroup
+          const mapSymbol = this.createSymbolForLayer(vectorLayer, vectorSource, styleToUse, geometryType);
+
+          // Create subgroup label
+          const label = document.createElement('label');
+          label.textContent = displayName;
+          label.style.cursor = 'pointer';
+
+          // Assemble subgroup item
+          subgroupItem.appendChild(checkbox);
+          subgroupItem.appendChild(mapSymbol);
+          subgroupItem.appendChild(label);
+
+          // Add to subgroups container
+          subgroupsContainer.appendChild(subgroupItem);
+        });
+      }
+
+      // Set up main checkbox to toggle all related layers
+      mainCheckbox.addEventListener('change', () => {
+        const isChecked = mainCheckbox.checked;
+
+        // Toggle all layers for this main type
+        mainTypeLayers.forEach(layer => {
+          layer.setVisible(isChecked);
+        });
+
+        // Update all subgroup checkboxes
+        subgroupCheckboxes.forEach(checkbox => {
+          checkbox.checked = isChecked;
+        });
+      });
+
+      // Add the main type container to the legend
+      mapLegend.appendChild(mainTypeContainer);
     });
 
     this.map.render();
     this.requestUpdate();
+  }
+
+  /**
+   * Creates a symbol representing the layer's style
+   *
+   * @param {ol/layer/Vector} vectorLayer - The vector layer
+   * @param {ol/source/Vector} vectorSource - The vector source
+   * @param {Function|ol/style/Style} styleInput - The style function or style object for the layer
+   * @param {string} geometryType - The geometry type for fallback style
+   * @returns {HTMLElement} - The symbol element
+   */
+  createSymbolForLayer(vectorLayer, vectorSource, styleInput, geometryType) {
+    // Create map symbol based on the first feature's geometry type
+    const mapSymbol = document.createElement('div');
+    mapSymbol.style.width = '20px';
+    mapSymbol.style.height = '20px';
+    mapSymbol.style.marginRight = '8px';
+    mapSymbol.style.position = 'relative';
+
+    // Get a style to represent
+    let style;
+
+    // Handle both style functions and regular styles
+    if (typeof styleInput === 'function') {
+      // For style functions, we need to evaluate the function
+      const firstFeature = vectorSource.getFeatures()[0];
+      if (firstFeature) {
+        const resolution = this.map.getView().getResolution();
+        const styles = styleInput(firstFeature, resolution);
+        // Style function might return an array of styles, take the first one
+        style = Array.isArray(styles) ? styles[0] : styles;
+      } else {
+        style = this.getStyle(geometryType);
+      }
+    } else {
+      // Direct style object
+      style = styleInput;
+    }
+
+    // If we still don't have a valid style, use default
+    if (!style) {
+      style = this.getStyle(geometryType);
+    }
+
+    // Apply style based on geometry type
+    switch (geometryType) {
+      case 'Polygon':
+      case 'MultiPolygon':
+        if (style && style.getFill && style.getStroke) {
+          const fill = style.getFill();
+          const stroke = style.getStroke();
+          if (fill) {
+            mapSymbol.style.backgroundColor = fill.getColor();
+          }
+          if (stroke) {
+            mapSymbol.style.border = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
+          }
+        } else {
+          // Fallback to default styles
+          mapSymbol.style.backgroundColor = this.styles.fillColor;
+          mapSymbol.style.border = `${this.styles.strokeWidth}px solid ${this.styles.strokeColor}`;
+        }
+        break;
+
+      case 'LineString':
+      case 'MultiLineString':
+        if (style && style.getStroke) {
+          const stroke = style.getStroke();
+          if (stroke) {
+            mapSymbol.style.borderTop = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
+          }
+        } else {
+          mapSymbol.style.borderTop = `${this.styles.strokeWidth}px solid ${this.styles.strokeColor}`;
+        }
+        mapSymbol.style.height = '0px';
+        mapSymbol.style.top = '50%';
+        break;
+
+      case 'Point':
+      case 'MultiPoint':
+        if (style && style.getImage) {
+          const image = style.getImage();
+          if (image) {
+            if (image instanceof Circle) {
+              const fill = image.getFill();
+              const stroke = image.getStroke();
+              if (fill) {
+                mapSymbol.style.backgroundColor = fill.getColor();
+              }
+              if (stroke) {
+                mapSymbol.style.border = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
+              }
+              mapSymbol.style.borderRadius = '50%';
+            } else {
+              // Handle other types of point symbolizers (e.g., icons)
+              const size = image.getSize();
+              if (size) {
+                mapSymbol.style.width = `${size[0]}px`;
+                mapSymbol.style.height = `${size[1]}px`;
+              }
+            }
+          }
+        } else {
+          // Fallback to default point style
+          mapSymbol.style.backgroundColor = this.styles.fillColor;
+          mapSymbol.style.border = `1px solid ${this.styles.strokeColor}`;
+          mapSymbol.style.borderRadius = '50%';
+        }
+        break;
+    }
+
+    return mapSymbol;
+  }
+
+  /**
+   * Updates the state of the main checkbox based on the state of subgroup checkboxes
+   *
+   * @param {HTMLInputElement} mainCheckbox - The main checkbox element
+   * @param {Array<HTMLInputElement>} subgroupCheckboxes - Array of subgroup checkbox elements
+   */
+  updateMainCheckboxState(mainCheckbox, subgroupCheckboxes) {
+    if (subgroupCheckboxes.length === 0) return;
+
+    const allChecked = subgroupCheckboxes.every(checkbox => checkbox.checked);
+    const allUnchecked = subgroupCheckboxes.every(checkbox => !checkbox.checked);
+
+    if (allChecked) {
+      mainCheckbox.checked = true;
+      mainCheckbox.indeterminate = false;
+    } else if (allUnchecked) {
+      mainCheckbox.checked = false;
+      mainCheckbox.indeterminate = false;
+    } else {
+      mainCheckbox.indeterminate = true;
+    }
   }
 
   /**
@@ -768,150 +1078,6 @@ export class MapViewer extends LitElement {
     }, {});
   }
 
-  /**
-   * Adds a vector layer to the map with controls for visibility and styling.
-   *
-   * This function creates a vector layer using the provided vector source and style function.
-   * It also adds a checkbox to toggle the visibility of the layer, and color pickers
-   * for adjusting the layer's fill color, stroke color, and stroke width.
-   *
-   * @param {string} type - The type or name of the layer.
-   * @param {ol/source/Vector} vectorSource - The vector source for the layer.
-   * @param {function} [sldStyleFunction] - Optional style function for the layer.
-   * @param sldObject the SLD object to apply styles from
-   */
-  addLayerWithControls(type, vectorSource, styleFunction) {
-    const vectorLayer = new VectorLayer({
-      source: vectorSource,
-      style: styleFunction || ((feature) => this.getStyle(feature.getGeometry().getType()))
-    });
-
-    this.map.addLayer(vectorLayer);
-    this.vectorLayers.push(vectorLayer);
-
-    // Create a checkbox and symbol for the layer
-    const layerToggleDiv = document.createElement('div');
-    layerToggleDiv.classList.add('legend-element');
-    layerToggleDiv.style.display = 'flex';
-    layerToggleDiv.style.alignItems = 'center';
-    layerToggleDiv.style.marginBottom = '8px';
-
-    // Create checkbox
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.checked = true;
-    checkbox.style.marginRight = '8px';
-    checkbox.addEventListener('change', () => {
-      vectorLayer.setVisible(checkbox.checked);
-    });
-
-    // Create map symbol based on the first feature's geometry type
-    const mapSymbol = document.createElement('div');
-    mapSymbol.style.width = '20px';
-    mapSymbol.style.height = '20px';
-    mapSymbol.style.marginRight = '8px';
-    mapSymbol.style.position = 'relative';
-
-    // Get the first feature to determine geometry type and style
-    const firstFeature = vectorSource.getFeatures()[0];
-    if (firstFeature) {
-      const geometryType = firstFeature.getGeometry().getType();
-      let style;
-
-      // Handle both SLD style functions and regular styles
-      if (typeof styleFunction === 'function') {
-        // For SLD styles, we need to evaluate the style function
-        // Pass required parameters that might be used in the style function
-        const resolution = this.map.getView().getResolution();
-        const styles = styleFunction(firstFeature, resolution);
-        // SLD might return an array of styles, take the first one
-        style = Array.isArray(styles) ? styles[0] : styles;
-      } else {
-        style = styleFunction || this.getStyle(geometryType);
-      }
-
-      // Apply style based on geometry type
-      switch (geometryType) {
-        case 'Polygon':
-        case 'MultiPolygon':
-          if (style) {
-            const fill = style.getFill();
-            const stroke = style.getStroke();
-            if (fill) {
-              mapSymbol.style.backgroundColor = fill.getColor();
-            }
-            if (stroke) {
-              mapSymbol.style.border = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
-            }
-          } else {
-            // Fallback to default styles
-            mapSymbol.style.backgroundColor = this.styles.fillColor;
-            mapSymbol.style.border = `${this.styles.strokeWidth}px solid ${this.styles.strokeColor}`;
-          }
-          break;
-
-        case 'LineString':
-        case 'MultiLineString':
-          if (style) {
-            const stroke = style.getStroke();
-            if (stroke) {
-              mapSymbol.style.borderTop = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
-            }
-          } else {
-            mapSymbol.style.borderTop = `${this.styles.strokeWidth}px solid ${this.styles.strokeColor}`;
-          }
-          mapSymbol.style.height = '0px';
-          mapSymbol.style.top = '50%';
-          break;
-
-        case 'Point':
-        case 'MultiPoint':
-          if (style) {
-            const image = style.getImage();
-            if (image) {
-              if (image instanceof Circle) {
-                const fill = image.getFill();
-                const stroke = image.getStroke();
-                if (fill) {
-                  mapSymbol.style.backgroundColor = fill.getColor();
-                }
-                if (stroke) {
-                  mapSymbol.style.border = `${stroke.getWidth()}px solid ${stroke.getColor()}`;
-                }
-                mapSymbol.style.borderRadius = '50%';
-              } else {
-                // Handle other types of point symbolizers (e.g., icons)
-                const size = image.getSize();
-                if (size) {
-                  mapSymbol.style.width = `${size[0]}px`;
-                  mapSymbol.style.height = `${size[1]}px`;
-                }
-                // If it's an icon, you might want to set a background image
-                // This would require getting the icon URL from the style
-              }
-            }
-          } else {
-            // Fallback to default point style
-            mapSymbol.style.backgroundColor = this.styles.fillColor;
-            mapSymbol.style.border = `1px solid ${this.styles.strokeColor}`;
-            mapSymbol.style.borderRadius = '50%';
-          }
-          break;
-      }
-    }
-
-    // Create label
-    const label = document.createElement('label');
-    label.textContent = type;
-    label.style.cursor = 'pointer';
-
-    // Assemble the legend element
-    layerToggleDiv.appendChild(checkbox);
-    layerToggleDiv.appendChild(mapSymbol);
-    layerToggleDiv.appendChild(label);
-
-    this.shadowRoot.getElementById('map-legend').appendChild(layerToggleDiv);
-  }
 
   // Drag and Drop Functions
   onDragOver(event) {
